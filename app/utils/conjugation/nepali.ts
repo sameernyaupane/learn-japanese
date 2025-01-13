@@ -6,6 +6,8 @@ const verbClasses = [
     test: (word: string) => word === 'जान्छु' || word === 'जान्',
     conjugate: (word: string, tense: string, context?: { prevWords?: string[] }) => {
       const isFirstPerson = context?.prevWords?.includes('म');
+      console.log(`Conjugating '${word}' in tense '${tense}', isFirstPerson: ${isFirstPerson}`);
+      
       const forms = {
         'simple-present': isFirstPerson ? 'जान्छु' : 'जान्छ',
         'present-continuous': 'जाँदैछु',
@@ -20,15 +22,23 @@ const verbClasses = [
         'passive': 'जाइन्छ',
         'causative': 'जान लगाउँछु'
       };
-      return forms[tense] || word;
+      const result = forms[tense] || word;
+      console.log(`Conjugation result: ${result}`);
+      return result;
     }
   },
   {
     name: 'छु-verb',
-    test: (word: string) => word.endsWith('छु'),
+    test: (word: string) => {
+      const result = word.endsWith('छु');
+      console.log(`Testing if '${word}' is a छु-verb: ${result}`);
+      return result;
+    },
     conjugate: (word: string, tense: string, context?: { prevWords?: string[] }) => {
       const isFirstPerson = context?.prevWords?.includes('म');
       const stem = word.replace(/छु$/, '');
+      console.log(`Conjugating छु-verb '${word}', stem: '${stem}', tense: '${tense}', isFirstPerson: ${isFirstPerson}`);
+      
       const forms = {
         'simple-present': isFirstPerson ? word : `${stem}छ`,
         'present-continuous': `${stem}दैछु`,
@@ -43,7 +53,9 @@ const verbClasses = [
         'passive': `${stem}इन्छ`,
         'causative': `${stem}न लगाउँछु`
       };
-      return forms[tense] || word;
+      const result = forms[tense] || word;
+      console.log(`Conjugation result: ${result}`);
+      return result;
     }
   }
 ];

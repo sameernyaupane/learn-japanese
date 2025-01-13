@@ -85,7 +85,18 @@ async function seed() {
             }[language];
 
             for (const tense of tenses) {
-              const conjugatedForm = conjugate(baseWord, language, tense);
+              // Get previous words for context
+              const prevWords = position > 0 ? 
+                phrase.translations[language].slice(0, position) : 
+                [];
+              
+              const conjugatedForm = conjugate(
+                baseWord, 
+                language, 
+                tense, 
+                { prevWords }
+              );
+              
               if (conjugatedForm !== baseWord) {
                 await sql`
                   INSERT INTO word_forms (word_id, language, tense, form)
