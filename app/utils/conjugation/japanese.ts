@@ -8,10 +8,12 @@ const verbClasses = [
       const forms = {
         'simple-present': 'する',
         'present-continuous': 'している',
+        'present-perfect': 'してある',
         'simple-past': 'した',
         'past-continuous': 'していた',
-        'present-perfect': 'してある',
-        'future': 'するつもり',
+        'past-perfect': 'してしまった',
+        'simple-future': 'するつもり',
+        'future-perfect': 'してしまうつもり',
         'imperative': 'しろ',
         'polite-imperative': 'してください',
         'potential': 'できる',
@@ -27,10 +29,20 @@ const verbClasses = [
     test: (word: string) => word === 'くる',
     conjugate: (word: string, tense: string) => {
       const forms = {
-        'plain-present': 'くる',
-        'polite-present': 'きます',
-        'te': 'きて',
-        'polite-past': 'きました'
+        'simple-present': 'くる',
+        'present-continuous': 'きている',
+        'present-perfect': 'きてある',
+        'simple-past': 'きた',
+        'past-continuous': 'きていた',
+        'past-perfect': 'きてしまった',
+        'simple-future': 'くるつもり',
+        'future-perfect': 'きてしまうつもり',
+        'imperative': 'こい',
+        'polite-imperative': 'きてください',
+        'potential': 'こられる',
+        'conditional': 'くれば',
+        'passive': 'こられる',
+        'causative': 'こさせる'
       };
       return forms[tense] || word;
     }
@@ -43,10 +55,12 @@ const verbClasses = [
       const forms = {
         'simple-present': word,
         'present-continuous': `${stem}ている`,
+        'present-perfect': `${stem}てある`,
         'simple-past': `${stem}た`,
         'past-continuous': `${stem}ていた`,
-        'present-perfect': `${stem}てある`,
-        'future': `${stem}るつもり`,
+        'past-perfect': `${stem}てしまった`,
+        'simple-future': `${word}つもり`,
+        'future-perfect': `${stem}てしまうつもり`,
         'imperative': `${stem}ろ`,
         'polite-imperative': `${stem}てください`,
         'potential': `${stem}られる`,

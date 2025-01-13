@@ -2,6 +2,7 @@ import { sql } from './db.server';
 import type { Language } from '~/types';
 import phrasesData from '../data/phrases.json';
 import { conjugate } from './conjugation';
+import { TENSES } from './conjugation/constants';
 
 type PhraseData = typeof phrasesData.phrases[0];
 
@@ -66,15 +67,7 @@ async function seed() {
 
           // Add word forms for each language and tense
           const languages: Language[] = ['japanese', 'japanese_romaji', 'english', 'nepali'];
-          const tenses = [
-            'simple-present',
-            'present-continuous',
-            'present-perfect',
-            'simple-past',
-            'past-continuous',
-            'past-perfect',
-            'simple-future'
-          ] as const;
+          const tenses = TENSES.map(t => t.value);
 
           for (const language of languages) {
             const baseWord = {

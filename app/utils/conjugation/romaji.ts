@@ -11,7 +11,7 @@ const verbClasses = [
         'simple-past': 'shita',
         'past-continuous': 'shiteita',
         'present-perfect': 'shitearu',
-        'future': 'surutsumori',
+        'simple-future': 'surutsumori',
         'imperative': 'shiro',
         'polite-imperative': 'shitekudasai',
         'potential': 'dekiru',
@@ -32,13 +32,37 @@ const verbClasses = [
         'simple-past': 'kita',
         'past-continuous': 'kiteita',
         'present-perfect': 'kitearu',
-        'future': 'kurutsumori',
+        'simple-future': 'kurutsumori',
         'imperative': 'koi',
         'polite-imperative': 'kitekudasai',
         'potential': 'korareru',
         'conditional': 'kureba',
         'passive': 'korareru',
         'causative': 'kosaseru'
+      };
+      return forms[tense] || word;
+    }
+  },
+  {
+    name: 'iku',
+    test: (word: string) => word === 'iku' || word === 'ikimasu',
+    conjugate: (word: string, tense: string) => {
+      const isPolite = word === 'ikimasu';
+      const forms = {
+        'simple-present': isPolite ? 'ikimasu' : 'iku',
+        'present-perfect': isPolite ? 'ittekimashita' : 'ittekita',
+        'simple-past': isPolite ? 'ikimashita' : 'itta',
+        'past-perfect': isPolite ? 'itteshimaimashita' : 'itteshimatta',
+        'simple-future': isPolite ? 'ikimasu' : 'iku',
+        'future-perfect': isPolite ? 'itteirumasu' : 'itteiru',
+        'present-continuous': isPolite ? 'itteimasu' : 'itteiru',
+        'past-continuous': isPolite ? 'itteimashita' : 'itteita',
+        'imperative': isPolite ? 'ittekudasai' : 'ike',
+        'polite-imperative': 'ittekudasai',
+        'potential': isPolite ? 'ikemasu' : 'ikeru',
+        'conditional': isPolite ? 'ikimashitara' : 'ikeba',
+        'passive': isPolite ? 'ikaremasu' : 'ikareru',
+        'causative': isPolite ? 'ikasemasu' : 'ikaseru'
       };
       return forms[tense] || word;
     }
@@ -54,7 +78,7 @@ const verbClasses = [
         'simple-past': `${stem}ta`,
         'past-continuous': `${stem}teita`,
         'present-perfect': `${stem}tearu`,
-        'future': `${word}tsumori`,
+        'simple-future': `${word}tsumori`,
         'imperative': `${stem}ro`,
         'polite-imperative': `${stem}tekudasai`,
         'potential': `${stem}rareru`,
@@ -68,6 +92,6 @@ const verbClasses = [
 ];
 
 export const romajiRules: ConjugationRule = {
-  nonVerbs: ['watashi', 'wa', 'wo', 'ni', 'de', 'he', 'no', 'ga', 'mo', 'kore', 'shigoto', 'kudasai'],
+  nonVerbs: ['watashi:polite', 'wa', 'wo', 'ni', 'de', 'he', 'no', 'ga', 'mo', 'kore', 'shigoto', 'kudasai'],
   verbClasses
 }; 
