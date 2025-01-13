@@ -1,0 +1,54 @@
+import type { ConjugationRule } from './types';
+
+const verbClasses = [
+  {
+    name: 'जानु',
+    test: (word: string) => word === 'जान्छु' || word === 'जान्',
+    conjugate: (word: string, tense: string, context?: { prevWords?: string[] }) => {
+      const isFirstPerson = context?.prevWords?.includes('म');
+      const forms = {
+        'simple-present': isFirstPerson ? 'जान्छु' : 'जान्छ',
+        'present-continuous': 'जाँदैछु',
+        'simple-past': isFirstPerson ? 'गएँ' : 'गयो',
+        'past-continuous': 'जाँदै थिएँ',
+        'present-perfect': 'गएको छु',
+        'future': 'जानेछु',
+        'imperative': 'जाऊ',
+        'polite-imperative': 'जानुहोस्',
+        'potential': 'जान सक्छु',
+        'conditional': 'जान्थें',
+        'passive': 'जाइन्छ',
+        'causative': 'जान लगाउँछु'
+      };
+      return forms[tense] || word;
+    }
+  },
+  {
+    name: 'छु-verb',
+    test: (word: string) => word.endsWith('छु'),
+    conjugate: (word: string, tense: string, context?: { prevWords?: string[] }) => {
+      const isFirstPerson = context?.prevWords?.includes('म');
+      const stem = word.replace(/छु$/, '');
+      const forms = {
+        'simple-present': isFirstPerson ? word : `${stem}छ`,
+        'present-continuous': `${stem}दैछु`,
+        'simple-past': isFirstPerson ? `${stem}एँ` : `${stem}यो`,
+        'past-continuous': `${stem}दै थिएँ`,
+        'present-perfect': `${stem}एको छु`,
+        'future': `${stem}नेछु`,
+        'imperative': `${stem}`,
+        'polite-imperative': `${stem}नुहोस्`,
+        'potential': `${stem}न सक्छु`,
+        'conditional': `${stem}न्थें`,
+        'passive': `${stem}इन्छ`,
+        'causative': `${stem}न लगाउँछु`
+      };
+      return forms[tense] || word;
+    }
+  }
+];
+
+export const nepaliRules: ConjugationRule = {
+  nonVerbs: ['म', 'मा', 'यो', 'काम', 'होस्'],
+  verbClasses
+}; 

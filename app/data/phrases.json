@@ -1,0 +1,49 @@
+{
+  "phrases": [
+    {
+      "sentence": "I go to work",
+      "translations": {
+        "japanese": ["私", "は", "仕事", "に", "行きます"],
+        "japanese_romaji": ["watashi", "wa", "shigoto", "ni", "ikimasu"],
+        "nepali": ["म", "", "काम", "मा", "जान्छु"],
+        "english": ["I", "", "work", "to", "go"]
+      }
+    },
+    {
+      "sentence": "Please look at this",
+      "translations": {
+        "japanese": ["これ", "を", "見て", "ください"],
+        "japanese_romaji": ["kore", "wo", "mite", "kudasai"],
+        "nepali": ["यो", "", "हेर्नु", "होस्"],
+        "english": ["this", "", "look", "please"]
+      }
+    },
+    {
+      "sentence": "I do a lot of work at home",
+      "translations": {
+        "japanese": ["家", "に", "多い", "仕事", "を", "します"],
+        "japanese_romaji": ["ie", "ni", "ooi", "shigoto", "wo", "shimasu"],
+        "nepali": ["घर", "मा", "धेरै", "काम", "", "गर्छु"],
+        "english": ["home", "at", "many", "work", "", "do"]
+      }
+    },
+    {
+      "sentence": "When will you look at that?",
+      "translations": {
+        "japanese": ["いつ", "それ", "を", "見ます", "か"],
+        "japanese_romaji": ["itsu", "sore", "wo", "mimasu", "ka"],
+        "nepali": ["कहिले", "त्यो", "", "हेर्नु", "हुन्छ"],
+        "english": ["when", "that", "", "look", "will"]
+      }
+    },
+    {
+      "sentence": "I will do this",
+      "translations": {
+        "japanese": ["私", "は", "これ", "を", "します"],
+        "japanese_romaji": ["watashi", "wa", "kore", "wo", "shimasu"],
+        "nepali": ["म", "", "यो", "", "गर्नेछु"],
+        "english": ["I", "", "this", "", "will-do"]
+      }
+    }
+  ]
+} 
