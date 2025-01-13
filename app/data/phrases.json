@@ -2,6 +2,7 @@
   "phrases": [
     {
       "sentence": "I go to work",
+      "image_url": "https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg",
       "translations": {
         "japanese": ["私", "は", "仕事", "に", "行きます"],
         "japanese_romaji": ["watashi", "wa", "shigoto", "ni", "ikimasu"],
@@ -11,6 +12,7 @@
     },
     {
       "sentence": "Please look at this",
+      "image_url": "https://images.pexels.com/photos/1311518/pexels-photo-1311518.jpeg",
       "translations": {
         "japanese": ["これ", "を", "見て", "ください"],
         "japanese_romaji": ["kore", "wo", "mite", "kudasai"],
@@ -20,6 +22,7 @@
     },
     {
       "sentence": "I do a lot of work at home",
+      "image_url": "https://images.pexels.com/photos/4492135/pexels-photo-4492135.jpeg",
       "translations": {
         "japanese": ["家", "に", "多い", "仕事", "を", "します"],
         "japanese_romaji": ["ie", "ni", "ooi", "shigoto", "wo", "shimasu"],
@@ -29,6 +32,7 @@
     },
     {
       "sentence": "When will you look at that?",
+      "image_url": "https://images.pexels.com/photos/3760810/pexels-photo-3760810.jpeg",
       "translations": {
         "japanese": ["いつ", "それ", "を", "見ます", "か"],
         "japanese_romaji": ["itsu", "sore", "wo", "mimasu", "ka"],
@@ -38,6 +42,7 @@
     },
     {
       "sentence": "I will do this",
+      "image_url": "https://images.pexels.com/photos/3760529/pexels-photo-3760529.jpeg",
       "translations": {
         "japanese": ["私", "は", "これ", "を", "します"],
         "japanese_romaji": ["watashi", "wa", "kore", "wo", "shimasu"],

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS sentences (
   id SERIAL PRIMARY KEY,
-  english_text TEXT NOT NULL UNIQUE
+  english_text TEXT NOT NULL UNIQUE,
+  image_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS words (
@@ -32,4 +33,4 @@ CREATE TABLE IF NOT EXISTS phrase_words (
 );
 
 CREATE INDEX idx_translations_word_id ON translations(word_id);
-CREATE INDEX idx_phrase_words_phrase_id ON phrase_words(phrase_id); 
+CREATE INDEX idx_phrase_words_phrase_id ON phrase_words(phrase_id);

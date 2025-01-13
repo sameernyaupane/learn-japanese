@@ -18,12 +18,14 @@
     "@remix-run/react": "^2.15.2",
     "@remix-run/serve": "^2.15.2",
     "isbot": "^4.1.0",
+    "node-fetch": "^2.7.0",
     "postgres": "^3.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.15.2",
+    "@types/node-fetch": "^2.6.12",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",

@@ -13,8 +13,8 @@ async function seed() {
       console.log(`Processing phrase ${phraseIndex + 1}: ${phrase.sentence}`);
 
       const [sentenceRecord] = await sql`
-        INSERT INTO sentences (english_text)
-        VALUES (${phrase.sentence})
+        INSERT INTO sentences (english_text, image_url)
+        VALUES (${phrase.sentence}, ${phrase.image_url || null})
         RETURNING id
       `;
 
