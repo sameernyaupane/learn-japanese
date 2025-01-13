@@ -70,6 +70,33 @@ const verbClasses = [
       };
       return forms[tense] || word;
     }
+  },
+  {
+    name: 'いく',
+    test: (word: string) => word === 'いく' || word === 'いきます' || word === '行く' || word === '行きます',
+    conjugate: (word: string, tense: string) => {
+      const isPolite = word === 'いきます' || word === '行きます';
+      const useKanji = word.includes('行');
+      const forms = {
+        'simple-present': isPolite ? (useKanji ? '行きます' : 'いきます') : (useKanji ? '行く' : 'いく'),
+        'present-continuous': isPolite ? (useKanji ? '行っています' : 'いっています') : (useKanji ? '行っている' : 'いっている'),
+        'present-perfect': isPolite ? (useKanji ? '行ってきました' : 'いってきました') : (useKanji ? '行ってきた' : 'いってきた'),
+        'simple-past': isPolite ? (useKanji ? '行きました' : 'いきました') : (useKanji ? '行った' : 'いった'),
+        'past-continuous': isPolite ? (useKanji ? '行っていました' : 'いっていました') : (useKanji ? '行っていた' : 'いっていた'),
+        'past-perfect': isPolite ? (useKanji ? '行ってしまいました' : 'いってしまいました') : (useKanji ? '行ってしまった' : 'いってしまった'),
+        'simple-future': isPolite ? (useKanji ? '行きます' : 'いきます') : (useKanji ? '行く' : 'いく'),
+        'future-perfect': isPolite ? (useKanji ? '行っています' : 'いっています') : (useKanji ? '行っている' : 'いっている'),
+        'imperative': isPolite ? (useKanji ? '行ってください' : 'いってください') : (useKanji ? '行け' : 'いけ'),
+        'polite-imperative': useKanji ? '行ってください' : 'いってください',
+        'potential': isPolite ? (useKanji ? '行けます' : 'いけます') : (useKanji ? '行ける' : 'いける'),
+        'conditional': isPolite ? (useKanji ? '行きましたら' : 'いきましたら') : (useKanji ? '行けば' : 'いけば'),
+        'passive': isPolite ? (useKanji ? '行かれます' : 'いかれます') : (useKanji ? '行かれる' : 'いかれる'),
+        'causative': isPolite ? (useKanji ? '行かせます' : 'いかせます') : (useKanji ? '行かせる' : 'いかせる'),
+        'desiderative': isPolite ? (useKanji ? '行きたいです' : 'いきたいです') : (useKanji ? '行きたい' : 'いきたい'),
+        'causative': isPolite ? (useKanji ? '行かせます' : 'いかせます') : (useKanji ? '行かせる' : 'いかせる')
+      };
+      return forms[tense] || word;
+    }
   }
 ];
 

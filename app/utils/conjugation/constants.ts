@@ -12,7 +12,8 @@ export const TENSES = [
   { value: 'potential', label: 'Potential' },
   { value: 'conditional', label: 'Conditional' },
   { value: 'passive', label: 'Passive' },
-  { value: 'causative', label: 'Causative' }
+  { value: 'causative', label: 'Make/Let do' },
+  { value: 'desiderative', label: 'Want to' }
 ] as const;
 
 export type Tense = typeof TENSES[number]['value']; 

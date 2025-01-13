@@ -62,7 +62,8 @@ const verbClasses = [
         'potential': isPolite ? 'ikemasu' : 'ikeru',
         'conditional': isPolite ? 'ikimashitara' : 'ikeba',
         'passive': isPolite ? 'ikaremasu' : 'ikareru',
-        'causative': isPolite ? 'ikasemasu' : 'ikaseru'
+        'causative': isPolite ? 'ikasemasu' : 'ikaseru',
+        'desiderative': isPolite ? 'ikitaidesu' : 'ikitai'
       };
       return forms[tense] || word;
     }

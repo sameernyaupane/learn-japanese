@@ -22,7 +22,8 @@ const verbClasses = [
         'potential': 'जान सक्छु',
         'conditional': 'जान्थें',
         'passive': 'जाइन्छ',
-        'causative': 'जान लगाउँछु'
+        'causative': 'जान लगाउँछु',
+        'desiderative': 'जान चाहन्छु'
       };
       const result = forms[tense] || word;
       console.log(`Conjugation result: ${result}`);

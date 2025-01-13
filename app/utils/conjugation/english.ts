@@ -55,7 +55,8 @@ const verbClasses = [
         'potential': `can ${word}`,
         'conditional': `would ${word}`,
         'passive': `is ${irregularPerfect[word] || `${word}ed`}`,
-        'causative': `make ${word}`
+        'causative': `make ${word}`,
+        'desiderative': `want to ${word}`
       };
       return forms[tense] || word;
     }
