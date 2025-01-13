@@ -31,14 +31,5 @@ CREATE TABLE IF NOT EXISTS phrase_words (
   UNIQUE(phrase_id, position)
 );
 
-CREATE TABLE IF NOT EXISTS word_forms (
-  id SERIAL PRIMARY KEY,
-  word_id INTEGER REFERENCES words(id),
-  language TEXT NOT NULL,
-  tense TEXT NOT NULL,
-  form TEXT NOT NULL,
-  UNIQUE(word_id, language, tense)
-);
-
 CREATE INDEX idx_translations_word_id ON translations(word_id);
 CREATE INDEX idx_phrase_words_phrase_id ON phrase_words(phrase_id); 

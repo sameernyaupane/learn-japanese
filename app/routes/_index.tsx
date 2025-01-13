@@ -1,40 +1,17 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node';
-import { useLoaderData, Form } from '@remix-run/react';
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { getPhrases } from '~/models/phrase.server';
-import type { Tense } from '~/utils/conjugation/types';
-import TenseDropdown from '~/components/TenseDropdown';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
-  const currentTense = (url.searchParams.get('tense') || 'simple-present') as Tense;
-  const phrases = await getPhrases(currentTense);
-  return json({ 
-    phrases,
-    currentTense
-  });
+export const loader = async () => {
+  const phrases = await getPhrases();
+  return json({ phrases });
 };
 
 export default function Index() {
-  const { phrases, currentTense } = useLoaderData<typeof loader>();
+  const { phrases } = useLoaderData<typeof loader>();
 
   return (
     <div className="p-8 font-mono">
-      <div className="mb-4">
-        <Form method="get">
-          <TenseDropdown
-            value={currentTense}
-            onChange={(tense) => {
-              const form = document.createElement('form');
-              form.method = 'get';
-              form.innerHTML = `<input name="tense" value="${tense}">`;
-              document.body.appendChild(form);
-              form.submit();
-            }}
-            className="w-full md:w-auto"
-          />
-        </Form>
-      </div>
-
       {phrases.map((phrase) => (
         <div key={phrase.id} className="mb-8">
           <h2 className="text-base font-bold mb-2">
