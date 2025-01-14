@@ -1,10 +1,10 @@
-import { json } from '@remix-run/node';
+import { type LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getPhrases } from '~/models/phrase.server';
 
 export const loader = async () => {
   const phrases = await getPhrases();
-  return json({ phrases });
+  return { phrases };
 };
 
 export default function Index() {
