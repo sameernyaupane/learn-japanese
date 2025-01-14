@@ -12,9 +12,6 @@ type Phrase = {
   order_number: number;
   english_text: string;
   translations: Translation;
-};
-
-type PhraseWithImage = Phrase & {
   image_url: string;
 };
 
@@ -63,38 +60,3 @@ export async function getPhrases(): Promise<Phrase[]> {
     }
   }));
 }
-
-export async function getPhraseWithImage(phraseId: number): Promise<PhraseWithImage | null> {
-  const [phrase] = await sql<PhraseWithImage[]>`
-    SELECT 
-      p.id,
-      p.order_number,
-      s.english_text,
-      s.image_url,
-      json_build_object(
-        'japanese', array_agg(CASE WHEN t.language = 'japanese' THEN t.text ELSE NULL END ORDER BY pw.position),
-        'japanese_romaji', array_agg(CASE WHEN t.language = 'japanese_romaji' THEN t.text ELSE NULL END ORDER BY pw.position),
-        'english', array_agg(CASE WHEN t.language = 'english' THEN t.text ELSE NULL END ORDER BY pw.position),
-        'nepali', array_agg(CASE WHEN t.language = 'nepali' THEN t.text ELSE NULL END ORDER BY pw.position)
-      ) as translations
-    FROM phrases p
-    JOIN sentences s ON p.sentence_id = s.id
-    JOIN phrase_words pw ON p.id = pw.phrase_id
-    JOIN words w ON pw.word_id = w.id
-    JOIN translations t ON w.id = t.word_id
-    WHERE p.id = ${phraseId}
-    GROUP BY p.id, p.order_number, s.english_text, s.image_url;
-  `;
-
-  if (!phrase) return null;
-
-  return {
-    ...phrase,
-    translations: {
-      japanese: phrase.translations.japanese.filter(x => x !== null),
-      japanese_romaji: phrase.translations.japanese_romaji.filter(x => x !== null),
-      english: phrase.translations.english.filter(x => x !== null),
-      nepali: phrase.translations.nepali.filter(x => x !== null)
-    }
-  };
-} 
