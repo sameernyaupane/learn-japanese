@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS sentences (
 
 CREATE TABLE IF NOT EXISTS words (
   id SERIAL PRIMARY KEY,
-  english_text TEXT NOT NULL UNIQUE,
+  japanese_text TEXT NOT NULL UNIQUE,
   word_type TEXT
 );
 

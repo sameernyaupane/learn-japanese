@@ -62,7 +62,7 @@ export async function getAllWords() {
   const words = await sql`
     SELECT 
       w.id,
-      w.english_text,
+      w.japanese_text,
       json_build_object(
         'japanese', MAX(CASE WHEN t.language = 'japanese' THEN t.text END),
         'japanese_romaji', MAX(CASE WHEN t.language = 'japanese_romaji' THEN t.text END),
@@ -71,8 +71,8 @@ export async function getAllWords() {
       ) as translations
     FROM words w
     LEFT JOIN translations t ON w.id = t.word_id
-    GROUP BY w.id, w.english_text
-    ORDER BY w.english_text;
+    GROUP BY w.id, w.japanese_text
+    ORDER BY w.japanese_text;
   `;
 
   return words;

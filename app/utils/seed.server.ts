@@ -42,16 +42,16 @@ async function seed() {
             (${phraseRecord.id}, ${position}, ${nepaliWord}, 'nepali')
         `;
 
-        // Only store unique words in the words table
-        if (englishWord) {
-          if (!wordMap.has(englishWord)) {
+        // Store Japanese words in the words table
+        if (japaneseWord) {
+          if (!wordMap.has(japaneseWord)) {
             const [wordRecord] = await sql`
-              INSERT INTO words (english_text)
-              VALUES (${englishWord})
+              INSERT INTO words (japanese_text)
+              VALUES (${japaneseWord})
               RETURNING id
             `;
             const wordId = wordRecord.id;
-            wordMap.set(englishWord, wordId);
+            wordMap.set(japaneseWord, wordId);
 
             await sql`
               INSERT INTO translations (word_id, language, text)
