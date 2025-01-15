@@ -24,14 +24,6 @@ CREATE TABLE IF NOT EXISTS phrases (
   sentence_id INTEGER REFERENCES sentences(id)
 );
 
-CREATE TABLE IF NOT EXISTS phrase_words (
-  id SERIAL PRIMARY KEY,
-  phrase_id INTEGER REFERENCES phrases(id),
-  word_id INTEGER REFERENCES words(id),
-  position INTEGER NOT NULL,
-  UNIQUE(phrase_id, position)
-);
-
 CREATE TABLE IF NOT EXISTS phrase_indexes (
   id SERIAL PRIMARY KEY,
   phrase_id INTEGER REFERENCES phrases(id),
@@ -42,5 +34,4 @@ CREATE TABLE IF NOT EXISTS phrase_indexes (
 );
 
 CREATE INDEX idx_translations_word_id ON translations(word_id);
-CREATE INDEX idx_phrase_words_phrase_id ON phrase_words(phrase_id);
 CREATE INDEX idx_phrase_indexes_phrase_id ON phrase_indexes(phrase_id);
