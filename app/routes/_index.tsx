@@ -1,6 +1,7 @@
 import { type LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getPhrases } from '~/models/phrase.server';
+import Navigation from '~/components/Navigation';
 
 export const loader = async () => {
   const phrases = await getPhrases();
@@ -12,6 +13,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Navigation />
       <div className="max-w-xl mx-auto p-4 font-mono">
         {phrases.map((phrase) => (
           <div key={phrase.id} className="mb-4 p-3 rounded-xl bg-gray-50 shadow-md border border-gray-300">

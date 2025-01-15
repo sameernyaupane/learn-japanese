@@ -57,3 +57,23 @@ export async function getPhrases(): Promise<Phrase[]> {
     }
   }));
 }
+
+export async function getAllWords() {
+  const words = await sql`
+    SELECT 
+      w.id,
+      w.english_text,
+      json_build_object(
+        'japanese', MAX(CASE WHEN t.language = 'japanese' THEN t.text END),
+        'japanese_romaji', MAX(CASE WHEN t.language = 'japanese_romaji' THEN t.text END),
+        'english', MAX(CASE WHEN t.language = 'english' THEN t.text END),
+        'nepali', MAX(CASE WHEN t.language = 'nepali' THEN t.text END)
+      ) as translations
+    FROM words w
+    LEFT JOIN translations t ON w.id = t.word_id
+    GROUP BY w.id, w.english_text
+    ORDER BY w.english_text;
+  `;
+
+  return words;
+}
