@@ -23,16 +23,13 @@ export async function getPhrases(): Promise<Phrase[]> {
         p.order_number,
         s.english_text,
         s.image_url,
-        pw.position,
-        w.id as word_id,
-        t.text,
-        t.language
+        pi.index_number,
+        pi.text,
+        pi.language
       FROM phrases p
       JOIN sentences s ON p.sentence_id = s.id
-      JOIN phrase_words pw ON p.id = pw.phrase_id
-      JOIN words w ON pw.word_id = w.id
-      JOIN translations t ON w.id = t.word_id
-      ORDER BY p.order_number, pw.position
+      JOIN phrase_indexes pi ON p.id = pi.phrase_id
+      ORDER BY p.order_number, pi.index_number
     )
     SELECT 
       id,
@@ -40,10 +37,10 @@ export async function getPhrases(): Promise<Phrase[]> {
       english_text,
       image_url,
       json_build_object(
-        'japanese', array_agg(CASE WHEN language = 'japanese' THEN text ELSE NULL END ORDER BY position),
-        'japanese_romaji', array_agg(CASE WHEN language = 'japanese_romaji' THEN text ELSE NULL END ORDER BY position),
-        'english', array_agg(CASE WHEN language = 'english' THEN text ELSE NULL END ORDER BY position),
-        'nepali', array_agg(CASE WHEN language = 'nepali' THEN text ELSE NULL END ORDER BY position)
+        'japanese', array_agg(CASE WHEN language = 'japanese' THEN text ELSE NULL END ORDER BY index_number),
+        'japanese_romaji', array_agg(CASE WHEN language = 'japanese_romaji' THEN text ELSE NULL END ORDER BY index_number),
+        'english', array_agg(CASE WHEN language = 'english' THEN text ELSE NULL END ORDER BY index_number),
+        'nepali', array_agg(CASE WHEN language = 'nepali' THEN text ELSE NULL END ORDER BY index_number)
       ) as translations
     FROM phrase_data
     GROUP BY id, order_number, english_text, image_url

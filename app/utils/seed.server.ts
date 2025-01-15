@@ -3,7 +3,7 @@ import phrasesData from '../data/phrases.json';
 
 async function seed() {
   try {
-    await sql`TRUNCATE phrases, phrase_words, translations, words, sentences CASCADE`;
+    await sql`TRUNCATE phrases, phrase_indexes, translations, words, sentences CASCADE`;
 
     const wordMap = new Map<string, number>();
 
@@ -32,34 +32,37 @@ async function seed() {
         const englishWord = phrase.translations.english[position] || '';
         const nepaliWord = phrase.translations.nepali[position] || '';
 
-        let wordId: number;
-        const wordKey = englishWord || `empty_${position}_${phraseIndex}`;
-        
-        if (wordMap.has(wordKey)) {
-          wordId = wordMap.get(wordKey)!;
-        } else {
-          const [wordRecord] = await sql`
-            INSERT INTO words (english_text)
-            VALUES (${wordKey})
-            RETURNING id
-          `;
-          wordId = wordRecord.id;
-          wordMap.set(wordKey, wordId);
-
-          await sql`
-            INSERT INTO translations (word_id, language, text)
-            VALUES 
-              (${wordId}, 'japanese', ${japaneseWord}),
-              (${wordId}, 'japanese_romaji', ${romajiWord}),
-              (${wordId}, 'english', ${englishWord}),
-              (${wordId}, 'nepali', ${nepaliWord})
-          `;
-        }
-
+        // Insert phrase indexes
         await sql`
-          INSERT INTO phrase_words (phrase_id, word_id, position)
-          VALUES (${phraseRecord.id}, ${wordId}, ${position})
+          INSERT INTO phrase_indexes (phrase_id, index_number, text, language)
+          VALUES 
+            (${phraseRecord.id}, ${position}, ${japaneseWord}, 'japanese'),
+            (${phraseRecord.id}, ${position}, ${romajiWord}, 'japanese_romaji'),
+            (${phraseRecord.id}, ${position}, ${englishWord}, 'english'),
+            (${phraseRecord.id}, ${position}, ${nepaliWord}, 'nepali')
         `;
+
+        // Only store unique words in the words table
+        if (englishWord) {
+          if (!wordMap.has(englishWord)) {
+            const [wordRecord] = await sql`
+              INSERT INTO words (english_text)
+              VALUES (${englishWord})
+              RETURNING id
+            `;
+            const wordId = wordRecord.id;
+            wordMap.set(englishWord, wordId);
+
+            await sql`
+              INSERT INTO translations (word_id, language, text)
+              VALUES 
+                (${wordId}, 'japanese', ${japaneseWord}),
+                (${wordId}, 'japanese_romaji', ${romajiWord}),
+                (${wordId}, 'english', ${englishWord}),
+                (${wordId}, 'nepali', ${nepaliWord})
+            `;
+          }
+        }
       }
     }
 
