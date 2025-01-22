@@ -16,7 +16,7 @@ export default function Index() {
       <Navigation />
       <div className="max-w-xl mx-auto p-4 font-mono">
         {phrases.map((phrase) => (
-          <div key={phrase.id} className="mb-4 p-3 rounded-xl bg-gray-50 shadow-md border border-gray-300">
+          <div key={phrase.id} className="mb-8 overflow-hidden rounded-xl bg-gray-50 shadow-md border border-gray-300">
             {phrase.image_url && (
               <div className="w-full h-48 overflow-hidden">
                 <img 
@@ -26,12 +26,10 @@ export default function Index() {
                 />
               </div>
             )}
-
             <div className="p-4">
               <h2 className="text-lg font-bold mb-2 text-black">
                 {phrase.order_number}. {phrase.english_text}
               </h2>
-
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <tbody className="divide-y divide-gray-200">
