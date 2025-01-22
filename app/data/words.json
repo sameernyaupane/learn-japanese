@@ -1,412 +1,128 @@
 {
-  "go": {
-    "japanese": "行く",
+  "行く": {
     "romaji": "iku",
-    "nepali": "जानु"
+    "english": "go",
+    "nepali": "जानु",
+    "image_url": "https://images.pexels.com/photos/2744193/pexels-photo-2744193.jpeg"
   },
-  "see": {
-    "japanese": "見る",
+  "見る": {
     "romaji": "miru",
-    "nepali": "हेर्नु"
+    "english": "see",
+    "nepali": "हेर्नु",
+    "image_url": "https://images.pexels.com/photos/1486974/pexels-photo-1486974.jpeg"
   },
-  "many": {
-    "japanese": "多い",
+  "多い": {
     "romaji": "ooi",
-    "nepali": "धेरै"
+    "english": "many",
+    "nepali": "धेरै",
+    "image_url": "https://images.pexels.com/photos/1532771/pexels-photo-1532771.jpeg"
   },
-  "home": {
-    "japanese": "家",
+  "家": {
     "romaji": "ie",
-    "nepali": "घर"
+    "english": "home",
+    "nepali": "घर",
+    "image_url": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
   },
-  "this": {
-    "japanese": "これ",
+  "これ": {
     "romaji": "kore",
-    "nepali": "यो"
+    "english": "this",
+    "nepali": "यो",
+    "image_url": "https://images.pexels.com/photos/3760529/pexels-photo-3760529.jpeg"
   },
-  "that": {
-    "japanese": "それ",
+  "それ": {
     "romaji": "sore",
-    "nepali": "त्यो"
+    "english": "that",
+    "nepali": "त्यो",
+    "image_url": "https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg"
   },
-  "I": {
-    "japanese": "私",
+  "私": {
     "romaji": "watashi",
-    "nepali": "म"
+    "english": "I",
+    "nepali": "म",
+    "image_url": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg"
   },
-  "work": {
-    "japanese": "仕事",
+  "仕事": {
     "romaji": "shigoto",
-    "nepali": "काम"
+    "english": "work",
+    "nepali": "काम",
+    "image_url": "https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg"
   },
-  "when": {
-    "japanese": "いつ",
+  "いつ": {
     "romaji": "itsu",
-    "nepali": "कहिले"
+    "english": "when",
+    "nepali": "कहिले",
+    "image_url": "https://images.pexels.com/photos/707676/pexels-photo-707676.jpeg"
   },
-  "do": {
-    "japanese": "する",
+  "する": {
     "romaji": "suru",
-    "nepali": "गर्नु"
+    "english": "do",
+    "nepali": "गर्नु",
+    "image_url": "https://images.pexels.com/photos/3228878/pexels-photo-3228878.jpeg"
   },
-  "leave": {
-    "japanese": "出る",
+  "出る": {
     "romaji": "deru",
-    "nepali": "छोड्नु"
+    "english": "leave",
+    "nepali": "छोड्नु",
+    "image_url": "https://images.pexels.com/photos/1462935/pexels-photo-1462935.jpeg"
   },
-  "use": {
-    "japanese": "使う",
+  "使う": {
     "romaji": "tsukau",
-    "nepali": "प्रयोग गर्नु"
+    "english": "use",
+    "nepali": "प्रयोग गर्नु",
+    "image_url": "https://images.pexels.com/photos/4065876/pexels-photo-4065876.jpeg"
   },
-  "place": {
-    "japanese": "所",
+  "所": {
     "romaji": "tokoro",
-    "nepali": "ठाउँ"
+    "english": "place",
+    "nepali": "ठाउँ",
+    "image_url": "https://images.pexels.com/photos/1796715/pexels-photo-1796715.jpeg"
   },
-  "make": {
-    "japanese": "作る",
+  "作る": {
     "romaji": "tsukuru",
-    "nepali": "बनाउनु"
+    "english": "make",
+    "nepali": "बनाउनु",
+    "image_url": "https://images.pexels.com/photos/3771110/pexels-photo-3771110.jpeg"
   },
-  "think": {
-    "japanese": "思う",
+  "思う": {
     "romaji": "omou",
-    "nepali": "सोच्नु"
+    "english": "think",
+    "nepali": "सोच्नु",
+    "image_url": "https://images.pexels.com/photos/3184657/pexels-photo-3184657.jpeg"
   },
-  "have": {
-    "japanese": "持つ",
+  "持つ": {
     "romaji": "motsu",
-    "nepali": "हुनु"
+    "english": "have",
+    "nepali": "हुनु",
+    "image_url": "https://images.pexels.com/photos/1430931/pexels-photo-1430931.jpeg"
   },
-  "buy": {
-    "japanese": "買う",
+  "買う": {
     "romaji": "kau",
-    "nepali": "किन्नु"
+    "english": "buy",
+    "nepali": "किन्नु",
+    "image_url": "https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg"
   },
-  "time": {
-    "japanese": "時間",
+  "時間": {
     "romaji": "jikan",
-    "nepali": "समय"
+    "english": "time",
+    "nepali": "समय",
+    "image_url": "https://images.pexels.com/photos/280254/pexels-photo-280254.jpeg"
   },
-  "know": {
-    "japanese": "知る",
+  "知る": {
     "romaji": "shiru",
-    "nepali": "जान्नु"
+    "english": "know",
+    "nepali": "जान्नु",
+    "image_url": "https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg"
   },
-  "same": {
-    "japanese": "同じ",
+  "同じ": {
     "romaji": "onaji",
-    "nepali": "उस्तै"
+    "english": "same",
+    "nepali": "उस्तै",
+    "image_url": "https://images.pexels.com/photos/1145434/pexels-photo-1145434.jpeg"
   },
-  "now": {
-    "japanese": "今",
+  "今": {
     "romaji": "ima",
-    "nepali": "अहिले"
-  },
-  "new": {
-    "japanese": "新しい",
-    "romaji": "atarashii",
-    "nepali": "नयाँ"
-  },
-  "become": {
-    "japanese": "なる",
-    "romaji": "naru",
-    "nepali": "बन्नु"
-  },
-  "not yet": {
-    "japanese": "まだ",
-    "romaji": "mada",
-    "nepali": "अझै"
-  },
-  "after": {
-    "japanese": "あと",
-    "romaji": "ato",
-    "nepali": "पछि"
-  },
-  "hear": {
-    "japanese": "聞く",
-    "romaji": "kiku",
-    "nepali": "सुन्नु"
-  },
-  "say": {
-    "japanese": "言う",
-    "romaji": "iu",
-    "nepali": "भन्नु"
-  },
-  "few": {
-    "japanese": "少ない",
-    "romaji": "sukunai",
-    "nepali": "थोरै"
-  },
-  "high": {
-    "japanese": "高い",
-    "romaji": "takai",
-    "nepali": "अग्लो"
-  },
-  "child": {
-    "japanese": "子供",
-    "romaji": "kodomo",
-    "nepali": "बच्चा"
-  },
-  "so": {
-    "japanese": "そう",
-    "romaji": "sou",
-    "nepali": "त्यसैले"
-  },
-  "already": {
-    "japanese": "もう",
-    "romaji": "mou",
-    "nepali": "पहिले नै"
-  },
-  "student": {
-    "japanese": "学生",
-    "romaji": "gakusei",
-    "nepali": "विद्यार्थी"
-  },
-  "hot": {
-    "japanese": "熱い",
-    "romaji": "atsui",
-    "nepali": "तातो"
-  },
-  "please": {
-    "japanese": "どうぞ",
-    "romaji": "douzo",
-    "nepali": "कृपया"
-  },
-  "afternoon": {
-    "japanese": "午後",
-    "romaji": "gogo",
-    "nepali": "दिउँसो"
-  },
-  "long": {
-    "japanese": "長い",
-    "romaji": "nagai",
-    "nepali": "लामो"
-  },
-  "book": {
-    "japanese": "本",
-    "romaji": "hon",
-    "nepali": "किताब"
-  },
-  "this year": {
-    "japanese": "今年",
-    "romaji": "kotoshi",
-    "nepali": "यो वर्ष"
-  },
-  "often": {
-    "japanese": "よく",
-    "romaji": "yoku",
-    "nepali": "प्राय:"
-  },
-  "she": {
-    "japanese": "彼女",
-    "romaji": "kanojo",
-    "nepali": "उनी"
-  },
-  "how": {
-    "japanese": "どう",
-    "romaji": "dou",
-    "nepali": "कसरी"
-  },
-  "word": {
-    "japanese": "言葉",
-    "romaji": "kotoba",
-    "nepali": "शब्द"
-  },
-  "face": {
-    "japanese": "顔",
-    "romaji": "kao",
-    "nepali": "अनुहार"
-  },
-  "finish": {
-    "japanese": "終わる",
-    "romaji": "owaru",
-    "nepali": "सक्नु"
-  },
-  "one": {
-    "japanese": "一つ",
-    "romaji": "hitotsu",
-    "nepali": "एक"
-  },
-  "give": {
-    "japanese": "あげる",
-    "romaji": "ageru",
-    "nepali": "दिनु"
-  },
-  "like this": {
-    "japanese": "こう",
-    "romaji": "kou",
-    "nepali": "यस्तो"
-  },
-  "school": {
-    "japanese": "学校",
-    "romaji": "gakkou",
-    "nepali": "विद्यालय"
-  },
-  "receive": {
-    "japanese": "くれる",
-    "romaji": "kureru",
-    "nepali": "पाउनु"
-  },
-  "start": {
-    "japanese": "始める",
-    "romaji": "hajimeru",
-    "nepali": "सुरु गर्नु"
-  },
-  "get up": {
-    "japanese": "起きる",
-    "romaji": "okiru",
-    "nepali": "उठ्नु"
-  },
-  "spring": {
-    "japanese": "春",
-    "romaji": "haru",
-    "nepali": "बसन्त"
-  },
-  "morning": {
-    "japanese": "午前",
-    "romaji": "gozen",
-    "nepali": "बिहान"
-  },
-  "different": {
-    "japanese": "別",
-    "romaji": "betsu",
-    "nepali": "फरक"
-  },
-  "where": {
-    "japanese": "どこ",
-    "romaji": "doko",
-    "nepali": "कहाँ"
-  },
-  "room": {
-    "japanese": "部屋",
-    "romaji": "heya",
-    "nepali": "कोठा"
-  },
-  "young": {
-    "japanese": "若い",
-    "romaji": "wakai",
-    "nepali": "जवान"
-  },
-  "car": {
-    "japanese": "車",
-    "romaji": "kuruma",
-    "nepali": "गाडी"
-  },
-  "put": {
-    "japanese": "置く",
-    "romaji": "oku",
-    "nepali": "राख्नु"
-  },
-  "live": {
-    "japanese": "住む",
-    "romaji": "sumu",
-    "nepali": "बस्नु"
-  },
-  "work": {
-    "japanese": "働く",
-    "romaji": "hataraku",
-    "nepali": "काम गर्नु"
-  },
-  "difficult": {
-    "japanese": "難しい",
-    "romaji": "muzukashii",
-    "nepali": "गाह्रो"
-  },
-  "teacher": {
-    "japanese": "先生",
-    "romaji": "sensei",
-    "nepali": "शिक्षक"
-  },
-  "stand": {
-    "japanese": "立つ",
-    "romaji": "tatsu",
-    "nepali": "उभिनु"
-  },
-  "call": {
-    "japanese": "呼ぶ",
-    "romaji": "yobu",
-    "nepali": "बोलाउनु"
-  },
-  "university": {
-    "japanese": "大学",
-    "romaji": "daigaku",
-    "nepali": "विश्वविद्यालय"
-  },
-  "cheap": {
-    "japanese": "安い",
-    "romaji": "yasui",
-    "nepali": "सस्तो"
-  },
-  "more": {
-    "japanese": "もっと",
-    "romaji": "motto",
-    "nepali": "अझै"
-  },
-  "return": {
-    "japanese": "帰る",
-    "romaji": "kaeru",
-    "nepali": "फर्कनु"
-  },
-  "understand": {
-    "japanese": "分かる",
-    "romaji": "wakaru",
-    "nepali": "बुझ्नु"
-  },
-  "wide": {
-    "japanese": "広い",
-    "romaji": "hiroi",
-    "nepali": "फराकिलो"
-  },
-  "number": {
-    "japanese": "数",
-    "romaji": "suu",
-    "nepali": "संख्या"
-  },
-  "near": {
-    "japanese": "近い",
-    "romaji": "chikai",
-    "nepali": "नजिक"
-  },
-  "there": {
-    "japanese": "そこ",
-    "romaji": "soko",
-    "nepali": "त्यहाँ"
-  },
-  "run": {
-    "japanese": "走る",
-    "romaji": "hashiru",
-    "nepali": "दौडनु"
-  },
-  "put in": {
-    "japanese": "入れる",
-    "romaji": "ireru",
-    "nepali": "हाल्नु"
-  },
-  "teach": {
-    "japanese": "教える",
-    "romaji": "oshieru",
-    "nepali": "सिकाउनु"
-  },
-  "walk": {
-    "japanese": "歩く",
-    "romaji": "aruku",
-    "nepali": "हिँड्नु"
-  },
-  "meet": {
-    "japanese": "会う",
-    "romaji": "au",
-    "nepali": "भेट्नु"
-  },
-  "write": {
-    "japanese": "書く",
-    "romaji": "kaku",
-    "nepali": "लेख्नु"
-  },
-  "head": {
-    "japanese": "頭",
-    "romaji": "atama",
-    "nepali": "टाउको"
+    "english": "now",
+    "nepali": "अहिले",
+    "image_url": "https://images.pexels.com/photos/3760810/pexels-photo-3760810.jpeg"
   }
 }

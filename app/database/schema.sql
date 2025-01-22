@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS sentences (
 CREATE TABLE IF NOT EXISTS words (
   id SERIAL PRIMARY KEY,
   japanese_text TEXT NOT NULL UNIQUE,
+  image_url TEXT,
   word_type TEXT
 );
 

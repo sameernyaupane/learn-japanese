@@ -63,6 +63,7 @@ export async function getAllWords() {
     SELECT 
       w.id,
       w.japanese_text,
+      w.image_url,
       json_build_object(
         'japanese', MAX(CASE WHEN t.language = 'japanese' THEN t.text END),
         'japanese_romaji', MAX(CASE WHEN t.language = 'japanese_romaji' THEN t.text END),
@@ -71,7 +72,7 @@ export async function getAllWords() {
       ) as translations
     FROM words w
     LEFT JOIN translations t ON w.id = t.word_id
-    GROUP BY w.id, w.japanese_text
+    GROUP BY w.id, w.japanese_text, w.image_url
     ORDER BY w.japanese_text;
   `;
 

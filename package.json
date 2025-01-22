@@ -10,8 +10,9 @@
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "seed": "tsx app/utils/seed.server.ts",
-    "db:reset": "bash app/database/resetdb.sh",
-    "resetandseed": "npm run db:reset && npm run seed"
+    "seed-words": "tsx app/utils/seed-words.server.ts",
+    "resetdb": "bash app/database/resetdb.sh",
+    "resetandseed": "npm run resetdb && npm run seed-words && npm run seed"
   },
   "dependencies": {
     "@remix-run/node": "^2.15.2",

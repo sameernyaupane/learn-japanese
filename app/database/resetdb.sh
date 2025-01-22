@@ -14,28 +14,19 @@ DB_USER=${PG_USERNAME:-"language_user"}
 DB_PASSWORD=${PG_PASSWORD:-"test"}
 DB_HOST=${PG_HOST:-"localhost"}
 
-echo "Dropping and recreating database..."
+echo "Resetting database tables..."
 
 # Export password for database commands
 export PGPASSWORD=$DB_PASSWORD
 
-# First, terminate all connections to the database
-psql -U $DB_USER -h $DB_HOST -d postgres <<EOF
-SELECT pg_terminate_backend(pg_stat_activity.pid)
-FROM pg_stat_activity
-WHERE pg_stat_activity.datname = '$DB_NAME'
-AND pid <> pg_backend_pid();
+# Drop all tables and indexes
+psql -U $DB_USER -h $DB_HOST -d $DB_NAME <<EOF
+DROP TABLE IF EXISTS phrase_indexes, phrases, translations, words, sentences CASCADE;
 EOF
 
-# Drop and recreate database
-psql -U $DB_USER -h $DB_HOST -d postgres <<EOF
-DROP DATABASE IF EXISTS $DB_NAME;
-CREATE DATABASE $DB_NAME;
-EOF
+echo "Tables dropped."
 
-echo "Database recreated."
-
-# Connect to the new database and run the schema
+# Apply schema
 echo "Applying schema..."
 psql -U $DB_USER -h $DB_HOST -d $DB_NAME -f "$PROJECT_ROOT/app/database/schema.sql"
 

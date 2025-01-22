@@ -44,23 +44,36 @@ async function seed() {
 
         // Store Japanese words in the words table
         if (japaneseWord) {
+          let wordId: number;
+          
           if (!wordMap.has(japaneseWord)) {
-            const [wordRecord] = await sql`
-              INSERT INTO words (japanese_text)
-              VALUES (${japaneseWord})
-              RETURNING id
+            // Check if word already exists in database
+            const existingWord = await sql`
+              SELECT id FROM words WHERE japanese_text = ${japaneseWord}
             `;
-            const wordId = wordRecord.id;
-            wordMap.set(japaneseWord, wordId);
 
-            await sql`
-              INSERT INTO translations (word_id, language, text)
-              VALUES 
-                (${wordId}, 'japanese', ${japaneseWord}),
-                (${wordId}, 'japanese_romaji', ${romajiWord}),
-                (${wordId}, 'english', ${englishWord}),
-                (${wordId}, 'nepali', ${nepaliWord})
-            `;
+            if (existingWord.length > 0) {
+              wordId = existingWord[0].id;
+              wordMap.set(japaneseWord, wordId);
+            } else {
+              // Insert new word if it doesn't exist
+              const [wordRecord] = await sql`
+                INSERT INTO words (japanese_text)
+                VALUES (${japaneseWord})
+                RETURNING id
+              `;
+              wordId = wordRecord.id;
+              wordMap.set(japaneseWord, wordId);
+
+              await sql`
+                INSERT INTO translations (word_id, language, text)
+                VALUES 
+                  (${wordId}, 'japanese', ${japaneseWord}),
+                  (${wordId}, 'japanese_romaji', ${romajiWord}),
+                  (${wordId}, 'english', ${englishWord}),
+                  (${wordId}, 'nepali', ${nepaliWord})
+              `;
+            }
           }
         }
       }
