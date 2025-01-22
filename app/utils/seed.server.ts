@@ -3,7 +3,8 @@ import phrasesData from '../data/phrases.json';
 
 async function seed() {
   try {
-    await sql`TRUNCATE phrases, phrase_indexes, translations, words, sentences CASCADE`;
+    // Only truncate phrases and phrase_indexes, not words and translations
+    await sql`TRUNCATE phrases, phrase_indexes CASCADE`;
 
     const wordMap = new Map<string, number>();
 
@@ -55,24 +56,6 @@ async function seed() {
             if (existingWord.length > 0) {
               wordId = existingWord[0].id;
               wordMap.set(japaneseWord, wordId);
-            } else {
-              // Insert new word if it doesn't exist
-              const [wordRecord] = await sql`
-                INSERT INTO words (japanese_text)
-                VALUES (${japaneseWord})
-                RETURNING id
-              `;
-              wordId = wordRecord.id;
-              wordMap.set(japaneseWord, wordId);
-
-              await sql`
-                INSERT INTO translations (word_id, language, text)
-                VALUES 
-                  (${wordId}, 'japanese', ${japaneseWord}),
-                  (${wordId}, 'japanese_romaji', ${romajiWord}),
-                  (${wordId}, 'english', ${englishWord}),
-                  (${wordId}, 'nepali', ${nepaliWord})
-              `;
             }
           }
         }
