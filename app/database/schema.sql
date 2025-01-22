@@ -1,9 +1,3 @@
-CREATE TABLE IF NOT EXISTS sentences (
-  id SERIAL PRIMARY KEY,
-  english_text TEXT NOT NULL UNIQUE,
-  image_url TEXT
-);
-
 CREATE TABLE IF NOT EXISTS words (
   id SERIAL PRIMARY KEY,
   japanese_text TEXT NOT NULL UNIQUE,
@@ -22,7 +16,8 @@ CREATE TABLE IF NOT EXISTS translations (
 CREATE TABLE IF NOT EXISTS phrases (
   id SERIAL PRIMARY KEY,
   order_number INTEGER NOT NULL,
-  sentence_id INTEGER REFERENCES sentences(id)
+  english_text TEXT NOT NULL UNIQUE,
+  image_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS phrase_indexes (

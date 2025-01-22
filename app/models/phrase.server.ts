@@ -21,13 +21,12 @@ export async function getPhrases(): Promise<Phrase[]> {
       SELECT 
         p.id,
         p.order_number,
-        s.english_text,
-        s.image_url,
+        p.english_text,
+        p.image_url,
         pi.index_number,
         pi.text,
         pi.language
       FROM phrases p
-      JOIN sentences s ON p.sentence_id = s.id
       JOIN phrase_indexes pi ON p.id = pi.phrase_id
       ORDER BY p.order_number, pi.index_number
     )

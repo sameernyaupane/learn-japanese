@@ -4,8 +4,6 @@ import { downloadImage } from './image.server';
 
 async function seedWords() {
   try {
-    await sql`TRUNCATE translations, words CASCADE`;
-
     for (const [japanese, translations] of Object.entries(wordsData)) {
       // Check if word already exists
       const existingWord = await sql`
