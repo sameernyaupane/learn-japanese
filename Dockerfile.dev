@@ -1,0 +1,27 @@
+# Development image
+FROM node:20-bullseye-slim
+
+# Install required system tools
+RUN apt-get update && \
+    apt-get install -y wget ca-certificates gnupg2 && \
+    mkdir -p /etc/apt/keyrings && \
+    wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/keyrings/postgresql.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && \
+    apt-get install -y postgresql-client-15 && \
+    npm install -g tsx && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /remixapp
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies including dev dependencies
+RUN npm install
+
+# Set development environment
+ENV NODE_ENV=development
+
+# Default command (can be overridden in compose.yml)
+CMD ["npm", "run", "dev"] 

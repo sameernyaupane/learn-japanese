@@ -1,0 +1,85 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${PG_PORT}:${PG_PORT}"
+    profiles:
+      - dev
+      - prod
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis_data:/data
+    profiles:
+      - dev
+      - prod
+
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./dozzle:/data
+    environment:
+      DOZZLE_AUTH_PROVIDER: simple
+    ports:
+      - "${DOZZLE_PORT}:8080"
+    profiles:
+      - dev
+      - prod
+
+  app-dev:
+    profiles:
+      - dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PG_HOST=postgres
+      - REDIS_HOST=redis
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - .:/remixapp
+    depends_on:
+      - postgres
+      - redis
+    command: ["npm", "run", "dev"]
+
+  app-prod:
+    profiles:
+      - prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      target: production
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PG_HOST=postgres
+      - REDIS_HOST=redis
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./certs:/remixapp/certs
+      - ./public:/remixapp/public
+    depends_on:
+      - postgres
+      - redis
+    command: ["npm", "start"]
+
+volumes:
+  postgres_data:
+  redis_data:

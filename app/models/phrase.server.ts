@@ -59,7 +59,7 @@ export async function getPhrases(): Promise<Phrase[]> {
 
 export async function getAllWords() {
   const words = await sql`
-    SELECT 
+    SELECT
       w.id,
       w.japanese_text,
       w.image_url,
@@ -72,7 +72,7 @@ export async function getAllWords() {
     FROM words w
     LEFT JOIN translations t ON w.id = t.word_id
     GROUP BY w.id, w.japanese_text, w.image_url
-    ORDER BY w.japanese_text;
+    ORDER BY w.id;
   `;
 
   return words;

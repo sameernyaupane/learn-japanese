@@ -124,5 +124,173 @@
     "english": "now",
     "nepali": "अहिले",
     "image_url": "https://images.pexels.com/photos/3760810/pexels-photo-3760810.jpeg"
+  },
+  "新しい": {
+    "romaji": "atarashii",
+    "english": "new",
+    "nepali": "नयाँ",
+    "image_url": "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg"
+  },
+  "なる": {
+    "romaji": "naru",
+    "english": "become",
+    "nepali": "बन्नु",
+    "image_url": "https://images.pexels.com/photos/1002703/pexels-photo-1002703.jpeg"
+  },
+  "まだ": {
+    "romaji": "mada",
+    "english": "not yet, still",
+    "nepali": "अझै",
+    "image_url": "https://images.pexels.com/photos/9321606/pexels-photo-9321606.jpeg"
+  },
+  "あと": {
+    "romaji": "ato",
+    "english": "after",
+    "nepali": "पछि",
+    "image_url": "https://images.pexels.com/photos/12802851/pexels-photo-12802851.jpeg"
+  },
+  "聞く": {
+    "romaji": "kiku",
+    "english": "hear, ask",
+    "nepali": "सोध्नु",
+    "image_url": "https://images.pexels.com/photos/3779448/pexels-photo-3779448.jpeg"
+  },
+  "言う": {
+    "romaji": "iu",
+    "english": "say, tell",
+    "nepali": "भन्नु",
+    "image_url": "https://images.pexels.com/photos/13044705/pexels-photo-13044705.jpeg"
+  },
+  "少ない": {
+    "romaji": "sukunai",
+    "english": "few, little",
+    "nepali": "कम",
+    "image_url": "https://images.pexels.com/photos/1433487/pexels-photo-1433487.jpeg"
+  },
+  "高い": {
+    "romaji": "takai",
+    "english": "high, tall",
+    "nepali": "उच्च",
+    "image_url": "https://images.pexels.com/photos/2467163/pexels-photo-2467163.jpeg"
+  },
+  "子供": {
+    "romaji": "kodomo",
+    "english": "child",
+    "nepali": "बच्चा",
+    "image_url": "https://images.pexels.com/photos/35537/child-children-girl-happy.jpg"
+  },
+  "そう": {
+    "romaji": "sou",
+    "english": "so, that way",
+    "nepali": "त्यसरी",
+    "image_url": "https://images.pexels.com/photos/66100/pexels-photo-66100.jpeg"
+  },
+  "もう": {
+    "romaji": "mou",
+    "english": "already, yet",
+    "nepali": "पहिले नै, अहिले सम्म",
+    "image_url": "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg"
+  },
+  "学生": {
+    "romaji": "gakusei",
+    "english": "student",
+    "nepali": "विद्यार्थी",
+    "image_url": "https://images.pexels.com/photos/4145153/pexels-photo-4145153.jpeg"
+  },
+  "熱い": {
+    "romaji": "atsui",
+    "english": "hot to touch",
+    "nepali": "तातो",
+    "image_url": "https://images.pexels.com/photos/87611/sun-fireball-solar-flare-sunlight-87611.jpeg"
+  },
+  "どうぞ": {
+    "romaji": "douzo",
+    "english": "please",
+    "nepali": "कृपया",
+    "image_url": "https://images.pexels.com/photos/3761270/pexels-photo-3761270.jpeg"
+  },
+  "午後": {
+    "romaji": "gogo",
+    "english": "afternoon, p.m.",
+    "nepali": "अपरान्ह",
+    "image_url": "https://images.pexels.com/photos/3952068/pexels-photo-3952068.jpeg"
+  },
+  "長い": {
+    "romaji": "nagai",
+    "english": "long",
+    "nepali": "लामो",
+    "image_url": "https://images.pexels.com/photos/1382156/pexels-photo-1382156.jpeg"
+  },
+  "本": {
+    "romaji": "hon",
+    "english": "book, volume",
+    "nepali": "पुस्तक",
+    "image_url": "https://images.pexels.com/photos/1907785/pexels-photo-1907785.jpeg"
+  },
+  "今年": {
+    "romaji": "kotoshi",
+    "english": "this year",
+    "nepali": "यस वर्ष",
+    "image_url": "https://images.pexels.com/photos/769525/pexels-photo-769525.jpeg"
+  },
+  "よく": {
+    "romaji": "yoku",
+    "english": "often, well",
+    "nepali": "प्रायः, राम्रोसँग",
+    "image_url": "https://images.pexels.com/photos/3771114/pexels-photo-3771114.jpeg"
+  },
+  "彼女": {
+    "romaji": "kanojo",
+    "english": "she, one's girlfriend",
+    "nepali": "उनी, प्रेमिका",
+    "image_url": "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg"
+  },
+  "どう": {
+    "romaji": "dou",
+    "english": "how, what",
+    "nepali": "कसरी, के",
+    "image_url": "https://images.pexels.com/photos/4220084/pexels-photo-4220084.jpeg"
+  },
+  "言葉": {
+    "romaji": "kotoba",
+    "english": "word, language",
+    "nepali": "शब्द, भाषा",
+    "image_url": "https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg"
+  },
+  "顔": {
+    "romaji": "kao",
+    "english": "face",
+    "nepali": "अनुहार",
+    "image_url": "https://images.pexels.com/photos/3778603/pexels-photo-3778603.jpeg"
+  },
+  "終わる": {
+    "romaji": "owaru",
+    "english": "finish, end",
+    "nepali": "समाप्त गर्नु",
+    "image_url": "https://images.pexels.com/photos/13740672/pexels-photo-13740672.jpeg"
+  },
+  "一つ": {
+    "romaji": "hitotsu",
+    "english": "one thing",
+    "nepali": "एउटा",
+    "image_url": "https://images.pexels.com/photos/30442944/pexels-photo-30442944/free-photo-of-solitary-cattle-egret-in-plowed-field.jpeg"
+  },
+  "あげる": {
+    "romaji": "ageru",
+    "english": "give, offer",
+    "nepali": "दिनु, प्रस्ताव गर्नु",
+    "image_url": "https://images.pexels.com/photos/6408285/pexels-photo-6408285.jpeg"
+  },
+  "こう": {
+    "romaji": "kou",
+    "english": "like this, such",
+    "nepali": "यस्तो, यसरी",
+    "image_url": "https://images.pexels.com/photos/669614/pexels-photo-669614.jpeg"
+  },
+  "学校": {
+    "romaji": "gakkou",
+    "english": "school",
+    "nepali": "विद्यालय",
+    "image_url": "https://images.pexels.com/photos/7972506/pexels-photo-7972506.jpeg"
   }
 }

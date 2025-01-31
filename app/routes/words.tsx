@@ -17,7 +17,7 @@ export default function Words() {
         {words.map((word) => (
           <div key={word.id} className="mb-8 overflow-hidden rounded-xl bg-gray-50 shadow-md border border-gray-300">
             {word.image_url && (
-              <div className="w-full h-48 overflow-hidden">
+              <div className="w-full h-60 overflow-hidden">
                 <img 
                   src={word.image_url} 
                   alt={word.translations.english || word.translations.japanese_romaji}
