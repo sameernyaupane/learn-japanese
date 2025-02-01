@@ -32,6 +32,7 @@ export default function Words() {
                 </h2>
                 {word.translations.japanese && (
                   <button 
+                    onClick={() => document.getElementById(`audio-${word.id}`)?.play()}
                     onMouseEnter={() => document.getElementById(`audio-${word.id}`)?.play()}
                     onMouseLeave={() => {
                       const audio = document.getElementById(`audio-${word.id}`);
