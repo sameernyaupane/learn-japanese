@@ -26,14 +26,21 @@ export default function Words() {
               </div>
             )}
             <div className="p-4">
-              <h2 className="text-lg font-bold mb-2 text-black">
-                {word.translations.japanese_romaji}
-              </h2>
-              {word.translations.japanese && (
-                <div className="mt-2">
+              <div className="flex flex-row items-center gap-2 mb-2">
+                <h2 className="text-lg font-bold text-black">
+                  {word.translations.japanese_romaji}
+                </h2>
+                {word.translations.japanese && (
                   <button 
-                    onClick={() => document.getElementById(`audio-${word.id}`)?.play()}
-                    className="p-2 rounded hover:bg-gray-100 transition-colors inline-flex items-center"
+                    onMouseEnter={() => document.getElementById(`audio-${word.id}`)?.play()}
+                    onMouseLeave={() => {
+                      const audio = document.getElementById(`audio-${word.id}`);
+                      if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                      }
+                    }}
+                    className="p-1 rounded hover:bg-gray-100 transition-colors inline-flex items-center"
                     aria-label="Play pronunciation"
                   >
                     <svg 
@@ -42,7 +49,7 @@ export default function Words() {
                       viewBox="0 0 24 24" 
                       strokeWidth="1.5" 
                       stroke="currentColor" 
-                      className="w-5 h-5 text-gray-600"
+                      className="w-4 h-4 text-gray-600"
                     >
                       <path 
                         strokeLinecap="round" 
@@ -56,8 +63,8 @@ export default function Words() {
                       className="hidden"
                     />
                   </button>
-                </div>
-              )}
+                )}
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <tbody className="divide-y divide-gray-200">
