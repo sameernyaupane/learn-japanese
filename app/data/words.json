@@ -1028,7 +1028,7 @@
   "やる": {
     "romaji": "yaru",
     "english": "do, give",
-    "nepali": "गर्नु",
+    "nepali": "दिनु",
     "image_url": "https://images.pexels.com/photos/1181359/pexels-photo-1181359.jpeg"
   },
   "かなり": {
@@ -1324,12 +1324,6 @@
     "english": "chat, talk",
     "nepali": "कुराकानी गर्नु",
     "image_url": "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg"
-  },
-  "近く": {
-    "romaji": "chikaku",
-    "english": "in the near future, before long",
-    "nepali": "चाँडै",
-    "image_url": "https://images.pexels.com/photos/1431282/pexels-photo-1431282.jpeg"
   },
   "甘い": {
     "romaji": "amai",
@@ -2476,12 +2470,6 @@
     "english": "computer",
     "nepali": "कम्प्युटर",
     "image_url": "https://images.pexels.com/photos/177598/pexels-photo-177598.jpeg"
-  },
-  "やる": {
-    "romaji": "yaru",
-    "english": "give to an inferior",
-    "nepali": "दिनु (निम्नतमलाई)",
-    "image_url": "https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg"
   },
   "意味": {
     "romaji": "imi",
