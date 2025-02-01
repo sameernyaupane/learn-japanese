@@ -2974,5 +2974,197 @@
     "english": "wash",
     "nepali": "धुनु",
     "image_url": "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg"
+  },
+  "パート": {
+    "romaji": "pa-to",
+    "english": "part-time",
+    "nepali": "अंशकालीन",
+    "image_url": "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg"
+  },
+  "氏名": {
+    "romaji": "shimei",
+    "english": "full name",
+    "nepali": "पुरा नाम",
+    "image_url": "https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg"
+  },
+  "今夜": {
+    "romaji": "konya",
+    "english": "tonight",
+    "nepali": "आज रात",
+    "image_url": "https://images.pexels.com/photos/355948/pexels-photo-355948.jpeg"
+  },
+  "夜中": {
+    "romaji": "yonaka",
+    "english": "midnight",
+    "nepali": "मध्यरात",
+    "image_url": "https://images.pexels.com/photos/355948/pexels-photo-355948.jpeg"
+  },
+  "来週": {
+    "romaji": "raishuu",
+    "english": "next week",
+    "nepali": "अर्को हप्ता",
+    "image_url": "https://images.pexels.com/photos/236151/pexels-photo-236151.jpeg"
+  },
+  "誰か": {
+    "romaji": "dareka",
+    "english": "someone",
+    "nepali": "कसैलाई",
+    "image_url": "https://images.pexels.com/photos/450597/pexels-photo-450597.jpeg"
+  },
+  "何": {
+    "romaji": "nani",
+    "english": "what",
+    "nepali": "के",
+    "image_url": "https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg"
+  },
+  "今朝": {
+    "romaji": "kesa",
+    "english": "this morning",
+    "nepali": "आज बिहान",
+    "image_url": "https://images.pexels.com/photos/2386144/pexels-photo-2386144.jpeg"
+  },
+  "寿司": {
+    "romaji": "sushi",
+    "english": "sushi",
+    "nepali": "सुशी",
+    "image_url": "https://images.pexels.com/photos/2098085/pexels-photo-2098085.jpeg"
+  },
+  "履く": {
+    "romaji": "haku",
+    "english": "put on shoes/wear pants",
+    "nepali": "लगाउनु (जुत्ता, पाइन्ट)",
+    "image_url": "https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg"
+  },
+  "おじさん": {
+    "romaji": "ojisan",
+    "english": "uncle",
+    "nepali": "काका",
+    "image_url": "https://images.pexels.com/photos/265787/pexels-photo-265787.jpeg"
+  },
+  "おばさん": {
+    "romaji": "obasan",
+    "english": "aunt",
+    "nepali": "काकी",
+    "image_url": "https://images.pexels.com/photos/7550289/pexels-photo-7550289.jpeg"
+  },
+  "お祖母さん": {
+    "romaji": "obaasan",
+    "english": "grandmother",
+    "nepali": "बज्यै",
+    "image_url": "https://images.pexels.com/photos/7550289/pexels-photo-7550289.jpeg"
+  },
+  "いとこ": {
+    "romaji": "itoko",
+    "english": "cousin",
+    "nepali": "भान्जा/भाउजु",
+    "image_url": "https://images.pexels.com/photos/3778603/pexels-photo-3778603.jpeg"
+  },
+  "辞書": {
+    "romaji": "jisho",
+    "english": "dictionary",
+    "nepali": "शब्दकोश",
+    "image_url": "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg"
+  },
+  "朝ご飯": {
+    "romaji": "asagohan",
+    "english": "breakfast",
+    "nepali": "बिहानको खाना",
+    "image_url": "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg"
+  },
+  "白": {
+    "romaji": "shiro",
+    "english": "white",
+    "nepali": "सेतो",
+    "image_url": "https://images.pexels.com/photos/236047/pexels-photo-236047.jpeg"
+  },
+  "どっち": {
+    "romaji": "docchi",
+    "english": "which (casual)",
+    "nepali": "कुन (अनौपचारिक)",
+    "image_url": "https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg"
+  },
+  "そっち": {
+    "romaji": "socchi",
+    "english": "there (casual)",
+    "nepali": "त्यहाँ (अनौपचारिक)",
+    "image_url": "https://images.pexels.com/photos/257040/pexels-photo-257040.jpeg"
+  },
+  "明日": {
+    "romaji": "ashita",
+    "english": "tomorrow",
+    "nepali": "भोलि",
+    "image_url": "https://images.pexels.com/photos/236151/pexels-photo-236151.jpeg"
+  },
+  "明後日": {
+    "romaji": "myougonichi/asatte",
+    "english": "day after tomorrow",
+    "nepali": "परसो",
+    "image_url": "https://images.pexels.com/photos/236151/pexels-photo-236151.jpeg"
+  },
+  "一昨日": {
+    "romaji": "ototoi",
+    "english": "day before yesterday",
+    "nepali": "अस्ति",
+    "image_url": "https://images.pexels.com/photos/236151/pexels-photo-236151.jpeg"
+  },
+  "庭": {
+    "romaji": "niwa",
+    "english": "garden",
+    "nepali": "बगैंचा",
+    "image_url": "https://images.pexels.com/photos/236047/pexels-photo-236047.jpeg"
+  },
+  "左側": {
+    "romaji": "hidarigawa",
+    "english": "left side",
+    "nepali": "बायाँ तर्फ",
+    "image_url": "https://images.pexels.com/photos/257040/pexels-photo-257040.jpeg"
+  },
+  "右側": {
+    "romaji": "migigawa",
+    "english": "right side",
+    "nepali": "दायाँ तर्फ",
+    "image_url": "https://images.pexels.com/photos/257040/pexels-photo-257040.jpeg"
+  },
+  "指": {
+    "romaji": "yubi",
+    "english": "finger",
+    "nepali": "औंला",
+    "image_url": "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg"
+  },
+  "眼鏡": {
+    "romaji": "megane",
+    "english": "glasses",
+    "nepali": "चश्मा",
+    "image_url": "https://images.pexels.com/photos/6627538/pexels-photo-6627538.jpeg"
+  },
+  "鞄": {
+    "romaji": "kaban",
+    "english": "bag",
+    "nepali": "झोला",
+    "image_url": "https://images.pexels.com/photos/2422297/pexels-photo-2422297.jpeg"
+  },
+  "あっち": {
+    "romaji": "acchi",
+    "english": "over there (casual)",
+    "nepali": "त्यहाँ (अनौपचारिक)",
+    "image_url": "https://images.pexels.com/photos/257040/pexels-photo-257040.jpeg"
+  },
+  "大人しい": {
+    "romaji": "otonashii",
+    "english": "gentle",
+    "nepali": "सौम्य",
+    "image_url": "https://images.pexels.com/photos/7550289/pexels-photo-7550289.jpeg"
+  },
+  "下手": {
+    "romaji": "heta",
+    "english": "not good at",
+    "nepali": "खराब",
+    "image_url": "https://images.pexels.com/photos/1433487/pexels-photo-1433487.jpeg"
+  },
+  "厳しい": {
+    "romaji": "kibishii",
+    "english": "strict",
+    "nepali": "कडा",
+    "image_url": "https://images.pexels.com/photos/265787/pexels-photo-265787.jpeg"
   }
 }
