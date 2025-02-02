@@ -193,7 +193,13 @@ export async function getEntries(page: number = 1, perPage: number = 50): Promis
       '&vs;': 'Suru verb',
       '&pref;': 'Prefix',
       '&suf;': 'Suffix',
-      '&int;': 'Interjection'
+      '&int;': 'Interjection',
+      '&adj-f;': 'Noun/verb prenominally',
+      '&adj-t;': 'Taru adjective',
+      '&adv-to;': 'Adverb taking \'to\'',
+      '&vs-c;': 'Suru verb (classical)',
+      '&vs-i;': 'Suru verb (included)',
+      '&vs-s;': 'Suru verb (special)'
     };
     return POS_MAP[pos] || pos.replace(/^&|;$/g, '');
   };
