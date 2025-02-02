@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export async function seedJMdict() {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     try {
       const filePath = path.resolve(__dirname, '../data/sample.xml');
       const parser = sax.createStream(false, {
@@ -131,6 +131,7 @@ export async function seedJMdict() {
           reject(new Error('No entries found in XML file'));
         } else {
           console.log('🏁 Finished processing XML stream');
+          resolve();
         }
       });
 
