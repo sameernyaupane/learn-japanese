@@ -95,8 +95,13 @@ export default function Index() {
                   {/* Kanji Header */}
                   <div className="mb-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="text-4xl font-bold text-gray-900">
-                        {primaryKanji}
+                      <div className="flex flex-col">
+                        <div className="text-sm text-gray-600 -mb-2 leading-tight">
+                          {primaryKana}
+                        </div>
+                        <div className="text-4xl font-bold text-gray-900">
+                          {primaryKanji}
+                        </div>
                       </div>
                       {priority && (
                         <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
@@ -105,37 +110,34 @@ export default function Index() {
                       )}
                     </div>
                     <div className="flex items-baseline gap-2">
-                      <div className="text-lg text-gray-600 font-medium">
-                        {primaryKana}
-                        {entry.kana_elements[0]?.audio && (
-                          <button
-                            onClick={() => handleAudioPlay(entry.kana_elements[0].audio!)}
-                            onMouseEnter={() => {
-                              if (entry.kana_elements[0]?.audio) {
-                                const timeout = setTimeout(() => {
-                                  handleAudioPlay(entry.kana_elements[0].audio!);
-                                }, 500);
-                                setHoverTimeout(timeout);
-                              }
-                            }}
-                            onMouseLeave={() => {
-                              if (hoverTimeout) {
-                                clearTimeout(hoverTimeout);
-                                setHoverTimeout(null);
-                              }
-                              if (currentAudio) {
-                                currentAudio.pause();
-                              }
-                            }}
-                            className="ml-2 p-1 text-gray-400 hover:text-blue-600"
-                          >
-                            <SpeakerWaveIcon className="h-4 w-4" />
-                          </button>
-                        )}
-                      </div>
                       <div className="text-sm text-gray-400">
                         {romaji}
                       </div>
+                      {entry.kana_elements[0]?.audio && (
+                        <button
+                          onClick={() => handleAudioPlay(entry.kana_elements[0].audio!)}
+                          onMouseEnter={() => {
+                            if (entry.kana_elements[0]?.audio) {
+                              const timeout = setTimeout(() => {
+                                handleAudioPlay(entry.kana_elements[0].audio!);
+                              }, 500);
+                              setHoverTimeout(timeout);
+                            }
+                          }}
+                          onMouseLeave={() => {
+                            if (hoverTimeout) {
+                              clearTimeout(hoverTimeout);
+                              setHoverTimeout(null);
+                            }
+                            if (currentAudio) {
+                              currentAudio.pause();
+                            }
+                          }}
+                          className="p-1 text-gray-400 hover:text-blue-600"
+                        >
+                          <SpeakerWaveIcon className="h-4 w-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
 
