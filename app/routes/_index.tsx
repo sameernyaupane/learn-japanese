@@ -2,6 +2,7 @@ import { type LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEntries } from '~/models/jmdict';
 import Navigation from '~/components/Navigation';
+import Wanakana from 'wanakana';
 
 const parsePartOfSpeech = (pos: string) => {
   const POS_MAP: { [key: string]: string } = {
@@ -115,14 +116,26 @@ export default function Index() {
                         <span className="mr-2">あ</span>Kana Readings
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {entry.kana_elements.map((kana) => (
-                          <span 
-                            key={kana.id}
-                            className="px-3 py-1.5 bg-green-50 text-green-800 rounded-lg font-medium text-sm"
-                          >
-                            {kana.reb}
-                          </span>
-                        ))}
+                        {entry.kana_elements.map((kana) => {
+                          const romaji = Wanakana.toRomaji(kana.reb, { 
+                            upcaseKatakana: true, 
+                            imemode: true 
+                          });
+                          
+                          return (
+                            <div 
+                              key={kana.id}
+                              className="inline-flex items-center gap-1.5 mr-2"
+                            >
+                              <span className="px-3 py-1.5 bg-green-50 text-green-800 rounded-lg font-medium text-sm">
+                                {kana.reb}
+                              </span>
+                              <span className="text-gray-500 text-sm">
+                                {romaji}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   )}

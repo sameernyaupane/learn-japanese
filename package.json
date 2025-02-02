@@ -18,6 +18,7 @@
     "@remix-run/node": "^2.15.2",
     "@remix-run/react": "^2.15.2",
     "@remix-run/serve": "^2.15.2",
+    "@types/wanakana": "^4.0.6",
     "dotenv": "^16.4.7",
     "fast-xml-parser": "^4.5.1",
     "isbot": "^4.1.0",
@@ -25,7 +26,8 @@
     "postgres": "^3.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sax": "^1.4.1"
+    "sax": "^1.4.1",
+    "wanakana": "^5.3.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.15.2",
