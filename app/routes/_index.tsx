@@ -96,7 +96,7 @@ export default function Index() {
                   <div className="mb-4 space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <div className="text-sm text-gray-600 -mb-2 leading-tight">
+                        <div className="text-sm text-gray-600 leading-tight">
                           {primaryKana}
                         </div>
                         <div className="text-4xl font-bold text-gray-900">
