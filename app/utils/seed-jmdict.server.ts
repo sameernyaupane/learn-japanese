@@ -14,7 +14,7 @@ const __dirname = dirname(__filename);
 export async function seedJMdict() {
   return new Promise<void>((resolve, reject) => {
     try {
-      const filePath = path.resolve(__dirname, '../data/sample.xml');
+      const filePath = path.resolve(__dirname, '../data/JMdict_e_examp');
       const parser = sax.createStream(false, {
         trim: true,
         xmlns: false,

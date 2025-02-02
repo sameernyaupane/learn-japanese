@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS kana_elements (
   re_nokanji BOOLEAN,
   re_restr JSONB,
   re_inf JSONB,
-  pri JSONB
+  pri JSONB,
+  romaji TEXT
 );
 
 CREATE TABLE IF NOT EXISTS senses (

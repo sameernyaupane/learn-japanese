@@ -2,65 +2,20 @@ import { type LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEntries } from '~/models/jmdict';
 import Navigation from '~/components/Navigation';
-import Wanakana from 'wanakana';
+import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 
-const parsePartOfSpeech = (pos: string) => {
-  const POS_MAP: { [key: string]: string } = {
-    '&unc;': 'Ⓤ Unclassified',
-    '&adj-i;': 'い-adjective',
-    '&adj-na;': 'な-adjective',
-    '&adj-ix;': 'い-adjective (yoi/ii)',
-    '&adj-t;': 'たる-adjective',
-    '&adv;': 'Adverb',
-    '&adv-to;': 'Adverb taking the と particle',
-    '&aux;': 'Auxiliary',
-    '&aux-adj;': 'Auxiliary adjective',
-    '&aux-v;': 'Auxiliary verb',
-    '&conj;': 'Conjunction',
-    '&cop;': 'Copula',
-    '&ctr;': 'Counter',
-    '&exp;': 'Expression',
-    '&int;': 'Interjection',
-    '&n;': 'Noun',
-    '&n-adv;': 'Adverbial noun',
-    '&n-pr;': 'Proper noun',
-    '&n-pref;': 'Noun prefix',
-    '&n-suf;': 'Noun suffix',
-    '&n-t;': 'Temporal noun',
-    '&num;': 'Numeric',
-    '&pn;': 'Pronoun',
-    '&pref;': 'Prefix',
-    '&prt;': 'Particle',
-    '&suf;': 'Suffix',
-    '&v1;': 'Ichidan verb',
-    '&v5;': 'Godan verb',
-    '&v5aru;': 'Godan verb - -aru special class',
-    '&v5k;': 'Godan verb (iku/yuku)',
-    '&v5s;': 'Godan verb - -suru special class',
-    '&v5u;': 'Godan verb - -u special class',
-    '&v5z;': 'Godan verb - -zuru special class',
-    '&vi;': 'Intransitive verb',
-    '&vk;': 'Kuru verb',
-    '&vn;': 'Irregular nu verb',
-    '&vr;': 'Irregular ru verb',
-    '&vs;': 'Suru verb',
-    '&vs-c;': 'Su verb - precursor to the modern suru',
-    '&vs-i;': 'Suru verb - irregular',
-    '&vs-s;': 'Suru verb - special class',
-    '&vt;': 'Transitive verb',
-    '&vz;': 'Zuru verb',
-  };
-
-  return POS_MAP[pos] || pos.replace(/^&|;$/g, '');
-};
-
-export const loader = async () => {
-  const entries = await getEntries();
-  return { entries };
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const url = new URL(request.url);
+  const page = Number(url.searchParams.get('page') || 1);
+  const { entries, totalEntries } = await getEntries(page, 50);
+  return { entries, totalEntries, currentPage: page };
 };
 
 export default function Index() {
-  const { entries } = useLoaderData<typeof loader>();
+  const { entries, totalEntries, currentPage } = useLoaderData<typeof loader>();
+  const totalPages = Math.ceil(totalEntries / 50);
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -116,26 +71,41 @@ export default function Index() {
                         <span className="mr-2">あ</span>Kana Readings
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {entry.kana_elements.map((kana) => {
-                          const romaji = Wanakana.toRomaji(kana.reb, { 
-                            upcaseKatakana: true, 
-                            imemode: true 
-                          });
-                          
-                          return (
-                            <div 
-                              key={kana.id}
-                              className="inline-flex items-center gap-1.5 mr-2"
+                        {entry.kana_elements.map((kana) => (
+                          <div key={kana.id} className="inline-flex items-center gap-1.5 mr-2">
+                            <span className="px-3 py-1.5 bg-green-50 text-green-800 rounded-lg font-medium text-sm">
+                              {kana.reb}
+                            </span>
+                            <span className="text-gray-500 text-sm">
+                              {kana.romaji}
+                            </span>
+                            <button
+                              onMouseEnter={async (e) => {
+                                e.preventDefault();
+                                if (currentAudio) {
+                                  currentAudio.pause();
+                                }
+                                const audio = new Audio(entry.audio[0]);
+                                setCurrentAudio(audio);
+                                await audio.play();
+                              }}
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                if (currentAudio) {
+                                  currentAudio.pause();
+                                }
+                                const audio = new Audio(entry.audio[0]);
+                                setCurrentAudio(audio);
+                                await audio.play();
+                              }}
+                              className="p-2 text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
+                              role="button"
+                              aria-label="Play pronunciation"
                             >
-                              <span className="px-3 py-1.5 bg-green-50 text-green-800 rounded-lg font-medium text-sm">
-                                {kana.reb}
-                              </span>
-                              <span className="text-gray-500 text-sm">
-                                {romaji}
-                              </span>
-                            </div>
-                          );
-                        })}
+                              <SpeakerWaveIcon className="h-6 w-6" />
+                            </button>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -160,7 +130,7 @@ export default function Index() {
                                 key={posIndex}
                                 className="px-2 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-md"
                               >
-                                {parsePartOfSpeech(pos)}
+                                {pos}
                               </span>
                             ))}
                           </div>
@@ -214,10 +184,68 @@ export default function Index() {
                     </div>
                   ))}
                 </div>
+
+                {/* Audio Sources */}
+                <div className="text-xs text-gray-400 space-y-1">
+                  <div>Audio source:</div>
+                  {entry.audio?.map((src, i) => (
+                    <div key={i} className="break-all max-w-xs">
+                      <a href={src} target="_blank" rel="noreferrer" className="hover:underline">
+                        {src}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="text-xs text-gray-400 space-y-1">
+                    <div>Audio source:</div>
+                    {entry.audio?.map((src, i) => (
+                      <div key={i} className="break-all max-w-xs">
+                        <a href={src} target="_blank" rel="noreferrer" className="hover:underline">
+                          {src}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
         </div>
+
+        <div className="mt-8 flex justify-between items-center">
+          <a
+            href={`?page=${currentPage - 1}`}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === 1 
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+            }`}
+          >
+            Previous
+          </a>
+          <span className="text-gray-600">
+            Page {currentPage} of {totalPages}
+          </span>
+          <a
+            href={`?page=${currentPage + 1}`}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === totalPages 
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+            }`}
+          >
+            Next
+          </a>
+        </div>
+
+        <footer className="mt-12 text-center text-sm text-gray-500">
+          Audio provided by{' '}
+          <a href="https://soundoftext.com" className="text-blue-600 hover:underline">
+            Sound of Text
+          </a>
+        </footer>
       </div>
     </div>
   );
