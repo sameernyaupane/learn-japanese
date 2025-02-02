@@ -351,15 +351,22 @@ async function processBatch(batch: any[]) {
         }
       }
     }
+  });
+}
 
-    // Verification query
+async function runSeed() {  
+  try {
+    console.log('🚀 Starting seed...');
+    await seedJMdict();
+
+    // Add single verification at the end
     console.log('\n✅ Final database state:');
-    const entryCount = await tx`SELECT COUNT(*) FROM jmdict_entries`;
-    const kanjiCount = await tx`SELECT COUNT(*) FROM kanji_elements`;
-    const kanaCount = await tx`SELECT COUNT(*) FROM kana_elements`;
-    const senseCount = await tx`SELECT COUNT(*) FROM senses`;
-    const glossCount = await tx`SELECT COUNT(*) FROM glosses`;
-    const exampleCount = await tx`SELECT COUNT(*) FROM examples`;
+    const entryCount = await sql`SELECT COUNT(*) FROM jmdict_entries`;
+    const kanjiCount = await sql`SELECT COUNT(*) FROM kanji_elements`;
+    const kanaCount = await sql`SELECT COUNT(*) FROM kana_elements`;
+    const senseCount = await sql`SELECT COUNT(*) FROM senses`;
+    const glossCount = await sql`SELECT COUNT(*) FROM glosses`;
+    const exampleCount = await sql`SELECT COUNT(*) FROM examples`;
 
     console.log({
       entries: entryCount[0].count,
@@ -369,13 +376,7 @@ async function processBatch(batch: any[]) {
       glosses: glossCount[0].count,
       examples: exampleCount[0].count
     });
-  });
-}
 
-async function runSeed() {  
-  try {
-    console.log('🚀 Starting seed...');
-    await seedJMdict();
   } catch (err) {
     console.error('💥 Seed failed:', err);
     process.exit(1);
