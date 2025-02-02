@@ -16,13 +16,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 function SearchForm({ initialQuery }: { initialQuery: string }) {
   return (
-    <form 
-      method="get" 
+    <form
+      method="get"
       className="mb-4 max-w-2xl mx-auto"
-      action={({ formData }) => {
-        const query = formData.get('q');
-        return `?q=${encodeURIComponent(query as string)}`;
-      }}
+      action={`?q=${initialQuery}`}
     >
       <div className="flex gap-2">
         <input

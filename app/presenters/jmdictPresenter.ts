@@ -1,4 +1,4 @@
-import { JMdictEntry } from '../models/jmdict';
+import { JMdictEntry } from '~/types/jmdict';
 import { getJapaneseAudioUrl } from '~/utils/text-to-speech.server';
 
 export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[]> {
