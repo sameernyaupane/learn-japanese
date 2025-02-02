@@ -5,6 +5,7 @@ import Navigation from '~/components/Navigation';
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { SearchForm } from '~/components/SearchForm';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -13,32 +14,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { entries, totalEntries } = await getEntries(page, 50, searchQuery);
   return { entries, totalEntries, currentPage: page, searchQuery };
 };
-
-function SearchForm({ initialQuery }: { initialQuery: string }) {
-  return (
-    <form
-      method="get"
-      className="mb-4 max-w-2xl mx-auto"
-      action={`?q=${initialQuery}`}
-    >
-      <div className="flex gap-2">
-        <input
-          type="search"
-          name="q"
-          defaultValue={initialQuery}
-          placeholder="Search..."
-          className="flex-1 px-3 py-1.5 text-sm rounded-md border focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          type="submit"
-          className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
-        >
-          Search
-        </button>
-      </div>
-    </form>
-  );
-}
 
 export default function Index() {
   const { entries, totalEntries, currentPage, searchQuery } = useLoaderData<typeof loader>();
