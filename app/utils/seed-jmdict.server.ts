@@ -47,11 +47,9 @@ export async function seedJMdict() {
       parser.on('opentag', (node) => {
         if (!shouldProcess) return;
         const elementName = node.name.toLowerCase();
-        console.log('📂 Opened tag:', elementName);
         elementStack.push(elementName);
 
         if (elementName === 'entry') {
-          console.log('🚪 ENTRY START');
           inEntry = true;
           tempEntry = { k_ele: [], r_ele: [], sense: [] };
         }
@@ -65,7 +63,6 @@ export async function seedJMdict() {
 
       parser.on('entity', (entity) => {
         if (!shouldProcess) return;
-        console.log('🔠 Entity detected:', entity);
       });
 
       parser.on('text', (text) => {
@@ -110,10 +107,8 @@ export async function seedJMdict() {
         if (!shouldProcess) return;
 
         const closedElement = elementStack.pop();
-        console.log('📕 Closed tag:', closedElement);
 
         if (tagName.toLowerCase() === 'entry') {
-          console.log('🚪 ENTRY END');
           inEntry = false;
           entryCount++;
 
