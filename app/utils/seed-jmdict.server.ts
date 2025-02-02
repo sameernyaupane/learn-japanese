@@ -121,19 +121,12 @@ export async function seedJMdict() {
           inEntry = false;
           entryCount++;
           console.log('Temp Entry before processBatch:', tempEntry);
-          shouldProcess = false;
 
-          // Let the parser finish naturally
-          readStream.unpipe(parser);
-          readStream.destroy();
-
+          // Process the entry without stopping the stream
           processBatch([tempEntry])
-            .then(() => {
-              console.log('✅ SEED COMPLETE');
-              parser.end();
-              resolve();
-            })
             .catch(reject);
+            
+          tempEntry = null; // Reset for next entry
         }
 
         // Clear current element when exiting nested tags
