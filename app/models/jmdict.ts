@@ -207,7 +207,23 @@ export async function getEntries(
             WHERE ka.entry_id = e.id 
             AND ka.romaji ILIKE '%' || ${searchQuery} || '%'
           ) THEN 2
-          ELSE 3
+          WHEN EXISTS (
+            SELECT 1 FROM kanji_elements ke
+            WHERE ke.entry_id = e.id AND ke.keb = ${searchQuery}
+          ) THEN 3
+          WHEN EXISTS (
+            SELECT 1 FROM kana_elements ka
+            WHERE ka.entry_id = e.id AND ka.reb = ${searchQuery}
+          ) THEN 4
+          WHEN EXISTS (
+            SELECT 1 FROM kanji_elements ke
+            WHERE ke.entry_id = e.id AND ke.keb ILIKE '%' || ${searchQuery} || '%'
+          ) THEN 5
+          WHEN EXISTS (
+            SELECT 1 FROM kana_elements ka
+            WHERE ka.entry_id = e.id AND ka.reb ILIKE '%' || ${searchQuery} || '%'
+          ) THEN 6
+          ELSE 7
         END,
         e.ent_seq ASC
       LIMIT ${perPage}
