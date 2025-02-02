@@ -9,12 +9,42 @@ import { getJapaneseAudioUrl } from '~/utils/text-to-speech.server';
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
-  const { entries, totalEntries } = await getEntries(page, 50);
-  return { entries, totalEntries, currentPage: page };
+  const searchQuery = url.searchParams.get('q') || '';
+  const { entries, totalEntries } = await getEntries(page, 50, searchQuery);
+  return { entries, totalEntries, currentPage: page, searchQuery };
 };
 
+function SearchForm({ initialQuery }: { initialQuery: string }) {
+  return (
+    <form 
+      method="get" 
+      className="mb-8 max-w-2xl mx-auto"
+      action={({ formData }) => {
+        const query = formData.get('q');
+        return `?q=${encodeURIComponent(query as string)}`;
+      }}
+    >
+      <div className="flex gap-2">
+        <input
+          type="search"
+          name="q"
+          defaultValue={initialQuery}
+          placeholder="Search kanji, kana, romaji or English..."
+          className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+  );
+}
+
 export default function Index() {
-  const { entries, totalEntries, currentPage } = useLoaderData<typeof loader>();
+  const { entries, totalEntries, currentPage, searchQuery } = useLoaderData<typeof loader>();
   const totalPages = Math.ceil(totalEntries / 50);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
@@ -23,12 +53,20 @@ export default function Index() {
       <Navigation />
       
       <div className="max-w-4xl mx-auto px-4 py-8">
+        <SearchForm initialQuery={searchQuery} />
+        
         <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-          Japanese Dictionary Entries
+          {searchQuery ? `Search results for "${searchQuery}"` : 'Japanese Dictionary Entries'}
           <span className="block text-lg font-normal text-gray-500 mt-2">
-            {entries.length} entries found
+            {totalEntries} entries found
           </span>
         </h1>
+
+        {entries.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            No entries found matching your search criteria
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {entries.map((entry) => (
@@ -260,7 +298,7 @@ export default function Index() {
 
         <div className="mt-8 flex justify-between items-center">
           <a
-            href={`?page=${currentPage - 1}`}
+            href={`?page=${currentPage - 1}&q=${encodeURIComponent(searchQuery)}`}
             className={`px-4 py-2 rounded-lg ${
               currentPage === 1 
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
@@ -273,7 +311,7 @@ export default function Index() {
             Page {currentPage} of {totalPages}
           </span>
           <a
-            href={`?page=${currentPage + 1}`}
+            href={`?page=${currentPage + 1}&q=${encodeURIComponent(searchQuery)}`}
             className={`px-4 py-2 rounded-lg ${
               currentPage === totalPages 
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
