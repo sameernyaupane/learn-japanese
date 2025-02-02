@@ -334,7 +334,7 @@ async function processBatch(batch: any[]) {
                       )}
                     )
                   `;
-                  console.log('  📚 Inserted example:', exSent['#text']);
+                  
                 }
               }
             }
