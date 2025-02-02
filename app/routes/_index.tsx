@@ -66,47 +66,43 @@ export default function Index() {
 
                   {/* Kana Elements */}
                   {entry.kana_elements.length > 0 && (
-                    <div className="space-y-2">
-                      <h3 className="flex items-center text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                        <span className="mr-2">あ</span>Kana Readings
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {entry.kana_elements.map((kana) => (
-                          <div key={kana.id} className="inline-flex items-center gap-1.5 mr-2">
-                            <span className="px-3 py-1.5 bg-green-50 text-green-800 rounded-lg font-medium text-sm">
-                              {kana.reb}
-                            </span>
-                            <span className="text-gray-500 text-sm">
-                              {kana.romaji}
-                            </span>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                      {entry.kana_elements.map((kana) => (
+                        <div 
+                          key={kana.id}
+                          className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="space-y-2">
+                              <div className="text-2xl font-semibold text-gray-900">
+                                {kana.reb}
+                              </div>
+                              <div className="text-sm text-gray-500 font-mono">
+                                {kana.romaji}
+                              </div>
+                            </div>
                             <button
                               onMouseEnter={async (e) => {
                                 e.preventDefault();
-                                if (currentAudio) {
-                                  currentAudio.pause();
-                                }
+                                if (currentAudio) currentAudio.pause();
                                 const audio = new Audio(entry.audio[0]);
                                 setCurrentAudio(audio);
                                 await audio.play();
                               }}
                               onClick={async (e) => {
                                 e.preventDefault();
-                                if (currentAudio) {
-                                  currentAudio.pause();
-                                }
+                                if (currentAudio) currentAudio.pause();
                                 const audio = new Audio(entry.audio[0]);
                                 setCurrentAudio(audio);
                                 await audio.play();
                               }}
-                              className="p-2 text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
-                              role="button"
-                              aria-label="Play pronunciation"
+                              className="p-2 text-blue-500 hover:text-blue-700 transition-colors"
                             >
                               <SpeakerWaveIcon className="h-6 w-6" />
                             </button>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -184,31 +180,6 @@ export default function Index() {
                     </div>
                   ))}
                 </div>
-
-                {/* Audio Sources */}
-                <div className="text-xs text-gray-400 space-y-1">
-                  <div>Audio source:</div>
-                  {entry.audio?.map((src, i) => (
-                    <div key={i} className="break-all max-w-xs">
-                      <a href={src} target="_blank" rel="noreferrer" className="hover:underline">
-                        {src}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-
-                {process.env.NODE_ENV === 'development' && (
-                  <div className="text-xs text-gray-400 space-y-1">
-                    <div>Audio source:</div>
-                    {entry.audio?.map((src, i) => (
-                      <div key={i} className="break-all max-w-xs">
-                        <a href={src} target="_blank" rel="noreferrer" className="hover:underline">
-                          {src}
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
           ))}
