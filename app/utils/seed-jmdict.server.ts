@@ -53,18 +53,13 @@ export async function seedJMdict() {
         if (elementName === 'entry') {
           console.log('🚪 ENTRY START');
           inEntry = true;
-          tempEntry = { k_ele: [], r_ele: [], sense: [] }; // Initialize tempEntry
-          console.log('Temp Entry initialized:', tempEntry);
+          tempEntry = { k_ele: [], r_ele: [], sense: [] };
         }
         else if (elementName === 'r_ele') {
-          if (tempEntry) {
-            tempEntry.r_ele.push({}); // Initialize new reading element in tempEntry
-          }
+          tempEntry.r_ele.push({});
         }
-
-        // Reset current element for sense children
-        if (elementStack.includes('sense')) {
-          currentElement = elementName;
+        else if (elementName === 'sense') {
+          tempEntry.sense.push({});
         }
       });
 
