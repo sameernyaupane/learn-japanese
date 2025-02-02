@@ -35,6 +35,14 @@ export async function getEntries(
         ) as kana_elements,
         (
           SELECT json_agg(json_build_object(
+            'ruby', jf.furigana->>'ruby',
+            'rt', jf.furigana->>'rt'
+          ))
+          FROM jmdict_furigana jf
+          WHERE jf.entry_id = e.id
+        ) as furigana,
+        (
+          SELECT json_agg(json_build_object(
             'id', s.id,
             'stagk', s.stagk,
             'stagr', s.stagr,

@@ -57,10 +57,27 @@ CREATE TABLE IF NOT EXISTS examples (
   translation JSONB
 );
 
+CREATE TABLE jmdict_furigana (
+  id SERIAL PRIMARY KEY,
+  entry_id INTEGER REFERENCES jmdict_entries(id),
+  text TEXT NOT NULL,
+  reading TEXT NOT NULL,
+  furigana JSONB NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE (text, reading)
+);
+
 CREATE INDEX idx_kanji_entry_id ON kanji_elements(entry_id);
 CREATE INDEX idx_kana_entry_id ON kana_elements(entry_id);
 CREATE INDEX idx_senses_entry_id ON senses(entry_id);
 CREATE INDEX idx_glosses_sense_id ON glosses(sense_id);
+CREATE INDEX idx_furigana_entry_id ON jmdict_furigana(entry_id);
+
+CREATE INDEX idx_furigana_text ON jmdict_furigana(text);
+CREATE INDEX idx_furigana_reading ON jmdict_furigana(reading);
+CREATE INDEX idx_furigana_text_reading ON jmdict_furigana(text, reading);
+CREATE INDEX idx_furigana_data ON jmdict_furigana USING GIN(furigana);
 
 ALTER TABLE kanji_elements
 ADD COLUMN ke_inf JSONB,

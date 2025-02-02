@@ -75,6 +75,7 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
       ...kana,
       audio: await getJapaneseAudioUrl(kana.reb)
     }))),
+    furigana: entry.furigana || [],
     senses: entry.senses?.map(sense => ({
       ...sense,
       pos: (sense.pos || []).map(parsePartOfSpeech),
