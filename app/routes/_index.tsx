@@ -47,6 +47,16 @@ export default function Index() {
   const { entries, totalEntries, currentPage, searchQuery } = useLoaderData<typeof loader>();
   const totalPages = Math.ceil(totalEntries / 50);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const handleAudioPlay = (audioUrl: string) => {
+    if (currentAudio) {
+      currentAudio.pause();
+    }
+    const newAudio = new Audio(audioUrl);
+    setCurrentAudio(newAudio);
+    newAudio.play();
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -74,6 +84,7 @@ export default function Index() {
             const primaryKana = entry.kana_elements[0]?.reb;
             const romaji = entry.kana_elements[0]?.romaji;
             const priority = entry.kana_elements[0]?.pri?.[0];
+            const audioUrl = entry.kana_elements[0]?.audio;
 
             return (
               <div 
@@ -96,6 +107,31 @@ export default function Index() {
                     <div className="flex items-baseline gap-2">
                       <div className="text-lg text-gray-600 font-medium">
                         {primaryKana}
+                        {entry.kana_elements[0]?.audio && (
+                          <button
+                            onClick={() => handleAudioPlay(entry.kana_elements[0].audio!)}
+                            onMouseEnter={() => {
+                              if (entry.kana_elements[0]?.audio) {
+                                const timeout = setTimeout(() => {
+                                  handleAudioPlay(entry.kana_elements[0].audio!);
+                                }, 500);
+                                setHoverTimeout(timeout);
+                              }
+                            }}
+                            onMouseLeave={() => {
+                              if (hoverTimeout) {
+                                clearTimeout(hoverTimeout);
+                                setHoverTimeout(null);
+                              }
+                              if (currentAudio) {
+                                currentAudio.pause();
+                              }
+                            }}
+                            className="ml-2 p-1 text-gray-400 hover:text-blue-600"
+                          >
+                            <SpeakerWaveIcon className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                       <div className="text-sm text-gray-400">
                         {romaji}
