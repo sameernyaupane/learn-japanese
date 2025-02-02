@@ -4,7 +4,7 @@ import { getEntries } from '~/models/jmdict';
 import Navigation from '~/components/Navigation';
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { getJapaneseAudioUrl } from '~/utils/text-to-speech.server';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -18,7 +18,7 @@ function SearchForm({ initialQuery }: { initialQuery: string }) {
   return (
     <form 
       method="get" 
-      className="mb-8 max-w-2xl mx-auto"
+      className="mb-4 max-w-2xl mx-auto"
       action={({ formData }) => {
         const query = formData.get('q');
         return `?q=${encodeURIComponent(query as string)}`;
@@ -29,12 +29,12 @@ function SearchForm({ initialQuery }: { initialQuery: string }) {
           type="search"
           name="q"
           defaultValue={initialQuery}
-          placeholder="Search kanji, kana, romaji or English..."
-          className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Search..."
+          className="flex-1 px-3 py-1.5 text-sm rounded-md border focus:ring-2 focus:ring-blue-500"
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
           Search
         </button>
@@ -49,16 +49,16 @@ export default function Index() {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-6">
         <SearchForm initialQuery={searchQuery} />
         
-        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-          {searchQuery ? `Search results for "${searchQuery}"` : 'Japanese Dictionary Entries'}
-          <span className="block text-lg font-normal text-gray-500 mt-2">
-            {totalEntries} entries found
+        <h1 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+          {searchQuery ? `Results for "${searchQuery}"` : 'Dictionary Entries'}
+          <span className="ml-2 text-sm text-gray-500">
+            ({totalEntries} entries)
           </span>
         </h1>
 
@@ -68,232 +68,113 @@ export default function Index() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {entries.map((entry) => (
-            <div 
-              key={entry.id} 
-              className="h-full group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-100"
-            >
-              <div className="p-6">
-                {/* Entry Header */}
-                <div className="mb-4">
-                  <span className="inline-block bg-indigo-100 text-indigo-800 text-sm font-mono px-3 py-1 rounded-full">
-                    Entry #{entry.ent_seq}
-                  </span>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {entries.map((entry) => {
+            const primaryKanji = entry.kanji_elements[0]?.keb;
+            const primaryKana = entry.kana_elements[0]?.reb;
+            const romaji = entry.kana_elements[0]?.romaji;
+            const priority = entry.kana_elements[0]?.pri?.[0];
 
-                {/* Kanji & Kana Grid */}
-                <div className="flex flex-col gap-4 mb-6">
-                  {/* Kanji Elements */}
-                  {entry.kanji_elements.length > 0 && (
-                    <div className="space-y-2">
-                      <h3 className="flex items-center text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                        <span className="mr-2">🈁</span>Kanji Forms
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {entry.kanji_elements.map((kanji) => (
-                          <span 
-                            key={kanji.id}
-                            className="px-3 py-1.5 bg-blue-50 text-blue-800 rounded-lg font-medium text-sm"
-                          >
-                            {kanji.keb}
-                            {kanji.pri?.length > 0 && (
-                              <span className="ml-1 text-[0.7em] bg-blue-100 px-1 rounded">
-                                {kanji.pri.join(', ')}
-                              </span>
-                            )}
-                          </span>
-                        ))}
+            return (
+              <div 
+                key={entry.id} 
+                className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100"
+              >
+                <div className="p-4">
+                  {/* Kanji Header */}
+                  <div className="mb-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="text-4xl font-bold text-gray-900">
+                        {primaryKanji}
+                      </div>
+                      {priority && (
+                        <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                          {priority}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                      <div className="text-lg text-gray-600 font-medium">
+                        {primaryKana}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {romaji}
                       </div>
                     </div>
-                  )}
+                  </div>
 
-                  {/* Kana Elements */}
-                  {entry.kana_elements.length > 0 && (
-                    <div className="space-y-2">
-                      <h3 className="flex items-center text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                        <span className="mr-2">🎌</span>Kana Readings
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {entry.kana_elements.map((kana) => (
-                          <div
-                            key={kana.id}
-                            className="flex items-center space-x-2 bg-gray-50 px-3 py-1.5 rounded-lg min-w-[200px]"
-                          >
-                            <div className="flex-1 min-w-0">
-                              <div className="flex flex-col">
-                                <span className="font-medium text-gray-700 text-sm whitespace-nowrap truncate">
-                                  {kana.reb}
-                                </span>
-                                <span className="text-xs text-gray-500 truncate">
-                                  {kana.romaji}
-                                </span>
-                                {kana.pri?.length > 0 && (
-                                  <span className="text-xs text-gray-500 ml-2">
-                                    ({kana.pri.join(', ')})
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            {kana.audio && (
-                              <button
-                                onMouseEnter={async (e) => {
-                                  e.preventDefault();
-                                  if (currentAudio) currentAudio.pause();
-                                  const audio = new Audio(kana.audio);
-                                  setCurrentAudio(audio);
-                                  await audio.play();
-                                }}
-                                onClick={async (e) => {
-                                  e.preventDefault();
-                                  if (currentAudio) currentAudio.pause();
-                                  const audio = new Audio(kana.audio);
-                                  setCurrentAudio(audio);
-                                  await audio.play();
-                                }}
-                                className="p-2 text-blue-500 hover:text-blue-700 transition-colors"
-                              >
-                                <SpeakerWaveIcon className="h-4 w-4" />
-                              </button>
+                  {/* Senses */}
+                  <div className="space-y-3">
+                    {entry.senses.map((sense, senseIndex) => (
+                      <div key={sense.id} className="text-sm">
+                        {/* Part of Speech */}
+                        {sense.pos?.length > 0 && (
+                          <div className="mb-2 flex items-center gap-2">
+                            <span className="text-xs font-semibold uppercase text-emerald-600">
+                              {sense.pos.join(', ')}
+                            </span>
+                            {sense.field && (
+                              <span className="text-xs text-gray-400">
+                                {sense.field}
+                              </span>
                             )}
                           </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                        )}
 
-                {/* Senses */}
-                <div className="space-y-4">
-                  {entry.senses.map((sense, senseIndex) => (
-                    <div 
-                      key={sense.id}
-                      className="p-4 bg-gray-50 rounded-xl border-l-4 border-purple-200"
-                    >
-                      {/* Parts of Speech */}
-                      {sense.pos?.length > 0 && (
-                        <div className="mb-3">
-                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                            Parts of Speech
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {sense.pos.map((pos, posIndex) => (
-                              <span 
-                                key={posIndex}
-                                className="px-2 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-md"
-                              >
-                                {pos}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Field */}
-                      {sense.field?.length > 0 && (
-                        <div className="mt-2">
-                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                            Field
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {sense.field.map((field, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded-md">
-                                {field}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Misc */}
-                      {sense.misc?.length > 0 && (
-                        <div className="mt-2">
-                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                            Misc
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {sense.misc.map((misc, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-yellow-50 text-yellow-700 text-xs rounded-md">
-                                {misc}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Meanings */}
-                      <div className="mb-3">
-                        <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
-                          📖 Meanings
-                        </h4>
-                        <ul className="space-y-1.5">
-                          {sense.glosses.map((gloss) => (
-                            <li 
-                              key={gloss.id}
-                              className="flex items-start text-gray-700"
-                            >
-                              <span className="text-gray-400 mr-2">•</span>
-                              <span className="flex-1">
-                                {gloss.gloss}
-                                {(gloss.g_type || gloss.g_gend) && (
-                                  <span className="ml-2 text-xs text-gray-500">
-                                    ({[gloss.g_type, gloss.g_gend].filter(Boolean).join(', ')})
+                        {/* Definitions */}
+                        <div className="space-y-2">
+                          {sense.glosses.reduce((acc, gloss) => {
+                            const lastGroup = acc[acc.length - 1];
+                            const currentType = [gloss.g_type, gloss.g_gend].filter(Boolean).join(' ') || sense.pos?.join(', ');
+                            
+                            if (lastGroup && lastGroup.type === currentType) {
+                              lastGroup.glosses.push(gloss);
+                            } else {
+                              acc.push({ type: currentType, glosses: [gloss] });
+                            }
+                            
+                            return acc;
+                          }, []).map((group, groupIndex) => (
+                            <div key={groupIndex} className="relative pl-3">
+                              <div className="text-gray-800 leading-snug">
+                                <span className="mr-2">•</span>
+                                {group.glosses.map((gloss, i) => (
+                                  <span key={gloss.id}>
+                                    {gloss.gloss}
+                                    {i < group.glosses.length - 1 && ', '}
                                   </span>
-                                )}
-                                <span className="ml-2 text-xs text-gray-500 font-mono">
-                                  ({gloss.lang})
-                                </span>
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Examples */}
-                      {sense.examples.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-gray-100">
-                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
-                            💬 Examples
-                          </h4>
-                          <div className="space-y-2">
-                            {sense.examples.map((example) => (
-                              <div 
-                                key={example.id}
-                                className="text-sm text-gray-700"
-                              >
-                                <p className="font-medium">"{example.text}"</p>
-                                {example.sentences?.map((sentence, idx) => (
-                                  <p key={idx} className="text-gray-500 text-sm mt-1">
-                                    {sentence.text} ({sentence.lang})
-                                  </p>
                                 ))}
+                                {group.type && (
+                                  <span className="ml-2 text-xs text-gray-500">
+                                    ({group.type})
+                                  </span>
+                                )}
                               </div>
-                            ))}
-                          </div>
+                              {group.glosses[0]?.example && (
+                                <div className="mt-2 ml-3 pl-2 border-l-2 border-gray-200 text-gray-600 text-xs italic bg-gray-50 p-1.5 rounded">
+                                  "{group.glosses[0].example}"
+                                </div>
+                              )}
+                            </div>
+                          ))}
                         </div>
-                      )}
 
-                      {/* Cross-references */}
-                      {sense.xref?.length > 0 && (
-                        <div className="mt-2">
-                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                            Cross References
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {sense.xref.map((xref, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md">
-                                {xref}
-                              </span>
-                            ))}
+                        {/* Related Terms */}
+                        {sense.xref && senseIndex === entry.senses.length - 1 && (
+                          <div className="mt-3 pt-3 border-t border-gray-100">
+                            <div className="flex items-center gap-2 text-xs text-blue-600">
+                              <ArrowRightIcon className="h-3 w-3" />
+                              <span>Related: {sense.xref}</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-8 flex justify-between items-center">
