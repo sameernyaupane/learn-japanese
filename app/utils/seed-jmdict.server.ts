@@ -38,33 +38,33 @@ export async function seedJMdict() {
       parser.on('ready', () => console.log('⚙️ Parser initialized'));
       
       let inEntry = false;
-      let currentEntry: any = {};
       let currentElement: string | null = null;
       let entryCount = 0;
       let shouldProcess = true;
       let elementStack: string[] = [];  // Track nested elements
+      let tempEntry: any = null; // Temporary entry object
 
       parser.on('opentag', (node) => {
         if (!shouldProcess) return;
-        console.log('📂 Opened tag:', node.name);
-        
-        // Track element hierarchy
-        elementStack.push(node.name.toLowerCase());
-        
         const elementName = node.name.toLowerCase();
-        
-        if (elementName === 'jmdict') {
-          console.log('✅ ROOT ELEMENT DETECTED');
-        }
-        
+        console.log('📂 Opened tag:', elementName);
+        elementStack.push(elementName);
+
         if (elementName === 'entry') {
           console.log('🚪 ENTRY START');
           inEntry = true;
-          currentEntry = { k_ele: [], r_ele: [], sense: [] }; // Initialize arrays for nested elements
+          tempEntry = { k_ele: [], r_ele: [], sense: [] }; // Initialize tempEntry
+          console.log('Temp Entry initialized:', tempEntry);
         }
-        
-        if (inEntry && elementName !== 'entry') {
-          currentElement = node.name;
+        else if (elementName === 'r_ele') {
+          if (tempEntry) {
+            tempEntry.r_ele.push({}); // Initialize new reading element in tempEntry
+          }
+        }
+
+        // Reset current element for sense children
+        if (elementStack.includes('sense')) {
+          currentElement = elementName;
         }
       });
 
@@ -74,68 +74,73 @@ export async function seedJMdict() {
       });
 
       parser.on('text', (text) => {
-        if (!shouldProcess || !inEntry || !currentElement) return;
-        
-        const entryDepth = elementStack.indexOf('entry');
-        if (entryDepth === -1) return;
+        if (!shouldProcess || !inEntry || !tempEntry) return;
 
-        // Calculate depth relative to entry
-        const depth = elementStack.length - entryDepth - 1;
-        
-        if (depth === 1) {
-          // Direct children of entry (ent_seq, k_ele, r_ele, sense)
-          const propName = currentElement.toLowerCase();
-          currentEntry[propName] = (currentEntry[propName] || '') + text.trim();
-        } else {
-          // Nested elements (keb, reb, pos, etc)
-          const path = elementStack
-            .slice(entryDepth + 1, -1) // Skip entry and current element
-            .map(t => t.toLowerCase());
+        const currentPath = elementStack.map(e => e.toLowerCase()).join('.');
+        const trimmedText = text.trim();
 
-          let target = currentEntry;
-          for (const segment of path) {
-            target = target[segment] = target[segment] || (segment.endsWith('_ele') ? [] : {});
+        console.log('🔍 Text event:', { currentPath, trimmedText });
+
+        if (currentPath === 'jmdict.entry.ent_seq') {
+          console.log('📝 Captured ent_seq:', trimmedText);
+          tempEntry.ent_seq = trimmedText;
+          console.log('✅ ent_seq assigned:', tempEntry);
+        }
+        else if (currentPath === 'jmdict.entry.r_ele.reb') {
+          const lastIndex = tempEntry.r_ele.length - 1;
+          if (lastIndex >= 0) {
+            tempEntry.r_ele[lastIndex].reb = trimmedText;
           }
-
-          const currentSegment = currentElement.toLowerCase();
-          if (Array.isArray(target)) {
-            const lastItem = target[target.length - 1] || {};
-            lastItem[currentSegment] = (lastItem[currentSegment] || '') + text.trim();
-            target[target.length - 1] = lastItem;
-          } else {
-            target[currentSegment] = (target[currentSegment] || '') + text.trim();
+        }
+        else if (currentPath === 'jmdict.entry.sense.pos') {
+          const lastSenseIndex = tempEntry.sense.length - 1;
+          if (lastSenseIndex >= 0) {
+            tempEntry.sense[lastSenseIndex].pos = [trimmedText];
+          }
+        }
+        else if (currentPath === 'jmdict.entry.sense.xref') {
+          const lastSenseIndex = tempEntry.sense.length - 1;
+          if (lastSenseIndex >= 0) {
+            tempEntry.sense[lastSenseIndex].xref = [trimmedText];
+          }
+        }
+        else if (currentPath === 'jmdict.entry.sense.gloss') {
+          const lastSenseIndex = tempEntry.sense.length - 1;
+          if (lastSenseIndex >= 0) {
+            tempEntry.sense[lastSenseIndex].gloss = [{
+              '#text': trimmedText,
+              '@_xml:lang': 'en'
+            }];
           }
         }
       });
 
       parser.on('closetag', (tagName) => {
         if (!shouldProcess) return;
-        
+
         const closedElement = elementStack.pop();
-        
+        console.log('📕 Closed tag:', closedElement);
+
         if (tagName.toLowerCase() === 'entry') {
           console.log('🚪 ENTRY END');
           inEntry = false;
           entryCount++;
+          console.log('Temp Entry before processBatch:', tempEntry);
+          shouldProcess = false;
 
-          if (entryCount === 1) {
-            console.log('🔥 PROCESSING FIRST ENTRY');
-            shouldProcess = false;
-            
-            // Let the parser finish naturally
-            readStream.unpipe(parser);
-            readStream.destroy();
+          // Let the parser finish naturally
+          readStream.unpipe(parser);
+          readStream.destroy();
 
-            processBatch([currentEntry])
-              .then(() => {
-                console.log('✅ SEED COMPLETE');
-                parser.end();
-                resolve();
-              })
-              .catch(reject);
-          }
+          processBatch([tempEntry])
+            .then(() => {
+              console.log('✅ SEED COMPLETE');
+              parser.end();
+              resolve();
+            })
+            .catch(reject);
         }
-        
+
         // Clear current element when exiting nested tags
         if (inEntry && elementStack.length > 0 && elementStack[elementStack.length - 1] === 'entry') {
           currentElement = null;
@@ -176,9 +181,11 @@ export async function seedJMdict() {
 async function processBatch(batch: any[]) {
   await sql.begin(async (tx) => {
     for (const entry of batch) {
+      if (!entry.ent_seq) {
+        throw new Error('Missing ent_seq in entry');
+      }
       console.log('Processing entry:', entry.ent_seq);
       
-      // Insert main entry
       const entSeq = parseInt(entry.ent_seq);
       if (isNaN(entSeq)) {
         throw new Error(`Invalid ent_seq value: ${entry.ent_seq}`);
@@ -211,7 +218,8 @@ async function processBatch(batch: any[]) {
       // Process Reading elements
       if (entry.r_ele) {
         console.log('Reading elements:', entry.r_ele);
-        for (const rEle of entry.r_ele) {
+        const rElements = Array.isArray(entry.r_ele) ? entry.r_ele : [entry.r_ele];
+        for (const rEle of rElements) {
           await tx`
             INSERT INTO kana_elements (
               entry_id, 
@@ -223,28 +231,45 @@ async function processBatch(batch: any[]) {
             )
             VALUES (
               ${entryRecord.id},
-              ${rEle.reb},
-              ${!!rEle.re_nokanji},
-              ${tx.json(rEle.re_restr || [])},
-              ${tx.json(rEle.re_inf || [])},
-              ${tx.json(rEle.re_pri || [])}
+              ${rEle.reb || rEle.REB},
+              ${!!rEle.re_nokanji || !!rEle.RE_NOKANJI},
+              ${tx.json(rEle.re_restr || rEle.RE_RESTR || [])},
+              ${tx.json(rEle.re_inf || rEle.RE_INF || [])},
+              ${tx.json(rEle.re_pri || rEle.RE_PRI || [])}
             )
           `;
-          console.log('  📖 Inserted reading:', rEle.reb);
+          console.log('  📖 Inserted reading:', rEle.reb || rEle.REB);
         }
       }
 
       // Process Senses
       if (entry.sense) {
-        console.log('Senses count:', entry.sense.length);
-        for (const sense of entry.sense) {
-          console.log('Processing sense:', {
-            pos: sense.pos,
-            field: sense.field,
-            misc: sense.misc,
-            dial: sense.dial
-          });
+        const senses = Array.isArray(entry.sense) ? entry.sense : [entry.sense];
+        console.log('Senses count:', senses.length);
+        
+        for (const sense of senses) {
+          // Handle text nodes in elements
+          const processTextNodes = (obj: any) => {
+            if (obj && obj['#text']) return obj['#text'];
+            if (typeof obj === 'string') return obj;
+            return obj;
+          };
 
+          const processedSense = {
+            stagk: (sense.stagk || []).map(processTextNodes),
+            stagr: (sense.stagr || []).map(processTextNodes),
+            pos: (sense.pos || []).map(processTextNodes),
+            xref: (sense.xref || []).map(processTextNodes),
+            ant: (sense.ant || []).map(processTextNodes),
+            field: (sense.field || []).map(processTextNodes),
+            misc: (sense.misc || []).map(processTextNodes),
+            dial: (sense.dial || []).map(processTextNodes),
+            lsource: sense.lsource || [],
+            s_inf: (sense.s_inf || []).map(processTextNodes),
+            gloss: sense.gloss || []
+          };
+
+          // Insert sense and process glosses
           const [senseRecord] = await tx`
             INSERT INTO senses (
               entry_id,
@@ -262,31 +287,30 @@ async function processBatch(batch: any[]) {
             )
             VALUES (
               ${entryRecord.id},
-              ${tx.json(sense.stagk || [])},
-              ${tx.json(sense.stagr || [])},
-              ${tx.json(sense.pos || [])},
-              ${tx.json(sense.xref?.map((x: any) => x['#text']) || [])},
-              ${tx.json(sense.ant?.map((a: any) => a['#text']) || [])},
-              ${tx.json(sense.field || [])},
-              ${tx.json(sense.misc || [])},
-              ${tx.json(sense.dial || [])},
-              ${tx.json(sense.lsource?.map((ls: any) => ({
-                lang: ls['@_xml:lang'] || 'eng',
-                type: ls['@_ls_type'],
-                wasei: ls['@_ls_wasei'],
-                text: ls['#text']
-              })) || [])},
-              ${tx.json(sense.s_inf || [])},
-              ${tx.json(sense.glosses || [])}
+              ${tx.json(processedSense.stagk)},
+              ${tx.json(processedSense.stagr)},
+              ${tx.json(processedSense.pos)},
+              ${tx.json(processedSense.xref)},
+              ${tx.json(processedSense.ant)},
+              ${tx.json(processedSense.field)},
+              ${tx.json(processedSense.misc)},
+              ${tx.json(processedSense.dial)},
+              ${tx.json(processedSense.lsource)},
+              ${tx.json(processedSense.s_inf)},
+              ${tx.json(processedSense.gloss)}
             )
             RETURNING id
           `;
-          console.log('Inserted sense ID:', senseRecord.id);
 
           // Process Glosses
-          if (sense.gloss) {
-            for (const glossEntry of sense.gloss) {
-              if (glossEntry.gloss) {
+          if (processedSense.gloss) {
+            const glosses = Array.isArray(processedSense.gloss) 
+              ? processedSense.gloss 
+              : [processedSense.gloss];
+            
+            for (const glossEntry of glosses) {
+              const glossText = processTextNodes(glossEntry);
+              if (glossText) {
                 await tx`
                   INSERT INTO glosses (
                     sense_id, 
@@ -297,16 +321,12 @@ async function processBatch(batch: any[]) {
                   )
                   VALUES (
                     ${senseRecord.id},
-                    ${glossEntry.gloss['@_xml:lang'] || 'en'},
-                    ${glossEntry.gloss['#text']},
-                    ${glossEntry.gloss['@_g_gend'] || null},
-                    ${glossEntry.gloss['@_g_type'] || null}
+                    ${glossEntry['@_xml:lang'] || 'en'},
+                    ${glossText},
+                    ${glossEntry['@_g_gend'] || null},
+                    ${glossEntry['@_g_type'] || null}
                   )
                 `;
-                console.log('  🌐 Inserted gloss:', {
-                  lang: glossEntry.gloss['@_xml:lang'] || 'en',
-                  text: glossEntry.gloss['#text']
-                });
               }
             }
           }
@@ -377,6 +397,11 @@ async function runSeed() {
   } catch (err) {
     console.error('💥 Seed failed:', err);
     process.exit(1);
+  } finally {
+    // Add database connection cleanup
+    await sql.end();
+    console.log('🛑 Database connection closed');
+    process.nextTick(() => process.exit(0));
   }
 }
 
