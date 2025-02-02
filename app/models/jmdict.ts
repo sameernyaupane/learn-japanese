@@ -104,7 +104,11 @@ export interface JMdictLSource {
   '#text'?: string;
 }
 
-export async function getEntries(page: number = 1, perPage: number = 50): Promise<{ entries: JMdictEntry[], totalEntries: number }> {
+export async function getEntries(
+  page: number = 1,
+  perPage: number = 50,
+  searchQuery: string = ''
+): Promise<{ entries: JMdictEntry[], totalEntries: number }> {
   const offset = (page - 1) * perPage;
   
   const [entriesResult, countResult] = await Promise.all([
@@ -169,11 +173,72 @@ export async function getEntries(page: number = 1, perPage: number = 50): Promis
           WHERE s.entry_id = e.id
         ) as senses
       FROM jmdict_entries e
-      ORDER BY e.ent_seq ASC
+      ${
+        searchQuery 
+          ? sql`
+            WHERE EXISTS (
+              SELECT 1 FROM kanji_elements ke 
+              WHERE ke.entry_id = e.id AND ke.keb ILIKE '%' || ${searchQuery} || '%'
+            )
+            OR EXISTS (
+              SELECT 1 FROM kana_elements ka 
+              WHERE ka.entry_id = e.id AND (
+                ka.reb ILIKE '%' || ${searchQuery} || '%' OR 
+                ka.romaji ILIKE '%' || ${searchQuery} || '%'
+              )
+            )
+            OR EXISTS (
+              SELECT 1 FROM senses s
+              JOIN glosses g ON s.id = g.sense_id
+              WHERE s.entry_id = e.id AND g.gloss ILIKE '%' || ${searchQuery} || '%'
+            )
+          `
+          : sql``
+      }
+      ORDER BY
+        CASE
+          WHEN EXISTS (
+            SELECT 1 FROM kana_elements ka 
+            WHERE ka.entry_id = e.id 
+            AND LOWER(ka.romaji) = LOWER(${searchQuery})
+          ) THEN 1
+          WHEN EXISTS (
+            SELECT 1 FROM kana_elements ka 
+            WHERE ka.entry_id = e.id 
+            AND ka.romaji ILIKE '%' || ${searchQuery} || '%'
+          ) THEN 2
+          ELSE 3
+        END,
+        e.ent_seq ASC
       LIMIT ${perPage}
       OFFSET ${offset}
     `,
-    sql`SELECT COUNT(*) FROM jmdict_entries`
+    sql`
+      SELECT COUNT(*) 
+      FROM jmdict_entries e
+      ${
+        searchQuery 
+          ? sql`
+            WHERE EXISTS (
+              SELECT 1 FROM kanji_elements ke 
+              WHERE ke.entry_id = e.id AND ke.keb ILIKE '%' || ${searchQuery} || '%'
+            )
+            OR EXISTS (
+              SELECT 1 FROM kana_elements ka 
+              WHERE ka.entry_id = e.id AND (
+                ka.reb ILIKE '%' || ${searchQuery} || '%' OR 
+                ka.romaji ILIKE '%' || ${searchQuery} || '%'
+              )
+            )
+            OR EXISTS (
+              SELECT 1 FROM senses s
+              JOIN glosses g ON s.id = g.sense_id
+              WHERE s.entry_id = e.id AND g.gloss ILIKE '%' || ${searchQuery} || '%'
+            )
+          `
+          : sql``
+      }
+    `
   ]);
 
   const totalEntries = Number(countResult[0].count);
