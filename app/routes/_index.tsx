@@ -59,6 +59,11 @@ export default function Index() {
                             className="px-3 py-1.5 bg-blue-50 text-blue-800 rounded-lg font-medium text-sm"
                           >
                             {kanji.keb}
+                            {kanji.pri?.length > 0 && (
+                              <span className="ml-1 text-[0.7em] bg-blue-100 px-1 rounded">
+                                {kanji.pri.join(', ')}
+                              </span>
+                            )}
                           </span>
                         ))}
                       </div>
@@ -85,6 +90,11 @@ export default function Index() {
                                 <span className="text-xs text-gray-500 truncate">
                                   {kana.romaji}
                                 </span>
+                                {kana.pri?.length > 0 && (
+                                  <span className="text-xs text-gray-500 ml-2">
+                                    ({kana.pri.join(', ')})
+                                  </span>
+                                )}
                               </div>
                             </div>
                             {kana.audio && (
@@ -141,6 +151,38 @@ export default function Index() {
                         </div>
                       )}
 
+                      {/* Field */}
+                      {sense.field?.length > 0 && (
+                        <div className="mt-2">
+                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
+                            Field
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {sense.field.map((field, idx) => (
+                              <span key={idx} className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded-md">
+                                {field}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Misc */}
+                      {sense.misc?.length > 0 && (
+                        <div className="mt-2">
+                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
+                            Misc
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {sense.misc.map((misc, idx) => (
+                              <span key={idx} className="px-2 py-1 bg-yellow-50 text-yellow-700 text-xs rounded-md">
+                                {misc}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Meanings */}
                       <div className="mb-3">
                         <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
@@ -155,6 +197,11 @@ export default function Index() {
                               <span className="text-gray-400 mr-2">•</span>
                               <span className="flex-1">
                                 {gloss.gloss}
+                                {(gloss.g_type || gloss.g_gend) && (
+                                  <span className="ml-2 text-xs text-gray-500">
+                                    ({[gloss.g_type, gloss.g_gend].filter(Boolean).join(', ')})
+                                  </span>
+                                )}
                                 <span className="ml-2 text-xs text-gray-500 font-mono">
                                   ({gloss.lang})
                                 </span>
@@ -177,10 +224,28 @@ export default function Index() {
                                 className="text-sm text-gray-700"
                               >
                                 <p className="font-medium">"{example.text}"</p>
-                                <p className="text-gray-500 text-sm mt-1">
-                                  {example.translation}
-                                </p>
+                                {example.sentences?.map((sentence, idx) => (
+                                  <p key={idx} className="text-gray-500 text-sm mt-1">
+                                    {sentence.text} ({sentence.lang})
+                                  </p>
+                                ))}
                               </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Cross-references */}
+                      {sense.xref?.length > 0 && (
+                        <div className="mt-2">
+                          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
+                            Cross References
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {sense.xref.map((xref, idx) => (
+                              <span key={idx} className="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md">
+                                {xref}
+                              </span>
                             ))}
                           </div>
                         </div>

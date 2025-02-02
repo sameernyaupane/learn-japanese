@@ -88,12 +88,20 @@ export interface JMdictKanaElement {
 }
 
 export interface JMdictExample {
-  source: string;
+  id: number;
+  source?: string;
   text: string;
   sentences: Array<{
     lang: string;
     text: string;
   }>;
+}
+
+export interface JMdictLSource {
+  '@_xml:lang'?: string;
+  '@_ls_type'?: string;
+  '@_ls_wasei'?: string;
+  '#text'?: string;
 }
 
 export async function getEntries(page: number = 1, perPage: number = 50): Promise<{ entries: JMdictEntry[], totalEntries: number }> {
@@ -151,14 +159,7 @@ export async function getEntries(page: number = 1, perPage: number = 50): Promis
                 'id', ex.id,
                 'source', ex.source,
                 'text', ex.text,
-                'sentences', (
-                  SELECT json_agg(json_build_object(
-                    'lang', exs.lang,
-                    'text', exs.text
-                  ))
-                  FROM example_sentences exs
-                  WHERE exs.example_id = ex.id
-                )
+                'sentences', ex.translation
               ))
               FROM examples ex
               WHERE ex.sense_id = s.id

@@ -59,6 +59,30 @@ export async function seedJMdict() {
         else if (elementName === 'sense') {
           tempEntry.sense.push({});
         }
+        else if (elementName === 'example') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          currentSense.example = currentSense.example || [];
+          currentSense.example.push({});
+        }
+        else if (elementName === 'lsource') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          currentSense.lsource = currentSense.lsource || [];
+          currentSense.lsource.push({
+            '@_xml:lang': node.attributes['xml:lang'] || 'eng',
+            '@_ls_type': node.attributes['ls_type'],
+            '@_ls_wasei': node.attributes['ls_wasei'],
+            '#text': '' // Initialize text content
+          });
+        }
+        else if (elementName === 'ex_sent') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          const currentExample = currentSense.example?.[currentSense.example.length - 1];
+          currentExample.ex_sent = currentExample.ex_sent || [];
+          currentExample.ex_sent.push({
+            '@_xml:lang': node.attributes['xml:lang'] || 'en',
+            '#text': ''
+          });
+        }
       });
 
       parser.on('entity', (entity) => {
@@ -100,6 +124,37 @@ export async function seedJMdict() {
               '@_xml:lang': 'en'
             }];
           }
+        }
+        else if (currentPath === 'jmdict.entry.sense.example.ex_srce') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          const currentExample = currentSense.example?.[currentSense.example.length - 1];
+          currentExample.ex_srce = currentExample.ex_srce || {};
+          currentExample.ex_srce['#text'] = trimmedText;
+        }
+        else if (currentPath === 'jmdict.entry.sense.example.ex_srce.@_exsrc_type') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          const currentExample = currentSense.example?.[currentSense.example.length - 1];
+          currentExample.ex_srce = currentExample.ex_srce || {};
+          currentExample.ex_srce['@_exsrc_type'] = trimmedText;
+        }
+        else if (currentPath === 'jmdict.entry.sense.example.ex_text') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          const currentExample = currentSense.example?.[currentSense.example.length - 1];
+          currentExample.ex_text = currentExample.ex_text || {};
+          currentExample.ex_text['#text'] = trimmedText;
+        }
+        else if (currentPath === 'jmdict.entry.sense.example.ex_sent') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          const currentExample = currentSense.example?.[currentSense.example.length - 1];
+          if (currentExample?.ex_sent?.length) {
+            const lastIndex = currentExample.ex_sent.length - 1;
+            currentExample.ex_sent[lastIndex]['#text'] += trimmedText;
+          }
+        }
+        else if (currentPath === 'jmdict.entry.sense.lsource') {
+          const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
+          const currentLsource = currentSense.lsource[currentSense.lsource.length - 1];
+          currentLsource['#text'] += trimmedText;
         }
       });
 
@@ -316,7 +371,7 @@ async function processBatch(batch: any[]) {
                       sense_id, 
                       source, 
                       text, 
-                      translation
+                      sentences
                     )
                     VALUES (
                       ${senseRecord.id},
