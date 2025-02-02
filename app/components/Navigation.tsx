@@ -15,7 +15,7 @@ export default function Navigation() {
               } inline-flex items-center border-b-2 px-1 pt-1 pb-2 text-sm font-medium`
             }
           >
-            Phrases
+            Entries
           </NavLink>
           <NavLink
             to="/words"
@@ -27,7 +27,7 @@ export default function Navigation() {
               } inline-flex items-center border-b-2 px-1 pt-1 pb-2 text-sm font-medium`
             }
           >
-            Words
+            Practice
           </NavLink>
         </div>
       </div>

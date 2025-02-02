@@ -1,0 +1,128 @@
+{
+  "行く": {
+    "romaji": "iku",
+    "english": "go",
+    "nepali": "जानु",
+    "image_url": "https://images.pexels.com/photos/2744193/pexels-photo-2744193.jpeg"
+  },
+  "見る": {
+    "romaji": "miru",
+    "english": "see",
+    "nepali": "हेर्नु",
+    "image_url": "https://images.pexels.com/photos/1486974/pexels-photo-1486974.jpeg"
+  },
+  "多い": {
+    "romaji": "ooi",
+    "english": "many",
+    "nepali": "धेरै",
+    "image_url": "https://images.pexels.com/photos/1532771/pexels-photo-1532771.jpeg"
+  },
+  "家": {
+    "romaji": "ie",
+    "english": "home",
+    "nepali": "घर",
+    "image_url": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+  },
+  "これ": {
+    "romaji": "kore",
+    "english": "this",
+    "nepali": "यो",
+    "image_url": "https://images.pexels.com/photos/3760529/pexels-photo-3760529.jpeg"
+  },
+  "それ": {
+    "romaji": "sore",
+    "english": "that",
+    "nepali": "त्यो",
+    "image_url": "https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg"
+  },
+  "私": {
+    "romaji": "watashi",
+    "english": "I",
+    "nepali": "म",
+    "image_url": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg"
+  },
+  "仕事": {
+    "romaji": "shigoto",
+    "english": "work",
+    "nepali": "काम",
+    "image_url": "https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg"
+  },
+  "いつ": {
+    "romaji": "itsu",
+    "english": "when",
+    "nepali": "कहिले",
+    "image_url": "https://images.pexels.com/photos/707676/pexels-photo-707676.jpeg"
+  },
+  "する": {
+    "romaji": "suru",
+    "english": "do",
+    "nepali": "गर्नु",
+    "image_url": "https://images.pexels.com/photos/3228878/pexels-photo-3228878.jpeg"
+  },
+  "出る": {
+    "romaji": "deru",
+    "english": "leave",
+    "nepali": "छोड्नु",
+    "image_url": "https://images.pexels.com/photos/1462935/pexels-photo-1462935.jpeg"
+  },
+  "使う": {
+    "romaji": "tsukau",
+    "english": "use",
+    "nepali": "प्रयोग गर्नु",
+    "image_url": "https://images.pexels.com/photos/4065876/pexels-photo-4065876.jpeg"
+  },
+  "ところ": {
+    "romaji": "tokoro",
+    "english": "place",
+    "nepali": "ठाउँ",
+    "image_url": "https://images.pexels.com/photos/1796715/pexels-photo-1796715.jpeg"
+  },
+  "作る": {
+    "romaji": "tsukuru",
+    "english": "make",
+    "nepali": "बनाउनु",
+    "image_url": "https://images.pexels.com/photos/3771110/pexels-photo-3771110.jpeg"
+  },
+  "思う": {
+    "romaji": "omou",
+    "english": "think",
+    "nepali": "सोच्नु",
+    "image_url": "https://images.pexels.com/photos/3184657/pexels-photo-3184657.jpeg"
+  },
+  "持つ": {
+    "romaji": "motsu",
+    "english": "have",
+    "nepali": "हुनु",
+    "image_url": "https://images.pexels.com/photos/1430931/pexels-photo-1430931.jpeg"
+  },
+  "買う": {
+    "romaji": "kau",
+    "english": "buy",
+    "nepali": "किन्नु",
+    "image_url": "https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg"
+  },
+  "時間": {
+    "romaji": "jikan",
+    "english": "time",
+    "nepali": "समय",
+    "image_url": "https://images.pexels.com/photos/280254/pexels-photo-280254.jpeg"
+  },
+  "知る": {
+    "romaji": "shiru",
+    "english": "know",
+    "nepali": "जान्नु",
+    "image_url": "https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg"
+  },
+  "同じ": {
+    "romaji": "onaji",
+    "english": "same",
+    "nepali": "उस्तै",
+    "image_url": "https://images.pexels.com/photos/1145434/pexels-photo-1145434.jpeg"
+  },
+  "今": {
+    "romaji": "ima",
+    "english": "now",
+    "nepali": "अहिले",
+    "image_url": "https://images.pexels.com/photos/3760810/pexels-photo-3760810.jpeg"
+  }
+}

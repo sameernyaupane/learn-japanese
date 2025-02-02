@@ -5321,7 +5321,6 @@
     "nepali": "विज्ञान",
     "image_url": "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg"
   },
-  // ... existing entries ...
   "太陽": {
     "romaji": "taiyou",
     "english": "sun",
@@ -5586,7 +5585,6 @@
     "nepali": "कार्यक्रम",
     "image_url": "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg"
   },
-  // ... existing entries ...
   "ビデオ": {
     "romaji": "bideo",
     "english": "video",
@@ -5821,7 +5819,6 @@
     "nepali": "पूर्व",
     "image_url": "https://images.pexels.com/photos/257040/pexels-photo-257040.jpeg"
   },
-  // ... existing entries ...
   "南": {
     "romaji": "minami",
     "english": "south",

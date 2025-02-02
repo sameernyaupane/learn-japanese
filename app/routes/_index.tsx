@@ -1,73 +1,92 @@
 import { type LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { getPhrases } from '~/models/phrase.server';
+import { getEntries } from '~/models/jmdict';
 import Navigation from '~/components/Navigation';
 
 export const loader = async () => {
-  const phrases = await getPhrases();
-  return { phrases };
+  const entries = await getEntries();
+  return { entries };
 };
 
 export default function Index() {
-  const { phrases } = useLoaderData<typeof loader>();
+  const { entries } = useLoaderData<typeof loader>();
 
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
       <div className="max-w-xl mx-auto p-4 font-mono">
-        {phrases.map((phrase) => (
-          <div key={phrase.id} className="mb-8 overflow-hidden rounded-xl bg-gray-50 shadow-md border border-gray-300">
-            {phrase.image_url && (
-              <div className="w-full h-48 overflow-hidden">
-                <img 
-                  src={phrase.image_url} 
-                  alt={phrase.english_text}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
+        {entries.map((entry) => (
+          <div key={entry.id} className="mb-8 overflow-hidden rounded-xl bg-gray-50 shadow-md border border-gray-300">
             <div className="p-4">
               <h2 className="text-lg font-bold mb-2 text-black">
-                {phrase.order_number}. {phrase.english_text}
+                Entry #{entry.ent_seq}
               </h2>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <tbody className="divide-y divide-gray-200">
-                    <tr>
-                      <td className="py-2 pr-3 whitespace-nowrap font-semibold w-24 text-black">
-                        Romaji:
-                      </td>
-                      {phrase.translations.japanese_romaji.map((word, i) => (
-                        <td key={i} className="px-2 py-2 text-center text-black">{word || '\u00A0'}</td>
+              
+              {/* Kanji Elements */}
+              {entry.kanji_elements.length > 0 && (
+                <div className="mb-4">
+                  <h3 className="font-semibold mb-1">Kanji:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {entry.kanji_elements.map((kanji) => (
+                      <span key={kanji.id} className="bg-blue-100 px-2 py-1 rounded">
+                        {kanji.keb}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Kana Elements */}
+              {entry.kana_elements.length > 0 && (
+                <div className="mb-4">
+                  <h3 className="font-semibold mb-1">Kana:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {entry.kana_elements.map((kana) => (
+                      <span key={kana.id} className="bg-green-100 px-2 py-1 rounded">
+                        {kana.reb}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Senses */}
+              {entry.senses.map((sense) => (
+                <div key={sense.id} className="mb-4 p-3 bg-white rounded border">
+                  {/* Parts of Speech */}
+                  {sense.pos?.length > 0 && (
+                    <div className="mb-2">
+                      <span className="font-semibold">Parts of Speech:</span>{' '}
+                      {sense.pos.join(', ')}
+                    </div>
+                  )}
+
+                  {/* Glosses */}
+                  <div className="mb-2">
+                    <h4 className="font-semibold">Meanings:</h4>
+                    <ul className="list-disc pl-5">
+                      {sense.glosses.map((gloss) => (
+                        <li key={gloss.id} className="text-black">
+                          {gloss.gloss} ({gloss.lang})
+                        </li>
                       ))}
-                    </tr>
-                    <tr>
-                      <td className="py-2 pr-3 whitespace-nowrap font-semibold w-24 text-black">
-                        Japanese:
-                      </td>
-                      {phrase.translations.japanese.map((word, i) => (
-                        <td key={i} className="px-2 py-2 text-center text-black">{word || '\u00A0'}</td>
+                    </ul>
+                  </div>
+
+                  {/* Examples */}
+                  {sense.examples.length > 0 && (
+                    <div className="mt-2">
+                      <h4 className="font-semibold">Examples:</h4>
+                      {sense.examples.map((example) => (
+                        <div key={example.id} className="ml-2">
+                          <p className="text-sm">{example.text}</p>
+                          <p className="text-sm text-gray-600">- {example.translation}</p>
+                        </div>
                       ))}
-                    </tr>
-                    <tr>
-                      <td className="py-2 pr-3 whitespace-nowrap font-semibold w-24 text-black">
-                        Nepali:
-                      </td>
-                      {phrase.translations.nepali.map((word, i) => (
-                        <td key={i} className="px-2 py-2 text-center text-black">{word || '\u00A0'}</td>
-                      ))}
-                    </tr>
-                    <tr>
-                      <td className="py-2 pr-3 whitespace-nowrap font-semibold w-24 text-black">
-                        English:
-                      </td>
-                      {phrase.translations.english.map((word, i) => (
-                        <td key={i} className="px-2 py-2 text-center text-black">{word || '\u00A0'}</td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         ))}

@@ -21,7 +21,7 @@ export PGPASSWORD=$DB_PASSWORD
 
 # Drop all tables and indexes
 psql -U $DB_USER -h $DB_HOST -d $DB_NAME <<EOF
-DROP TABLE IF EXISTS phrase_indexes, phrases, translations, words, sentences CASCADE;
+DROP TABLE IF EXISTS jmdict_entries, kanji_elements, kana_elements, senses, glosses, examples CASCADE;
 EOF
 
 echo "Tables dropped."
