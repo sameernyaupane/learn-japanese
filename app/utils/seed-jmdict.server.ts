@@ -74,12 +74,8 @@ export async function seedJMdict() {
         const currentPath = elementStack.map(e => e.toLowerCase()).join('.');
         const trimmedText = text.trim();
 
-        console.log('🔍 Text event:', { currentPath, trimmedText });
-
         if (currentPath === 'jmdict.entry.ent_seq') {
-          console.log('📝 Captured ent_seq:', trimmedText);
           tempEntry.ent_seq = trimmedText;
-          console.log('✅ ent_seq assigned:', tempEntry);
         }
         else if (currentPath === 'jmdict.entry.r_ele.reb') {
           const lastIndex = tempEntry.r_ele.length - 1;
@@ -120,7 +116,6 @@ export async function seedJMdict() {
           console.log('🚪 ENTRY END');
           inEntry = false;
           entryCount++;
-          console.log('Temp Entry before processBatch:', tempEntry);
 
           // Process the entry without stopping the stream
           processBatch([tempEntry])
@@ -205,7 +200,6 @@ async function processBatch(batch: any[]) {
 
       // Process Reading elements
       if (entry.r_ele) {
-        console.log('Reading elements:', entry.r_ele);
         const rElements = Array.isArray(entry.r_ele) ? entry.r_ele : [entry.r_ele];
         for (const rEle of rElements) {
           await tx`
