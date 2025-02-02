@@ -53,6 +53,9 @@ export async function seedJMdict() {
           inEntry = true;
           tempEntry = { k_ele: [], r_ele: [], sense: [] };
         }
+        else if (elementName === 'k_ele') {
+          tempEntry.k_ele.push({});
+        }
         else if (elementName === 'r_ele') {
           tempEntry.r_ele.push({});
         }
@@ -155,6 +158,26 @@ export async function seedJMdict() {
           const currentSense = tempEntry.sense[tempEntry.sense.length - 1];
           const currentLsource = currentSense.lsource[currentSense.lsource.length - 1];
           currentLsource['#text'] += trimmedText;
+        }
+        else if (currentPath === 'jmdict.entry.k_ele.keb') {
+          const lastIndex = tempEntry.k_ele.length - 1;
+          if (lastIndex >= 0) {
+            tempEntry.k_ele[lastIndex].keb = trimmedText;
+          }
+        }
+        else if (currentPath === 'jmdict.entry.k_ele.ke_inf') {
+          const lastIndex = tempEntry.k_ele.length - 1;
+          if (lastIndex >= 0) {
+            tempEntry.k_ele[lastIndex].ke_inf = tempEntry.k_ele[lastIndex].ke_inf || [];
+            tempEntry.k_ele[lastIndex].ke_inf.push(trimmedText);
+          }
+        }
+        else if (currentPath === 'jmdict.entry.k_ele.ke_pri') {
+          const lastIndex = tempEntry.k_ele.length - 1;
+          if (lastIndex >= 0) {
+            tempEntry.k_ele[lastIndex].ke_pri = tempEntry.k_ele[lastIndex].ke_pri || [];
+            tempEntry.k_ele[lastIndex].ke_pri.push(trimmedText);
+          }
         }
       });
 
@@ -371,7 +394,7 @@ async function processBatch(batch: any[]) {
                       sense_id, 
                       source, 
                       text, 
-                      sentences
+                      translation
                     )
                     VALUES (
                       ${senseRecord.id},
