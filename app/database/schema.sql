@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS kanji_elements (
   entry_id INTEGER REFERENCES jmdict_entries(id),
   keb TEXT NOT NULL,
   ke_inf JSONB,
+  ke_pri JSONB,
   pri JSONB
 );
 
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS kana_elements (
   re_nokanji BOOLEAN,
   re_restr JSONB,
   re_inf JSONB,
+  re_pri JSONB,
   pri JSONB,
   romaji TEXT
 );
@@ -59,3 +61,20 @@ CREATE INDEX idx_kanji_entry_id ON kanji_elements(entry_id);
 CREATE INDEX idx_kana_entry_id ON kana_elements(entry_id);
 CREATE INDEX idx_senses_entry_id ON senses(entry_id);
 CREATE INDEX idx_glosses_sense_id ON glosses(sense_id);
+
+ALTER TABLE kanji_elements
+ADD COLUMN ke_inf JSONB,
+ADD COLUMN ke_pri JSONB;
+
+ALTER TABLE kana_elements
+ADD COLUMN re_inf JSONB,
+ADD COLUMN re_pri JSONB,
+ADD COLUMN re_restr JSONB,
+ADD COLUMN re_nokanji BOOLEAN;
+
+ALTER TABLE senses
+ADD COLUMN xref JSONB,
+ADD COLUMN ant JSONB,
+ADD COLUMN lsource JSONB,
+ADD COLUMN stagk JSONB,
+ADD COLUMN stagr JSONB;
