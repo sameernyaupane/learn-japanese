@@ -14,6 +14,7 @@ export interface JMdictEntry {
     reb: string;
     pri: string[];
     romaji: string;
+    audio?: string;
   }>;
   senses: Array<{
     id: number;
@@ -33,7 +34,6 @@ export interface JMdictEntry {
       source?: string;
     }>;
   }>;
-  audio?: string[];
 }
 
 export interface JMdictSense {
@@ -133,11 +133,11 @@ export async function getEntries(page: number = 1, perPage: number = 50): Promis
 
   const entries = await Promise.all(entriesResult.map(async (entry) => ({
     ...entry,
-    audio: [
-      await getJapaneseAudioUrl(entry.kana_elements[0]?.reb)
-    ].filter(Boolean),
     kanji_elements: entry.kanji_elements || [],
-    kana_elements: entry.kana_elements || [],
+    kana_elements: await Promise.all((entry.kana_elements || []).map(async (kana) => ({
+      ...kana,
+      audio: await getJapaneseAudioUrl(kana.reb)
+    }))),
     senses: entry.senses?.map(sense => ({
       ...sense,
       pos: (sense.pos || []).map(parsePartOfSpeech),

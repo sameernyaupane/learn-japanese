@@ -4,6 +4,7 @@ import { getEntries } from '~/models/jmdict';
 import Navigation from '~/components/Navigation';
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { getJapaneseAudioUrl } from '~/utils/text-to-speech.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -29,11 +30,11 @@ export default function Index() {
           </span>
         </h1>
 
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {entries.map((entry) => (
             <div 
               key={entry.id} 
-              className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-100"
+              className="h-full group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-100"
             >
               <div className="p-6">
                 {/* Entry Header */}
@@ -44,7 +45,7 @@ export default function Index() {
                 </div>
 
                 {/* Kanji & Kana Grid */}
-                <div className="grid gap-4 md:grid-cols-2 mb-6">
+                <div className="flex flex-col gap-4 mb-6">
                   {/* Kanji Elements */}
                   {entry.kanji_elements.length > 0 && (
                     <div className="space-y-2">
@@ -66,43 +67,50 @@ export default function Index() {
 
                   {/* Kana Elements */}
                   {entry.kana_elements.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                      {entry.kana_elements.map((kana) => (
-                        <div 
-                          key={kana.id}
-                          className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="space-y-2">
-                              <div className="text-2xl font-semibold text-gray-900">
-                                {kana.reb}
-                              </div>
-                              <div className="text-sm text-gray-500 font-mono">
-                                {kana.romaji}
+                    <div className="space-y-2">
+                      <h3 className="flex items-center text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                        <span className="mr-2">🎌</span>Kana Readings
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {entry.kana_elements.map((kana) => (
+                          <div
+                            key={kana.id}
+                            className="flex items-center space-x-2 bg-gray-50 px-3 py-1.5 rounded-lg min-w-[200px]"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <div className="flex flex-col">
+                                <span className="font-medium text-gray-700 text-sm whitespace-nowrap truncate">
+                                  {kana.reb}
+                                </span>
+                                <span className="text-xs text-gray-500 truncate">
+                                  {kana.romaji}
+                                </span>
                               </div>
                             </div>
-                            <button
-                              onMouseEnter={async (e) => {
-                                e.preventDefault();
-                                if (currentAudio) currentAudio.pause();
-                                const audio = new Audio(entry.audio[0]);
-                                setCurrentAudio(audio);
-                                await audio.play();
-                              }}
-                              onClick={async (e) => {
-                                e.preventDefault();
-                                if (currentAudio) currentAudio.pause();
-                                const audio = new Audio(entry.audio[0]);
-                                setCurrentAudio(audio);
-                                await audio.play();
-                              }}
-                              className="p-2 text-blue-500 hover:text-blue-700 transition-colors"
-                            >
-                              <SpeakerWaveIcon className="h-6 w-6" />
-                            </button>
+                            {kana.audio && (
+                              <button
+                                onMouseEnter={async (e) => {
+                                  e.preventDefault();
+                                  if (currentAudio) currentAudio.pause();
+                                  const audio = new Audio(kana.audio);
+                                  setCurrentAudio(audio);
+                                  await audio.play();
+                                }}
+                                onClick={async (e) => {
+                                  e.preventDefault();
+                                  if (currentAudio) currentAudio.pause();
+                                  const audio = new Audio(kana.audio);
+                                  setCurrentAudio(audio);
+                                  await audio.play();
+                                }}
+                                className="p-2 text-blue-500 hover:text-blue-700 transition-colors"
+                              >
+                                <SpeakerWaveIcon className="h-4 w-4" />
+                              </button>
+                            )}
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
