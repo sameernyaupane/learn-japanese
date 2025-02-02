@@ -175,11 +175,9 @@ async function processBatch(batch: any[]) {
         VALUES (${entSeq})
         RETURNING id
       `;
-      console.log('📥 Inserted entry ID:', entryRecord.id);
 
       // Process Kanji elements
       if (entry.k_ele) {
-        console.log('Kanji elements:', entry.k_ele);
         for (const kEle of entry.k_ele) {
           await tx`
             INSERT INTO kanji_elements (entry_id, keb, ke_inf, pri)
@@ -190,7 +188,6 @@ async function processBatch(batch: any[]) {
               ${tx.json(kEle.ke_pri || [])}
             )
           `;
-          console.log('  ⬇️ Inserted kanji:', kEle.keb);
         }
       }
 
@@ -216,14 +213,12 @@ async function processBatch(batch: any[]) {
               ${tx.json(rEle.re_pri || rEle.RE_PRI || [])}
             )
           `;
-          console.log('  📖 Inserted reading:', rEle.reb || rEle.REB);
         }
       }
 
       // Process Senses
       if (entry.sense) {
         const senses = Array.isArray(entry.sense) ? entry.sense : [entry.sense];
-        console.log('Senses count:', senses.length);
         
         for (const sense of senses) {
           // Handle text nodes in elements
