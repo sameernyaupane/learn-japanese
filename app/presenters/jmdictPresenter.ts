@@ -68,27 +68,47 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
     return POS_MAP[pos] || pos.replace(/^&|;$/g, '');
   };
 
-  return Promise.all(entriesResult.map(async (entry) => ({
-    ...entry,
-    kanji_elements: entry.kanji_elements || [],
-    kana_elements: await Promise.all((entry.kana_elements || []).map(async (kana) => ({
-      ...kana,
-      audio: await getJapaneseAudioUrl(kana.reb)
-    }))),
-    furigana: entry.furigana || [],
-    senses: entry.senses?.map(sense => ({
-      ...sense,
-      pos: (sense.pos || []).map(parsePartOfSpeech),
-      field: sense.field || [],
-      misc: sense.misc || [],
-      dial: sense.dial || [],
-      stagk: sense.stagk || [],
-      stagr: sense.stagr || [],
-      xref: sense.xref || [],
-      ant: sense.ant || [],
-      lsource: sense.lsource || [],
-      glosses: sense.glosses || [],
-      examples: sense.examples || []
-    })) || []
-  })));
+  return Promise.all(entriesResult.map(async (entry) => {
+    const presentedEntry = {
+      ...entry,
+      primaryKanji: entry.kanji_elements[0]?.keb,
+      primaryKana: entry.kana_elements[0]?.reb,
+      romaji: entry.kana_elements[0]?.romaji,
+      priority: entry.kana_elements[0]?.pri?.[0],
+      audioUrl: entry.kana_elements[0]?.audio,
+      kanji_elements: entry.kanji_elements || [],
+      kana_elements: await Promise.all((entry.kana_elements || []).map(async (kana) => ({
+        ...kana,
+        audio: await getJapaneseAudioUrl(kana.reb)
+      }))),
+      furigana: entry.furigana || [],
+      senses: entry.senses?.map(sense => ({
+        ...sense,
+        pos: (sense.pos || []).map(parsePartOfSpeech),
+        field: sense.field || [],
+        misc: sense.misc || [],
+        dial: sense.dial || [],
+        stagk: sense.stagk || [],
+        stagr: sense.stagr || [],
+        xref: sense.xref || [],
+        ant: sense.ant || [],
+        lsource: sense.lsource || [],
+        glosses: sense.glosses || [],
+        examples: sense.examples || []
+      })) || []
+    };
+
+    // Debug logging
+    console.log('Processed entry:', {
+      id: presentedEntry.id,
+      primaryKanji: presentedEntry.primaryKanji,
+      primaryKana: presentedEntry.primaryKana,
+      romaji: presentedEntry.romaji,
+      priority: presentedEntry.priority,
+      audioUrl: presentedEntry.audioUrl,
+      furigana: presentedEntry.furigana
+    });
+
+    return presentedEntry;
+  }));
 } 

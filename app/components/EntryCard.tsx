@@ -17,12 +17,6 @@ export function EntryCard({
   hoverTimeout: NodeJS.Timeout | null;
   setHoverTimeout: (timeout: NodeJS.Timeout | null) => void;
 }) {
-  const primaryKanji = entry.kanji_elements[0]?.keb;
-  const primaryKana = entry.kana_elements[0]?.reb;
-  const romaji = entry.kana_elements[0]?.romaji;
-  const priority = entry.kana_elements[0]?.pri?.[0];
-  const audioUrl = entry.kana_elements[0]?.audio;
-
   return (
     <div 
       key={entry.id} 
@@ -31,14 +25,15 @@ export function EntryCard({
       <div className="p-4">
         <div className="mb-4 space-y-2">
           <KanjiHeader
-            primaryKana={primaryKana}
-            primaryKanji={primaryKanji}
-            priority={priority}
+            primaryKana={entry.primaryKana}
+            primaryKanji={entry.primaryKanji}
+            priority={entry.priority}
+            furigana={entry.furigana}
           />
-          <RomajiRow romaji={romaji}>
-            {audioUrl && (
+          <RomajiRow romaji={entry.romaji}>
+            {entry.audioUrl && (
               <AudioPlayButton
-                audioUrl={audioUrl}
+                audioUrl={entry.audioUrl}
                 currentAudio={currentAudio}
                 setCurrentAudio={setCurrentAudio}
                 hoverTimeout={hoverTimeout}
