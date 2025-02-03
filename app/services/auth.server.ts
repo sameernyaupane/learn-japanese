@@ -1,26 +1,27 @@
-import { Authenticator } from "remix-auth";
-import { sessionStorage } from "./session.server";
-import { FormStrategy } from "remix-auth-form";
-
-type User = {
-  id: string;
-  email: string;
-};
-
-export const authenticator = new Authenticator<User>(sessionStorage);
+import type { User } from "@prisma/client";
+import { getSession, commitSession, destroySession } from "./session.server";
 
 // Mock user database
 const users: User[] = [
   { id: "1", email: "user@example.com" }
 ];
 
-authenticator.use(
-  new FormStrategy(async ({ form }) => {
-    const email = form.get("email") as string;
-    const user = users.find(u => u.email === email);
-    
-    if (!user) throw new Error("Invalid credentials");
-    return user;
-  }),
-  "user-pass"
-); 
+export async function login(email: string) {
+  const user = users.find(u => u.email === email);
+  if (!user) return null;
+  return user;
+}
+
+export async function checkAuth(request: Request) {
+  const session = await getSession(request.headers.get("Cookie"));
+  return session.get("userId") ? { 
+    id: session.get("userId"), 
+    email: session.get("email") 
+  } : null;
+}
+
+export async function requireAuth(request: Request) {
+  const user = await checkAuth(request);
+  if (!user) throw new Response("Unauthorized", { status: 401 });
+  return user;
+}

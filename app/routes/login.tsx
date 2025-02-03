@@ -1,16 +1,23 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { authenticator } from "~/services/auth.server";
+import { login, commitSession } from "~/services/auth.server";
 
 export async function action({ request }: ActionFunctionArgs) {
-  try {
-    return await authenticator.authenticate("user-pass", request, {
-      successRedirect: "/",
-      throwOnError: true,
-    });
-  } catch (error) {
-    return json({ error: "Invalid email or password" });
-  }
+  const formData = await request.formData();
+  const email = formData.get("email") as string;
+  
+  const user = await login(email);
+  if (!user) return json({ error: "Invalid email" });
+
+  const session = await getSession();
+  session.set("userId", user.id);
+  session.set("email", user.email);
+
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await commitSession(session)
+    }
+  });
 }
 
 export default function Login() {

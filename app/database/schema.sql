@@ -92,7 +92,7 @@ CREATE TABLE jmdict_audio (
 
 CREATE TABLE user_list (
   id SERIAL PRIMARY KEY,
-  user_id UUID NOT NULL REFERENCES auth.users(id),
+  user_id UUID NOT NULL REFERENCES users(id),
   ent_seq INTEGER NOT NULL REFERENCES jmdict_entries(ent_seq),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -100,14 +100,15 @@ CREATE TABLE user_list (
 );
 
 CREATE TABLE users (
-  id UUID PRIMARY KEY REFERENCES auth.users(id),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
   username TEXT UNIQUE,
   display_name TEXT,
   avatar_url TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  last_login TIMESTAMP WITH TIME ZONE
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  last_login TIMESTAMPTZ
 );
 
 CREATE INDEX idx_kanji_entry_id ON kanji_elements(entry_id);
@@ -166,6 +167,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Update user_list table to reference new users table
+ALTER TABLE user_list 
+  DROP CONSTRAINT user_list_user_id_fkey,
+  ADD CONSTRAINT user_list_user_id_fkey 
+    FOREIGN KEY (user_id) REFERENCES users(id);
+
+-- Add updated_at trigger for users table
 CREATE TRIGGER update_users_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW

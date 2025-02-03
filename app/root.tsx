@@ -5,10 +5,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { authenticator } from "~/services/auth.server";
+import { checkAuth } from "~/services/auth.server";
+import { sessionStorage } from "./session.server";
+import { Authenticator } from "remix-auth";
 
 import "./tailwind.css";
 import Navigation from "~/components/Navigation";
@@ -26,14 +28,22 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export async function loader({ request }) {
-  const user = await authenticator.isAuthenticated(request);
-  return json({ user });
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
+  return json({
+    user: session.has("userId") ? { 
+      id: session.get("userId"), 
+      email: session.get("email") 
+    } : null
+  });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { user } = useLoaderData<typeof loader>();
-  
+  const data = useLoaderData<typeof loader>();
+  const user = data?.user ?? null;
+
   return (
     <html lang="en" className="bg-white">
       <head>

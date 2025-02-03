@@ -1,6 +1,11 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import { authenticator } from "~/services/auth.server";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { destroySession } from "~/services/session.server";
 
 export async function action({ request }: ActionFunctionArgs) {
-  return await authenticator.logout(request, { redirectTo: "/login" });
+  const session = await getSession(request.headers.get("Cookie"));
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await destroySession(session)
+    }
+  });
 } 

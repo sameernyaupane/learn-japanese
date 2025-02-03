@@ -1,17 +1,18 @@
-import { createCookie, createFileSessionStorage } from "@remix-run/node";
-import path from "path";
-import { fileURLToPath } from "url";
+import { createCookieSessionStorage } from "@remix-run/node";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+type SessionData = {
+  userId: string;
+  email: string;
+};
 
-const sessionCookie = createCookie("__session", {
-  secrets: [process.env.SESSION_SECRET || "SECRET_BASE"],
-  sameSite: "lax",
-});
-
-const sessionStorage = createFileSessionStorage({
-  cookie: sessionCookie,
-  dir: process.env.SESSION_DIR || path.join(__dirname, "../../sessions"),
-});
-
-export const { getSession, commitSession, destroySession } = sessionStorage; 
+export const { getSession, commitSession, destroySession } = 
+  createCookieSessionStorage<SessionData>({
+    cookie: {
+      name: "__session",
+      secrets: [process.env.SESSION_SECRET || "SECRET_BASE"],
+      sameSite: "lax",
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    }
+  }); 

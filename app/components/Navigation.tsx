@@ -1,10 +1,7 @@
 import { Link, Form } from '@remix-run/react';
 import { NavLink } from '@remix-run/react';
-import { useUser } from '~/utils/auth';
 
-export default function Navigation() {
-  const user = useUser();
-  
+export default function Navigation({ user }: { user?: User | null }) {
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-3">

@@ -3,15 +3,13 @@ import { useLoaderData } from '@remix-run/react';
 import { getUserList } from '~/models/userList.server';
 import { EntryCard } from '~/components/EntryCard';
 import { Pagination } from '~/components/Pagination';
-import { authenticator } from '~/services/auth.server';
+import { authenticator, requireAuth } from '~/services/auth.server';
 import Navigation from '~/components/Navigation';
 
 const PER_PAGE = 50;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/login',
-  });
+  const user = await requireAuth(request);
 
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
