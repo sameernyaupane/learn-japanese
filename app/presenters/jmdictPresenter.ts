@@ -24,6 +24,11 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
       // Add other async calls here if needed
     ]);
 
+    // Get audio URL with proper parameters
+    const audioUrl = entry.ent_seq 
+      ? await getJapaneseAudioUrl(primaryKana, entry.ent_seq)
+      : null;
+
     return {
       ...entry,
       frequency: frequencyCode,
@@ -33,7 +38,7 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
       primaryKana,
       romaji: (entry.kana_elements || [])[0]?.romaji,
       priority: (entry.kana_elements || [])[0]?.pri?.[0],
-      audioUrl: await getJapaneseAudioUrl(primaryKana),
+      audioUrl,  // Use the properly fetched URL
       kanji_elements: entry.kanji_elements || [],
       kana_elements: entry.kana_elements || [],
       furigana: (entry.furigana || []).sort((a, b) => {
