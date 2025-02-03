@@ -6,8 +6,12 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { authenticator } from "~/services/auth.server";
 
 import "./tailwind.css";
+import Navigation from "~/components/Navigation";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -22,7 +26,14 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }) {
+  const user = await authenticator.isAuthenticated(request);
+  return json({ user });
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { user } = useLoaderData<typeof loader>();
+  
   return (
     <html lang="en" className="bg-white">
       <head>
@@ -32,6 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-white">
+        <Navigation user={user} />
         {children}
         <ScrollRestoration />
         <Scripts />

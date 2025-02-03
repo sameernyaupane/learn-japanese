@@ -90,6 +90,26 @@ CREATE TABLE jmdict_audio (
   UNIQUE(ent_seq)
 );
 
+CREATE TABLE user_list (
+  id SERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id),
+  ent_seq INTEGER NOT NULL REFERENCES jmdict_entries(ent_seq),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, ent_seq)
+);
+
+CREATE TABLE users (
+  id UUID PRIMARY KEY REFERENCES auth.users(id),
+  email TEXT NOT NULL UNIQUE,
+  username TEXT UNIQUE,
+  display_name TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  last_login TIMESTAMP WITH TIME ZONE
+);
+
 CREATE INDEX idx_kanji_entry_id ON kanji_elements(entry_id);
 CREATE INDEX idx_kana_entry_id ON kana_elements(entry_id);
 CREATE INDEX idx_senses_entry_id ON senses(entry_id);
@@ -113,6 +133,13 @@ CREATE INDEX idx_jmdict_images_filename ON jmdict_images(filename);
 CREATE INDEX idx_jmdict_audio_ent_seq ON jmdict_audio(ent_seq);
 CREATE INDEX idx_jmdict_audio_filename ON jmdict_audio(filename);
 
+CREATE INDEX idx_user_list_user_id ON user_list(user_id);
+CREATE INDEX idx_user_list_ent_seq ON user_list(ent_seq);
+
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX idx_users_display_name ON users(display_name);
+
 ALTER TABLE kanji_elements
 ADD COLUMN ke_inf JSONB,
 ADD COLUMN ke_pri JSONB;
@@ -129,3 +156,17 @@ ADD COLUMN ant JSONB,
 ADD COLUMN lsource JSONB,
 ADD COLUMN stagk JSONB,
 ADD COLUMN stagr JSONB;
+
+-- Add this trigger to automatically update the updated_at column
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_users_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();

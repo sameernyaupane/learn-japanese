@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs } from '@remix-run/node';
+import { type LoaderFunctionArgs, type ActionFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEntries } from '~/models/jmdict';
 import Navigation from '~/components/Navigation';
@@ -8,6 +8,8 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
+import { addToUserList, removeFromUserList } from '~/models/userList.server';
+import { authenticator } from '~/services/auth.server';
 
 const PER_PAGE = 50;
 
@@ -25,6 +27,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
   
   return { entries, totalEntries, currentPage: page, searchQuery, frequencyFilter, perPage: PER_PAGE };
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const user = await authenticator.isAuthenticated(request);
+  if (!user) return json({ error: 'Not authenticated' }, { status: 401 });
+
+  const formData = await request.formData();
+  const entSeq = Number(formData.get('entSeq'));
+  const action = formData.get('_action');
+
+  if (action === 'addToList') {
+    await addToUserList(user.id, entSeq);
+  } else if (action === 'removeFromList') {
+    await removeFromUserList(user.id, entSeq);
+  }
+
+  return json({ success: true });
 };
 
 export default function Index() {

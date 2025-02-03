@@ -4,6 +4,8 @@ import { SenseGroup } from './SenseGroup';
 import { RelatedTerms } from './RelatedTerms';
 import { AudioPlayButton } from './AudioPlayButton';
 import { FrequencyBadge } from './FrequencyBadge';
+import { useUser } from '~/utils/auth';
+import { Form } from '@remix-run/react';
 
 export function EntryCard({
   entry,
@@ -18,11 +20,11 @@ export function EntryCard({
   hoverTimeout: NodeJS.Timeout | null;
   setHoverTimeout: (timeout: NodeJS.Timeout | null) => void;
 }) {
+  const user = useUser();
+  
   return (
-    <div 
-      key={entry.id} 
-      className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100"
-    >
+    <div className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100 relative">
+      <ListControls entry={entry} userId={user?.id} />
       {entry.imageUrl && (
         <div className="w-full h-56 bg-gray-50 overflow-hidden border-b border-gray-100 rounded-t-xl">
           <img 
@@ -107,5 +109,36 @@ export function EntryCard({
         </div>
       </div>
     </div>
+  );
+}
+
+function ListControls({ entry, userId }: { entry: any; userId?: string }) {
+  if (!userId) return null;
+
+  const isInList = entry.isInList; // This should come from your presenter
+
+  return (
+    <Form method="post" className="absolute top-2 right-2">
+      <input type="hidden" name="entSeq" value={entry.ent_seq} />
+      {isInList ? (
+        <button
+          name="_action"
+          value="removeFromList"
+          className="p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
+          title="Remove from list"
+        >
+          ★
+        </button>
+      ) : (
+        <button
+          name="_action"
+          value="addToList"
+          className="p-1.5 bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-full transition-colors"
+          title="Add to list"
+        >
+          ☆
+        </button>
+      )}
+    </Form>
   );
 } 
