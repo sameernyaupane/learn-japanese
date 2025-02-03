@@ -70,6 +70,15 @@ CREATE TABLE jmdict_furigana (
   UNIQUE (text, reading)
 );
 
+CREATE TABLE jmdict_images (
+  id SERIAL PRIMARY KEY,
+  ent_seq INTEGER NOT NULL REFERENCES jmdict_entries(ent_seq),
+  filename TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE(ent_seq)
+);
+
 CREATE INDEX idx_kanji_entry_id ON kanji_elements(entry_id);
 CREATE INDEX idx_kana_entry_id ON kana_elements(entry_id);
 CREATE INDEX idx_senses_entry_id ON senses(entry_id);
@@ -86,6 +95,9 @@ ON kanji_elements(keb, position);
 
 CREATE INDEX IF NOT EXISTS idx_kana_position 
 ON kana_elements(reb, position);
+
+CREATE INDEX idx_jmdict_images_ent_seq ON jmdict_images(ent_seq);
+CREATE INDEX idx_jmdict_images_filename ON jmdict_images(filename);
 
 ALTER TABLE kanji_elements
 ADD COLUMN ke_inf JSONB,
