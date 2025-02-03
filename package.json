@@ -14,7 +14,7 @@
     "seed": "tsx app/utils/seed-jmdict.server.ts",
     "resetandseed": "npm run resetdb && npm run seed",
     "romaji": "tsx app/utils/seed-romaji.server.ts",
-    "seedfurigana": "tsx app/utils/seed-jmdict-furigana.server.ts"
+    "furigana": "tsx app/utils/seed-jmdict-furigana.server.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

@@ -67,10 +67,10 @@ export async function seedJmdictFurigana() {
               FROM kanji_elements k
               INNER JOIN kana_elements r 
                 ON r.entry_id = k.entry_id
-                AND r.position = 1  // Match first kana element
+                AND r.position = 1  -- First kana element
               WHERE k.keb = batched.text
                 AND r.reb = batched.reading
-                AND k.position = 1  // Match first kanji element
+                AND k.position = 1  -- First kanji element
               LIMIT 1
             )
           GROUP BY je.id, batched.text, batched.reading
@@ -89,11 +89,16 @@ export async function seedJmdictFurigana() {
   } catch (error) {
     console.error('❌ Seed failed:', error);
     process.exit(1);
+  } finally {
+    // Add database connection cleanup
+    await sql.end();
+    console.log('🛑 Database connection closed');
   }
 }
 
 // Add this at the end of the file to actually execute the function
 seedJmdictFurigana()
+  .then(() => process.exit(0))
   .catch((error) => {
     console.error('Fatal error during seeding:', error);
     process.exit(1);
