@@ -9,17 +9,19 @@ import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
 
+const PER_PAGE = 50;
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
   const searchQuery = url.searchParams.get('q') || '';
-  const { entries, totalEntries } = await getEntries(page, 50, searchQuery);
-  return { entries, totalEntries, currentPage: page, searchQuery };
+  const { entries, totalEntries } = await getEntries(page, PER_PAGE, searchQuery);
+  return { entries, totalEntries, currentPage: page, searchQuery, perPage: PER_PAGE };
 };
 
 export default function Index() {
-  const { entries, totalEntries, currentPage, searchQuery } = useLoaderData<typeof loader>();
-  const totalPages = Math.ceil(totalEntries / 50);
+  const { entries, totalEntries, currentPage, searchQuery, perPage } = useLoaderData<typeof loader>();
+  const totalPages = Math.ceil(totalEntries / perPage);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -60,6 +62,8 @@ export default function Index() {
           currentPage={currentPage}
           totalPages={totalPages}
           searchQuery={searchQuery}
+          totalEntries={totalEntries}
+          perPage={perPage}
         />
 
         <footer className="mt-12 text-center text-sm text-gray-500">
