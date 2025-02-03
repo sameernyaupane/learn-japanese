@@ -54,10 +54,14 @@ export async function seedJMdict() {
           tempEntry = { k_ele: [], r_ele: [], sense: [] };
         }
         else if (elementName === 'k_ele') {
-          tempEntry.k_ele.push({});
+          tempEntry.k_ele.push({
+            position: tempEntry.k_ele.length + 1
+          });
         }
         else if (elementName === 'r_ele') {
-          tempEntry.r_ele.push({});
+          tempEntry.r_ele.push({
+            position: tempEntry.r_ele.length + 1
+          });
         }
         else if (elementName === 'sense') {
           tempEntry.sense.push({});
@@ -258,12 +262,19 @@ async function processBatch(batch: any[]) {
       if (entry.k_ele) {
         for (const kEle of entry.k_ele) {
           await tx`
-            INSERT INTO kanji_elements (entry_id, keb, ke_inf, pri)
+            INSERT INTO kanji_elements (
+              entry_id, 
+              keb, 
+              ke_inf, 
+              pri,
+              position
+            )
             VALUES (
               ${entryRecord.id}, 
               ${kEle.keb}, 
               ${tx.json(kEle.ke_inf || [])},
-              ${tx.json(kEle.ke_pri || [])}
+              ${tx.json(kEle.ke_pri || [])},
+              ${kEle.position}
             )
           `;
         }
@@ -280,7 +291,8 @@ async function processBatch(batch: any[]) {
               re_nokanji, 
               re_restr, 
               re_inf, 
-              pri
+              pri,
+              position
             )
             VALUES (
               ${entryRecord.id},
@@ -288,7 +300,8 @@ async function processBatch(batch: any[]) {
               ${!!rEle.re_nokanji || !!rEle.RE_NOKANJI},
               ${tx.json(rEle.re_restr || rEle.RE_RESTR || [])},
               ${tx.json(rEle.re_inf || rEle.RE_INF || [])},
-              ${tx.json(rEle.re_pri || rEle.RE_PRI || [])}
+              ${tx.json(rEle.re_pri || rEle.RE_PRI || [])},
+              ${rEle.position}
             )
           `;
         }

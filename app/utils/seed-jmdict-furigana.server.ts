@@ -65,9 +65,12 @@ export async function seedJmdictFurigana() {
             ON je.id = (
               SELECT k.entry_id 
               FROM kanji_elements k
-              INNER JOIN kana_elements r ON r.entry_id = k.entry_id
+              INNER JOIN kana_elements r 
+                ON r.entry_id = k.entry_id
+                AND r.position = 1  // Match first kana element
               WHERE k.keb = batched.text
                 AND r.reb = batched.reading
+                AND k.position = 1  // Match first kanji element
               LIMIT 1
             )
           GROUP BY je.id, batched.text, batched.reading

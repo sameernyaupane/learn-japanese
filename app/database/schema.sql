@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS kanji_elements (
   keb TEXT NOT NULL,
   ke_inf JSONB,
   ke_pri JSONB,
-  pri JSONB
+  pri JSONB,
+  position INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS kana_elements (
@@ -21,7 +22,8 @@ CREATE TABLE IF NOT EXISTS kana_elements (
   re_inf JSONB,
   re_pri JSONB,
   pri JSONB,
-  romaji TEXT
+  romaji TEXT,
+  position INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS senses (
@@ -78,6 +80,12 @@ CREATE INDEX idx_furigana_text ON jmdict_furigana(text);
 CREATE INDEX idx_furigana_reading ON jmdict_furigana(reading);
 CREATE INDEX idx_furigana_text_reading ON jmdict_furigana(text, reading);
 CREATE INDEX idx_furigana_data ON jmdict_furigana USING GIN(furigana);
+
+CREATE INDEX IF NOT EXISTS idx_kanji_position 
+ON kanji_elements(keb, position);
+
+CREATE INDEX IF NOT EXISTS idx_kana_position 
+ON kana_elements(reb, position);
 
 ALTER TABLE kanji_elements
 ADD COLUMN ke_inf JSONB,
