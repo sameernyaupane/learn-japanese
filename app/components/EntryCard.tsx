@@ -22,6 +22,16 @@ export function EntryCard({
       key={entry.id} 
       className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100"
     >
+      {entry.imageUrl && (
+        <div className="w-full h-32 bg-gray-50 overflow-hidden border-b border-gray-100 rounded-t-xl">
+          <img 
+            src={entry.imageUrl}
+            alt={entry.senses[0]?.glosses[0]?.text || "Vocabulary illustration"}
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
+      )}
+
       <div className="p-4">
         <div className="mb-4 space-y-2">
           <KanjiHeader

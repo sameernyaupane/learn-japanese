@@ -4,18 +4,29 @@ import { parsePartOfSpeech } from '~/utils/jmdict-utils';
 import { getFirstSenseImageUrl } from '~/utils/jmdict-image-search.server';
 
 export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[]> {
+  // Process all entries in parallel
   return Promise.all(entriesResult.map(async (entry) => {
-    const primaryKanji = (entry.kanji_elements || [])[0]?.keb;
-    const primaryKana = (entry.kana_elements || [])[0]?.reb;
+    // Start image fetch early in the process
+    const imagePromise = getFirstSenseImageUrl(entry);
     
-    const presentedEntry = {
+    // Process other fields while image loads
+    const primaryKanji = entry.kanji_elements?.[0]?.keb || '';
+    const primaryKana = entry.kana_elements?.[0]?.reb || '';
+    
+    // Await both image and audio together
+    const [imageUrl] = await Promise.all([
+      imagePromise,
+      // Add other async calls here if needed
+    ]);
+
+    return {
       ...entry,
+      imageUrl,
       primaryKanji,
       primaryKana,
       romaji: (entry.kana_elements || [])[0]?.romaji,
       priority: (entry.kana_elements || [])[0]?.pri?.[0],
       audioUrl: await getJapaneseAudioUrl(primaryKana),
-      imageUrl: await getFirstSenseImageUrl(entry),
       kanji_elements: entry.kanji_elements || [],
       kana_elements: entry.kana_elements || [],
       furigana: (entry.furigana || []).sort((a, b) => {
@@ -40,7 +51,5 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
         examples: sense.examples || []
       })) || []
     };
-
-    return presentedEntry;
   }));
 } 
