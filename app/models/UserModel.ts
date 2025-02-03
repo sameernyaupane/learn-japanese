@@ -1,4 +1,4 @@
-import { hash, compare } from "bcryptjs";
+import * as argon2 from "argon2";
 import { sql } from "~/utils/db.server";
 
 type User = {
@@ -10,7 +10,7 @@ type User = {
 };
 
 export async function createUser(email: string, password: string) {
-  const passwordHash = await hash(password, 10);
+  const passwordHash = await argon2.hash(password);
   
   const [user] = await sql<User[]>`
     INSERT INTO users (email, password_hash)
@@ -34,7 +34,7 @@ export async function verifyLogin(email: string, password: string) {
   const user = await findByEmail(email);
   if (!user) return null;
   
-  const isValid = await compare(password, user.password_hash);
+  const isValid = await argon2.verify(user.password_hash, password);
   if (!isValid) return null;
 
   const { password_hash, ...safeUser } = user;
@@ -62,7 +62,7 @@ export async function updateUser(
   }
   
   if (updates.password) {
-    const passwordHash = await hash(updates.password, 10);
+    const passwordHash = await argon2.hash(updates.password);
     updatesQuery = sql`
       ${updatesQuery}
       ${updatesQuery.text ? sql`,` : sql``} 

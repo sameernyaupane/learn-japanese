@@ -1,27 +1,55 @@
-import type { User } from "@prisma/client";
-import { getSession, commitSession, destroySession } from "./session.server";
+import { createCookieSessionStorage, redirect } from "@remix-run/node";
+import { verifyLogin, getUserById } from "~/models/UserModel";
 
-// Mock user database
-const users: User[] = [
-  { id: "1", email: "user@example.com" }
-];
+// Session configuration remains the same
+const { getSession: getRawSession, commitSession, destroySession } = 
+  createCookieSessionStorage({
+    cookie: {
+      name: "__session",
+      secrets: [process.env.SESSION_SECRET || "SECRET_BASE"],
+      sameSite: "lax",
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    }
+  });
 
-export async function login(email: string) {
-  const user = users.find(u => u.email === email);
+export async function getAuthSession(request: Request) {
+  return getRawSession(request.headers.get("Cookie"));
+}
+
+export async function getUserId(request: Request) {
+  const session = await getAuthSession(request);
+  return session.get("userId");
+}
+
+export async function requireUserId(request: Request) {
+  const userId = await getUserId(request);
+  if (!userId) throw redirect("/login");
+  return userId;
+}
+
+export async function getUser(request: Request) {
+  const userId = await getUserId(request);
+  return userId ? getUserById(userId) : null;
+}
+
+export async function login({ email, password }: { email: string; password: string }) {
+  const user = await verifyLogin(email, password);
   if (!user) return null;
-  return user;
+  
+  const session = await getRawSession();
+  session.set("userId", user.id);
+  session.set("email", user.email);
+  
+  return { user, cookie: await commitSession(session) };
 }
 
-export async function checkAuth(request: Request) {
-  const session = await getSession(request.headers.get("Cookie"));
-  return session.get("userId") ? { 
-    id: session.get("userId"), 
-    email: session.get("email") 
-  } : null;
-}
-
-export async function requireAuth(request: Request) {
-  const user = await checkAuth(request);
-  if (!user) throw new Response("Unauthorized", { status: 401 });
-  return user;
+export async function logout(request: Request) {
+  const session = await getAuthSession(request);
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await destroySession(session)
+    }
+  });
 }

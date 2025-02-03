@@ -8,9 +8,7 @@ import {
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { checkAuth } from "~/services/auth.server";
-import { sessionStorage } from "./session.server";
-import { Authenticator } from "remix-auth";
+import { getAuthSession } from "~/services/auth.server";
 
 import "./tailwind.css";
 import Navigation from "~/components/Navigation";
@@ -29,9 +27,7 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await sessionStorage.getSession(
-    request.headers.get("Cookie")
-  );
+  const session = await getAuthSession(request);
   return json({
     user: session.has("userId") ? { 
       id: session.get("userId"), 

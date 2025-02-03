@@ -10,6 +10,7 @@ export default function Navigation({ user }: { user?: User | null }) {
             Japanese Dictionary
           </Link>
           <div className="flex items-center gap-4">
+            {/* User-specific links */}
             {user ? (
               <>
                 <Link to="/mylist" className="text-gray-600 hover:text-gray-800">
@@ -24,6 +25,8 @@ export default function Navigation({ user }: { user?: User | null }) {
                 Login
               </Link>
             )}
+            
+            {/* Main navigation links - moved outside user conditional */}
             <NavLink
               to="/"
               className={({ isActive }) =>

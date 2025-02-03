@@ -30,7 +30,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request);
+  const user = await authenticator.getUser(request);
   if (!user) return json({ error: 'Not authenticated' }, { status: 401 });
 
   const formData = await request.formData();
