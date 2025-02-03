@@ -1,3 +1,5 @@
+import { CopyButton } from "./ui/CopyButton";
+
 export function KanjiHeader({
   primaryKana,
   primaryKanji,
@@ -23,17 +25,24 @@ export function KanjiHeader({
         )}
         <div className="text-4xl font-bold text-gray-900">
           {Array.isArray(furigana) && furigana.length > 0 ? (
-            <div className="flex flex-row items-end gap-0.5">
+            <div className="flex flex-row items-center gap-0.5">
               {furigana.map(({ rt, ruby }, index) => (
                 <div key={index} className="flex flex-col items-center">
-                  <div className="text-sm font-normal text-gray-500 mb-1 min-h-[1.25rem]">
-                    {rt || " "}
+                  <div className="flex items-center gap-1">
+                    <div className="text-sm font-normal text-gray-500 mb-1 min-h-[1.25rem]">
+                      {rt || " "}
+                    </div>
                   </div>
-                  <div className="text-4xl leading-none font-normal">
-                    {ruby}
+                  <div className="flex items-center gap-1">
+                    <div className="text-4xl leading-none font-normal">
+                      {ruby}
+                    </div>
                   </div>
                 </div>
               ))}
+              <div className="translate-y-[12px]">
+                <CopyButton textToCopy={primaryKanji} />
+              </div>
             </div>
           ) : (
             primaryKanji
