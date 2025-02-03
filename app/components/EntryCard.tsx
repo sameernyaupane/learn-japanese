@@ -24,7 +24,7 @@ export function EntryCard({
       className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100"
     >
       {entry.imageUrl && (
-        <div className="w-full h-32 bg-gray-50 overflow-hidden border-b border-gray-100 rounded-t-xl">
+        <div className="w-full h-56 bg-gray-50 overflow-hidden border-b border-gray-100 rounded-t-xl">
           <img 
             src={entry.imageUrl}
             alt={entry.senses[0]?.glosses[0]?.text || "Vocabulary illustration"}

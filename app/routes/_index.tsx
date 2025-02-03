@@ -9,7 +9,7 @@ import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
 
-const PER_PAGE = 5;
+const PER_PAGE = 50;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
