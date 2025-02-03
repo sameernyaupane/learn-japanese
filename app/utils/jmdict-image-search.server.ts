@@ -1,6 +1,5 @@
 import type { JMdictEntry } from '~/types/jmdict';
 import 'dotenv/config';
-import { db } from '~/utils/db.server';
 import path from 'path';
 import fs from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,7 +7,7 @@ import {
   findImageByEntSeq,
   createImageRecord,
   imageExists
-} from '~/models/JmdictImageModel;
+} from '~/models/JmdictImageModel';
 
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 const IMAGE_CACHE_DIR = path.join(process.cwd(), 'public/images');
@@ -17,6 +16,7 @@ async function getOrCreateImage(ent_seq: number, searchTerm: string): Promise<st
     // Check database first
     const existing = await findImageByEntSeq(ent_seq);
     if (existing) {
+        console.log('image exists, getting from db', ent_seq)
         return `/images/${existing.filename}`;
     }
 
@@ -32,8 +32,9 @@ async function getOrCreateImage(ent_seq: number, searchTerm: string): Promise<st
     if (!photo) return null;
 
     // Download and save image
-    const imageResponse = await fetch(photo.src.medium);
-    const ext = path.extname(photo.src.medium) || '.jpg';
+    const imageResponse = await fetch(photo.src.large);
+    const urlWithoutParams = new URL(photo.src.large).pathname.split('?')[0];
+    const ext = path.extname(urlWithoutParams) || '.jpg';
     const filename = `${ent_seq}-${uuidv4()}${ext}`;
     const filePath = path.join(IMAGE_CACHE_DIR, filename);
 
@@ -41,9 +42,12 @@ async function getOrCreateImage(ent_seq: number, searchTerm: string): Promise<st
     await fs.writeFile(filePath, Buffer.from(await imageResponse.arrayBuffer()));
 
     // Store in database
-    const newImage = await createImageRecord(ent_seq, filename);
+    await createImageRecord(ent_seq, filename, photo.src.large);
     
-    return `/images/${newImage.filename}`;
+    const imageRecord = await findImageByEntSeq(ent_seq);
+    const originalUrl = imageRecord?.image_url;
+    
+    return `/images/${filename}`;
 }
 
 export async function getFirstSenseImageUrl(entry: JMdictEntry): Promise<string | null> {

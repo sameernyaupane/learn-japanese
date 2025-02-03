@@ -9,7 +9,7 @@ import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
 
-const PER_PAGE = 50;
+const PER_PAGE = 5;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -70,6 +70,16 @@ export default function Index() {
           Audio provided by{' '}
           <a href="https://soundoftext.com" className="text-blue-600 hover:underline">
             Sound of Text
+          </a>
+          {' • '}
+          Images from{' '}
+          <a 
+            href="https://pexels.com" 
+            className="text-blue-600 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Pexels
           </a>
         </footer>
       </div>

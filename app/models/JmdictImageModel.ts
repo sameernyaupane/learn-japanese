@@ -21,11 +21,12 @@ export async function findImageByFilename(filename: string): Promise<JMdictImage
 
 export async function createImageRecord(
   ent_seq: number,
-  filename: string
+  filename: string,
+  image_url: string
 ): Promise<JMdictImage> {
   const [result] = await sql<JMdictImage[]>`
-    INSERT INTO jmdict_images (ent_seq, filename)
-    VALUES (${ent_seq}, ${filename})
+    INSERT INTO jmdict_images (ent_seq, filename, image_url)
+    VALUES (${ent_seq}, ${filename}, ${image_url})
     RETURNING *
   `;
   return result;

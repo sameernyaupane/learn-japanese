@@ -74,6 +74,7 @@ CREATE TABLE jmdict_images (
   id SERIAL PRIMARY KEY,
   ent_seq INTEGER NOT NULL REFERENCES jmdict_entries(ent_seq),
   filename TEXT NOT NULL,
+  image_url TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
   UNIQUE(ent_seq)
