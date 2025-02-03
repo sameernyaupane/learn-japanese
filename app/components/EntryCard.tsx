@@ -3,6 +3,7 @@ import { RomajiRow } from './RomajiRow';
 import { SenseGroup } from './SenseGroup';
 import { RelatedTerms } from './RelatedTerms';
 import { AudioPlayButton } from './AudioPlayButton';
+import { FrequencyBadge } from './FrequencyBadge';
 
 export function EntryCard({
   entry,
@@ -33,13 +34,15 @@ export function EntryCard({
       )}
 
       <div className="p-4">
-        <div className="mb-4 space-y-2">
-          <KanjiHeader
-            primaryKana={entry.primaryKana}
-            primaryKanji={entry.primaryKanji}
-            priority={entry.priority}
-            furigana={entry.furigana}
-          />
+        <div className="mb-2 space-y-2">
+          <div className="flex items-center gap-2 mb-2">
+            <KanjiHeader
+              primaryKana={entry.primaryKana}
+              primaryKanji={entry.primaryKanji}
+              priority={entry.priority}
+              furigana={entry.furigana}
+            />
+          </div>
           <RomajiRow romaji={entry.romaji}>
             {entry.audioUrl && (
               <AudioPlayButton
@@ -51,6 +54,12 @@ export function EntryCard({
               />
             )}
           </RomajiRow>
+        </div>
+
+        <div className="mb-4 space-y-3">
+          {entry.frequency && (
+              <FrequencyBadge code={entry.frequency} label={entry.frequencyLabel} />
+            )}
         </div>
 
         <div className="space-y-3">

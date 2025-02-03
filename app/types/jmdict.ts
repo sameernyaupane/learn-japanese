@@ -6,3 +6,8 @@ export interface JMdictImage {
     created_at: Date;
     updated_at: Date;
   } 
+
+export interface JMdictEntry {
+  frequency?: string;
+  priority?: string[];
+} 

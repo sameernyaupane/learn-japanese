@@ -2,10 +2,15 @@ import { JMdictEntry } from '~/types/jmdict';
 import { getJapaneseAudioUrl } from '~/utils/text-to-speech.server';
 import { parsePartOfSpeech } from '~/utils/jmdict-utils';
 import { getFirstSenseImageUrl } from '~/utils/jmdict-image-search.server';
+import { FREQUENCY_RANK, FREQUENCY_LABELS } from '~/utils/frequency-ranks';
 
 export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[]> {
   // Process all entries in parallel
   return Promise.all(entriesResult.map(async (entry) => {
+    // Calculate both code and label
+    const frequencyCode = calculateFrequency(entry);
+    const frequencyLabel = FREQUENCY_LABELS[frequencyCode] || 'Less Common';
+    
     // Start image fetch early in the process
     const imagePromise = getFirstSenseImageUrl(entry);
     
@@ -21,6 +26,8 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
 
     return {
       ...entry,
+      frequency: frequencyCode,
+      frequencyLabel,
       imageUrl,
       primaryKanji,
       primaryKana,
@@ -52,4 +59,25 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
       })) || []
     };
   }));
+}
+
+function calculateFrequency(entry: any): string {
+  const allPris = [
+    ...(entry.kanji_elements || []).flatMap((k: any) => k.pri || []),
+    ...(entry.kana_elements || []).flatMap((k: any) => k.pri || [])
+  ];
+  
+  const highestRank = Math.min(
+    ...allPris.map((p: string) => FREQUENCY_RANK[p.toLowerCase()] || Infinity)
+  );
+  
+  return Object.keys(FREQUENCY_RANK).find(key => 
+    FREQUENCY_RANK[key] === highestRank
+  ) || 'uncommon';
+} 
+
+export interface JMdictEntry {
+  // ... existing properties ...
+  frequency?: string;
+  frequencyLabel?: string;
 } 
