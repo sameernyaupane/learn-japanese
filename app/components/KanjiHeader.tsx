@@ -11,12 +11,6 @@ export function KanjiHeader({
   priority?: string;
   furigana?: Array<{ rt: string; ruby: string }>;
 }) {
-  console.log('KanjiHeader furigana:', { 
-    furigana, 
-    primaryKanji, 
-    primaryKana 
-  });
-
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-col">

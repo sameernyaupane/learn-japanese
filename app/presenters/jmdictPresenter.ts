@@ -1,6 +1,7 @@
 import { JMdictEntry } from '~/types/jmdict';
 import { getJapaneseAudioUrl } from '~/utils/text-to-speech.server';
 import { parsePartOfSpeech } from '~/utils/jmdict-utils';
+import { getFirstSenseImageUrl } from '~/utils/jmdict-image-search.server';
 
 export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[]> {
   return Promise.all(entriesResult.map(async (entry) => {
@@ -14,6 +15,7 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
       romaji: (entry.kana_elements || [])[0]?.romaji,
       priority: (entry.kana_elements || [])[0]?.pri?.[0],
       audioUrl: await getJapaneseAudioUrl(primaryKana),
+      imageUrl: await getFirstSenseImageUrl(entry),
       kanji_elements: entry.kanji_elements || [],
       kana_elements: entry.kana_elements || [],
       furigana: (entry.furigana || []).sort((a, b) => {
