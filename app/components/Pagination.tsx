@@ -23,8 +23,8 @@ export function Pagination({
           to={`?q=${searchQuery}&page=${currentPage - 1}&frequency=${frequencyFilter}`}
           className={`px-3 py-1 rounded ${
             currentPage === 1
-              ? 'bg-gray-200 cursor-not-allowed'
-              : 'bg-gray-200 hover:bg-gray-300'
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-gray-400 hover:bg-gray-500'
           }`}
           onClick={(e) => currentPage === 1 && e.preventDefault()}
         >
@@ -46,7 +46,7 @@ export function Pagination({
                 className={`px-3 py-1 rounded ${
                   currentPage === pageNumber
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 hover:bg-gray-300'
+                    : 'bg-gray-400 hover:bg-gray-500'
                 }`}
               >
                 {pageNumber}
@@ -60,8 +60,8 @@ export function Pagination({
           to={`?q=${searchQuery}&page=${currentPage + 1}&frequency=${frequencyFilter}`}
           className={`px-3 py-1 rounded ${
             currentPage === totalPages
-              ? 'bg-gray-200 cursor-not-allowed'
-              : 'bg-gray-200 hover:bg-gray-300'
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-gray-400 hover:bg-gray-500'
           }`}
           onClick={(e) => currentPage === totalPages && e.preventDefault()}
         >
