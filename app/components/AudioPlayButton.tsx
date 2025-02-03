@@ -37,9 +37,6 @@ export function AudioPlayButton({
           clearTimeout(hoverTimeout);
           setHoverTimeout(null);
         }
-        if (currentAudio) {
-          currentAudio.pause();
-        }
       }}
       className="p-1 text-gray-400 hover:text-blue-600"
     >
