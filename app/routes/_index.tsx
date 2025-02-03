@@ -15,12 +15,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
   const searchQuery = url.searchParams.get('q') || '';
-  const { entries, totalEntries } = await getEntries(page, PER_PAGE, searchQuery);
-  return { entries, totalEntries, currentPage: page, searchQuery, perPage: PER_PAGE };
+  const frequencyFilter = url.searchParams.get('frequency') || '';
+  
+  const { entries, totalEntries } = await getEntries(
+    page, 
+    PER_PAGE, 
+    searchQuery,
+    frequencyFilter
+  );
+  
+  return { entries, totalEntries, currentPage: page, searchQuery, frequencyFilter, perPage: PER_PAGE };
 };
 
 export default function Index() {
-  const { entries, totalEntries, currentPage, searchQuery, perPage } = useLoaderData<typeof loader>();
+  const { entries, totalEntries, currentPage, searchQuery, frequencyFilter, perPage } = useLoaderData<typeof loader>();
   const totalPages = Math.ceil(totalEntries / perPage);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -30,7 +38,10 @@ export default function Index() {
       <Navigation />
       
       <div className="max-w-6xl mx-auto px-4 py-6">
-        <SearchForm initialQuery={searchQuery} />
+        <SearchForm 
+          initialQuery={searchQuery} 
+          initialFrequency={frequencyFilter} 
+        />
         
         <h1 className="text-xl font-semibold text-gray-800 mb-4 text-center">
           {searchQuery ? `Results for "${searchQuery}"` : 'Dictionary Entries'}
@@ -62,6 +73,7 @@ export default function Index() {
           currentPage={currentPage}
           totalPages={totalPages}
           searchQuery={searchQuery}
+          frequencyFilter={frequencyFilter}
           totalEntries={totalEntries}
           perPage={perPage}
         />
