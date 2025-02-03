@@ -18,10 +18,24 @@ export function Pagination({
   return (
     <div className="mt-6 flex flex-col items-center gap-4">
       <div className="flex gap-1">
+        {/* Previous Button */}
+        <Link
+          to={`?q=${searchQuery}&page=${currentPage - 1}&frequency=${frequencyFilter}`}
+          className={`px-3 py-1 rounded ${
+            currentPage === 1
+              ? 'bg-gray-200 cursor-not-allowed'
+              : 'bg-gray-200 hover:bg-gray-300'
+          }`}
+          onClick={(e) => currentPage === 1 && e.preventDefault()}
+        >
+          Previous
+        </Link>
+
+        {/* Page Numbers */}
         {(() => {
-          const visiblePages = 5; // Show 5 pages at a time
-          const startPage = Math.max(1, currentPage - 2);
-          const endPage = Math.min(totalPages, currentPage + 2);
+          const visiblePages = 10; // Show 10 pages at a time
+          const startPage = Math.max(1, currentPage - 5);
+          const endPage = Math.min(totalPages, currentPage + 4);
           
           return Array.from({ length: endPage - startPage + 1 }, (_, i) => {
             const pageNumber = startPage + i;
@@ -40,6 +54,19 @@ export function Pagination({
             );
           });
         })()}
+
+        {/* Next Button */}
+        <Link
+          to={`?q=${searchQuery}&page=${currentPage + 1}&frequency=${frequencyFilter}`}
+          className={`px-3 py-1 rounded ${
+            currentPage === totalPages
+              ? 'bg-gray-200 cursor-not-allowed'
+              : 'bg-gray-200 hover:bg-gray-300'
+          }`}
+          onClick={(e) => currentPage === totalPages && e.preventDefault()}
+        >
+          Next
+        </Link>
       </div>
       <div className="text-sm text-gray-500">
         Showing {(currentPage - 1) * perPage + 1} -{' '}
