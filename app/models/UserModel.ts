@@ -1,7 +1,7 @@
 import * as argon2 from "argon2";
 import { sql } from "~/utils/db.server";
 
-type User = {
+export type User = {
   id: string;
   email: string;
   password_hash: string;
@@ -9,19 +9,19 @@ type User = {
   updated_at: Date;
 };
 
-export async function createUser(email: string, password: string) {
+export async function createUser(email: string, password: string): Promise<Omit<User, 'password_hash'>> {
   const passwordHash = await argon2.hash(password);
   
   const [user] = await sql<User[]>`
     INSERT INTO users (email, password_hash)
     VALUES (${email}, ${passwordHash})
-    RETURNING id, email, created_at
+    RETURNING id, email, created_at, updated_at
   `;
   
   return user;
 }
 
-export async function findByEmail(email: string) {
+export async function findByEmail(email: string): Promise<User | null> {
   const [user] = await sql<User[]>`
     SELECT * FROM users 
     WHERE email = ${email}
@@ -30,7 +30,7 @@ export async function findByEmail(email: string) {
   return user || null;
 }
 
-export async function verifyLogin(email: string, password: string) {
+export async function verifyLogin(email: string, password: string): Promise<Omit<User, 'password_hash'> | null> {
   const user = await findByEmail(email);
   if (!user) return null;
   
@@ -41,9 +41,9 @@ export async function verifyLogin(email: string, password: string) {
   return safeUser;
 }
 
-export async function getUserById(id: string) {
+export async function getUserById(id: string): Promise<Omit<User, 'password_hash'> | null> {
   const [user] = await sql<User[]>`
-    SELECT id, email, created_at 
+    SELECT id, email, created_at, updated_at 
     FROM users 
     WHERE id = ${id}
     LIMIT 1
@@ -54,7 +54,7 @@ export async function getUserById(id: string) {
 export async function updateUser(
   id: string, 
   updates: { email?: string; password?: string }
-) {
+): Promise<Omit<User, 'password_hash'> | null> {
   let updatesQuery = sql``;
   
   if (updates.email) {
@@ -72,9 +72,9 @@ export async function updateUser(
 
   const [user] = await sql<User[]>`
     UPDATE users
-    SET ${updatesQuery}
+    SET ${updatesQuery}, updated_at = NOW()
     WHERE id = ${id}
-    RETURNING id, email, created_at
+    RETURNING id, email, created_at, updated_at
   `;
   
   return user || null;

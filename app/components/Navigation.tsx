@@ -1,5 +1,6 @@
 import { Link, Form } from '@remix-run/react';
 import { NavLink } from '@remix-run/react';
+import { User } from '~/models/UserModel';
 
 export default function Navigation({ user }: { user?: User | null }) {
   return (
@@ -21,9 +22,17 @@ export default function Navigation({ user }: { user?: User | null }) {
                 </Form>
               </>
             ) : (
-              <Link to="/login" className="text-gray-600 hover:text-gray-800">
-                Login
-              </Link>
+              <>
+                <Link to="/login" className="text-gray-600 hover:text-gray-800">
+                  Login
+                </Link>
+                <Link 
+                  to="/signup" 
+                  className="text-gray-600 hover:text-gray-800"
+                >
+                  Sign Up
+                </Link>
+              </>
             )}
             
             {/* Main navigation links - moved outside user conditional */}

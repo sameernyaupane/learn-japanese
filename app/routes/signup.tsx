@@ -1,28 +1,35 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData, Link } from "@remix-run/react";
-import { login } from "~/services/auth.server";
-import { getSession, commitSession } from "~/services/session.server";
+import { createUser } from "~/models/UserModel";
+import { getSession, commitSession } from "~/services/auth.server";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   
-  const user = await login(email, password);
-  if (!user) return json({ error: "Invalid credentials" });
+  // Basic validation
+  if (!email || !password) {
+    return json({ error: "Email and password are required" });
+  }
 
-  const session = await getSession(request.headers.get("Cookie"));
-  session.set("userId", user.id);
-  session.set("email", user.email);
+  try {
+    const user = await createUser(email, password);
+    const session = await getSession();
+    session.set("userId", user.id);
+    session.set("email", user.email);
 
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await commitSession(session)
-    }
-  });
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": await commitSession(session)
+      }
+    });
+  } catch (error) {
+    return json({ error: "Registration failed. Email may already be in use." });
+  }
 }
 
-export default function Login() {
+export default function Signup() {
   const data = useActionData<typeof action>();
   
   return (
@@ -30,7 +37,7 @@ export default function Login() {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Japanese Dictionary</h1>
-          <p className="text-gray-600">Sign in to your account</p>
+          <p className="text-gray-600">Create a new account</p>
         </div>
 
         <Form 
@@ -61,7 +68,7 @@ export default function Login() {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                 placeholder="••••••••"
@@ -73,7 +80,7 @@ export default function Login() {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
           >
-            Sign in
+            Create Account
           </button>
 
           {data?.error && (
@@ -83,12 +90,12 @@ export default function Login() {
           )}
 
           <div className="text-center text-sm text-gray-600">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <Link 
-              to="/signup" 
+              to="/login" 
               className="text-blue-600 hover:text-blue-500 font-medium"
             >
-              Sign up
+              Sign in
             </Link>
           </div>
         </Form>

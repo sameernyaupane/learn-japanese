@@ -1,7 +1,6 @@
 import { type LoaderFunctionArgs, type ActionFunctionArgs, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useMatches } from '@remix-run/react';
 import { getEntries } from '~/models/jmdict';
-import Navigation from '~/components/Navigation';
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
@@ -9,7 +8,6 @@ import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
 import { addToUserList, removeFromUserList } from '~/models/userList.server';
-import { authenticator } from '~/services/auth.server';
 
 const PER_PAGE = 50;
 
@@ -51,11 +49,12 @@ export default function Index() {
   const totalPages = Math.ceil(totalEntries / perPage);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const matches = useMatches();
+  const rootData = matches.find(match => match.id === 'root')?.data;
+  const user = rootData?.user || null;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      
       <div className="max-w-6xl mx-auto px-4 py-6">
         <SearchForm 
           initialQuery={searchQuery} 
@@ -80,6 +79,7 @@ export default function Index() {
             <EntryCard
               key={entry.id}
               entry={entry}
+              user={user}
               currentAudio={currentAudio}
               setCurrentAudio={setCurrentAudio}
               hoverTimeout={hoverTimeout}

@@ -4,7 +4,6 @@ import { SenseGroup } from './SenseGroup';
 import { RelatedTerms } from './RelatedTerms';
 import { AudioPlayButton } from './AudioPlayButton';
 import { FrequencyBadge } from './FrequencyBadge';
-import { useUser } from '~/utils/auth';
 import { Form } from '@remix-run/react';
 
 export function EntryCard({
@@ -13,15 +12,15 @@ export function EntryCard({
   setCurrentAudio,
   hoverTimeout,
   setHoverTimeout,
+  user,
 }: {
   entry: any;
   currentAudio: HTMLAudioElement | null;
   setCurrentAudio: (audio: HTMLAudioElement | null) => void;
   hoverTimeout: NodeJS.Timeout | null;
   setHoverTimeout: (timeout: NodeJS.Timeout | null) => void;
+  user?: { id: string };
 }) {
-  const user = useUser();
-  
   return (
     <div className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100 relative">
       <ListControls entry={entry} userId={user?.id} />
