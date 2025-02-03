@@ -81,7 +81,13 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
         ...kana,
         audio: await getJapaneseAudioUrl(kana.reb)
       }))),
-      furigana: entry.furigana || [],
+      furigana: (entry.furigana || []).sort((a, b) => {
+        const text = entry.kanji_elements[0]?.keb || '';
+        return text.indexOf(a.ruby) - text.indexOf(b.ruby);
+      }).map(f => ({
+        ruby: f.ruby,
+        rt: f.rt || ''
+      })),
       senses: entry.senses?.map(sense => ({
         ...sense,
         pos: (sense.pos || []).map(parsePartOfSpeech),
