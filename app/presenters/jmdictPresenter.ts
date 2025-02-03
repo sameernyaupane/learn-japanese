@@ -69,20 +69,20 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
   };
 
   return Promise.all(entriesResult.map(async (entry) => {
+    const primaryKanji = (entry.kanji_elements || [])[0]?.keb;
+    const primaryKana = (entry.kana_elements || [])[0]?.reb;
+    
     const presentedEntry = {
       ...entry,
-      primaryKanji: entry.kanji_elements[0]?.keb,
-      primaryKana: entry.kana_elements[0]?.reb,
-      romaji: entry.kana_elements[0]?.romaji,
-      priority: entry.kana_elements[0]?.pri?.[0],
-      audioUrl: entry.kana_elements[0]?.audio,
+      primaryKanji,
+      primaryKana,
+      romaji: (entry.kana_elements || [])[0]?.romaji,
+      priority: (entry.kana_elements || [])[0]?.pri?.[0],
+      audioUrl: await getJapaneseAudioUrl(primaryKana),
       kanji_elements: entry.kanji_elements || [],
-      kana_elements: await Promise.all((entry.kana_elements || []).map(async (kana) => ({
-        ...kana,
-        audio: await getJapaneseAudioUrl(kana.reb)
-      }))),
+      kana_elements: entry.kana_elements || [],
       furigana: (entry.furigana || []).sort((a, b) => {
-        const text = entry.kanji_elements[0]?.keb || '';
+        const text = (entry.kanji_elements || [])[0]?.keb || '';
         return text.indexOf(a.ruby) - text.indexOf(b.ruby);
       }).map(f => ({
         ruby: f.ruby,
@@ -103,17 +103,6 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
         examples: sense.examples || []
       })) || []
     };
-
-    // Debug logging
-    console.log('Processed entry:', {
-      id: presentedEntry.id,
-      primaryKanji: presentedEntry.primaryKanji,
-      primaryKana: presentedEntry.primaryKana,
-      romaji: presentedEntry.romaji,
-      priority: presentedEntry.priority,
-      audioUrl: presentedEntry.audioUrl,
-      furigana: presentedEntry.furigana
-    });
 
     return presentedEntry;
   }));
