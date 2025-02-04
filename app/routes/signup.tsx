@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form, useActionData, Link } from "@remix-run/react";
 import { createUser } from "~/models/UserModel";
 import { getSession, commitSession } from "~/services/auth.server";
@@ -10,7 +10,10 @@ export async function action({ request }: ActionFunctionArgs) {
   
   // Basic validation
   if (!email || !password) {
-    return json({ error: "Email and password are required" });
+    return new Response(
+      JSON.stringify({ error: "Email and password are required" }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
   try {
@@ -22,10 +25,21 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirect("/", {
       headers: {
         "Set-Cookie": await commitSession(session)
-      }
+      },
+      status: 302
     });
   } catch (error) {
-    return json({ error: "Registration failed. Email may already be in use." });
+    let errorMessage = "Registration failed. Please try again.";
+    
+    // Handle specific database error (PostgreSQL example)
+    if (error instanceof Error && 'code' in error && error.code === '23505') {
+      errorMessage = "This email is already registered.";
+    }
+
+    return new Response(
+      JSON.stringify({ error: errorMessage }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 }
 
