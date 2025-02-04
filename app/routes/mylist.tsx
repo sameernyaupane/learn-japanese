@@ -1,30 +1,59 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
-import { getUserList } from '~/models/UserListModel';
+import { getEntries } from '~/models/JmdictModel';
 import { EntryCard } from '~/components/EntryCard';
 import { Pagination } from '~/components/Pagination';
 import { getUserId } from "~/services/auth";
 import { useState, useEffect } from 'react';
 import { SearchForm } from '~/components/SearchForm';
+import { addToUserList, removeFromUserList } from '~/models/UserListModel';
 
 const PER_PAGE = 5;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request);
 
+  if (!userId) return json({ entries: [], totalEntries: 0 }, { status: 401 });
+
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
   const searchQuery = url.searchParams.get('q') || '';
   const frequencyFilter = url.searchParams.get('frequency') || '';
   
-  const { entries, totalEntries } = await getUserList(
+  const { entries, totalEntries } = await getEntries(
+    page,
+    PER_PAGE,
+    searchQuery,
+    frequencyFilter,
     userId,
-    page, 
-    PER_PAGE, 
-    searchQuery
+    true  // Enable user list filtering
   );
   
   return { entries, totalEntries, currentPage: page, searchQuery, frequencyFilter, perPage: PER_PAGE };
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const userId = await getUserId(request);
+  if (!userId) return json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
+  const formData = await request.formData();
+  const entSeq = Number(formData.get('entSeq'));
+  const action = formData.get('_action');
+
+  if (!entSeq || !action) {
+    return json({ success: false, error: 'Invalid request' }, { status: 400 });
+  }
+
+  try {
+    if (action === 'addToList') {
+      await addToUserList(userId, entSeq);
+    } else if (action === 'removeFromList') {
+      await removeFromUserList(userId, entSeq);
+    }
+    return json({ success: true });
+  } catch (error) {
+    return json({ success: false, error: 'Operation failed' }, { status: 500 });
+  }
 };
 
 export default function MyListPage() {
@@ -98,8 +127,3 @@ export default function MyListPage() {
     </div>
   );
 } 
-
-export function shouldRevalidate({ formData }: { formData?: FormData }) {
-  const action = formData?.get('_action');
-  return !(action === 'addToList' || action === 'removeFromList');
-}
