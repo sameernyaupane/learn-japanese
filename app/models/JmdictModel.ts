@@ -1,14 +1,17 @@
 import { sql } from '~/utils/db.server';
 import { JMdictEntry } from '~/types/jmdict';
 import { presentEntries } from '~/presenters/jmdictPresenter';
+import { getUserId } from '~/services/auth';
 
 export async function getEntries(
   page: number = 1,
   perPage: number = 50,
   searchQuery: string = '',
-  frequencyFilter: string = ''
+  frequencyFilter: string = '',
+  request?: Request
 ): Promise<{ entries: JMdictEntry[], totalEntries: number }> {
   const offset = (page - 1) * perPage;
+  const userId = request ? await getUserId(request) : null;
   
   const buildFrequencyCondition = () => {
     if (!frequencyFilter) return sql``;
@@ -62,6 +65,11 @@ export async function getEntries(
       SELECT
         e.id,
         e.ent_seq,
+        ${
+          userId ? 
+          sql`EXISTS (SELECT 1 FROM user_list WHERE user_id = ${userId} AND ent_seq = e.ent_seq)` 
+          : sql`FALSE`
+        } as isInList,
         (
           SELECT json_agg(json_build_object(
             'id', ke.id,

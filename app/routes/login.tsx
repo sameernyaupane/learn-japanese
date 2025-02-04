@@ -1,7 +1,6 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData, Link } from "@remix-run/react";
-import { login } from "~/services/auth.server";
-import { getSession, commitSession } from "~/services/session.server";
+import { login } from "~/services/auth";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();

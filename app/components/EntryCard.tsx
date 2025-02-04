@@ -12,18 +12,18 @@ export function EntryCard({
   setCurrentAudio,
   hoverTimeout,
   setHoverTimeout,
-  user,
+  isLoggedIn,
 }: {
   entry: any;
   currentAudio: HTMLAudioElement | null;
   setCurrentAudio: (audio: HTMLAudioElement | null) => void;
   hoverTimeout: NodeJS.Timeout | null;
   setHoverTimeout: (timeout: NodeJS.Timeout | null) => void;
-  user?: { id: string };
+  isLoggedIn?: (boolean);
 }) {
   return (
     <div className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100 relative">
-      <ListControls entry={entry} userId={user?.id} />
+      <ListControls entry={{entry, isLoggedIn}} />
       {entry.imageUrl && (
         <div className="w-full h-56 bg-gray-50 overflow-hidden border-b border-gray-100 rounded-t-xl">
           <img 
@@ -111,10 +111,8 @@ export function EntryCard({
   );
 }
 
-function ListControls({ entry, userId }: { entry: any; userId?: string }) {
-  if (!userId) return null;
-
-  const isInList = entry.isInList; // This should come from your presenter
+function ListControls(entry: object) {
+  const isInList = entry.isInList;
 
   return (
     <Form method="post" className="absolute top-2 right-2">

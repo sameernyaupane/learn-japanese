@@ -3,8 +3,8 @@ import { useLoaderData } from '@remix-run/react';
 import { getUserList } from '~/models/UserListModel';
 import { EntryCard } from '~/components/EntryCard';
 import { Pagination } from '~/components/Pagination';
-import { requireUser } from '~/services/auth.server';
 import Navigation from '~/components/Navigation';
+
 
 const PER_PAGE = 50;
 

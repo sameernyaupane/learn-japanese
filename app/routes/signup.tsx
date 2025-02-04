@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form, useActionData, Link } from "@remix-run/react";
 import { createUser } from "~/models/UserModel";
-import { getSession, commitSession } from "~/services/auth.server";
+import { login } from "~/services/auth";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -18,13 +18,15 @@ export async function action({ request }: ActionFunctionArgs) {
 
   try {
     const user = await createUser(email, password);
-    const session = await getSession();
-    session.set("userId", user.id);
-    session.set("email", user.email);
+    const loginResult = await login(email, password);
+    
+    if (!loginResult) {
+      throw new Error("Session creation failed");
+    }
 
     return redirect("/", {
       headers: {
-        "Set-Cookie": await commitSession(session)
+        "Set-Cookie": loginResult.cookie
       },
       status: 302
     });

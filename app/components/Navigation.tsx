@@ -1,8 +1,7 @@
 import { Link, Form } from '@remix-run/react';
 import { NavLink } from '@remix-run/react';
-import { User } from '~/models/UserModel';
 
-export default function Navigation({ user }: { user?: User | null }) {
+export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-3">
@@ -11,8 +10,7 @@ export default function Navigation({ user }: { user?: User | null }) {
             Japanese Dictionary
           </Link>
           <div className="flex items-center gap-4">
-            {/* User-specific links */}
-            {user ? (
+            {isLoggedIn ? (
               <>
                 <Link to="/mylist" className="text-sm text-gray-600 hover:text-gray-800">
                   My List

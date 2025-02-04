@@ -6,9 +6,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { getAuthSession } from "~/services/auth.server";
+import { getAuthSession } from "~/services/auth";
 
 import "./tailwind.css";
 import Navigation from "~/components/Navigation";
@@ -28,18 +27,13 @@ export const links: LinksFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getAuthSession(request);
-  return json({
-    user: session.has("userId") ? { 
-      id: session.get("userId"), 
-      email: session.get("email") 
-    } : null
-  });
+  return {
+    isLoggedIn: session.has("userId")
+  };
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<typeof loader>();
-  const user = data?.user ?? null;
-
   return (
     <html lang="en" className="bg-white">
       <head>
@@ -49,7 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-white">
-        <Navigation user={user} />
+        <Navigation isLoggedIn={data?.isLoggedIn ?? false} />
         {children}
         <ScrollRestoration />
         <Scripts />

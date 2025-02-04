@@ -1,12 +1,11 @@
 import { type LoaderFunctionArgs, type ActionFunctionArgs, json } from '@remix-run/node';
-import { useLoaderData, useMatches } from '@remix-run/react';
+import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import { getEntries } from '~/models/JmdictModel';
 import { useState } from 'react';
 import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
 import { addToUserList, removeFromUserList } from '~/models/UserListModel';
-import { getUser } from '~/services/auth.server';
 
 const PER_PAGE = 5;
 
@@ -39,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await removeFromUserList(user.id, entSeq);
   }
 
-  return json({ success: true });
+  return { success: true };
 };
 
 export default function Index() {
@@ -47,9 +46,8 @@ export default function Index() {
   const totalPages = Math.ceil(totalEntries / perPage);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
-  const matches = useMatches();
-  const rootData = matches.find(match => match.id === 'root')?.data;
-  const user = rootData?.user || null;
+  const rootData = useRouteLoaderData('root');
+  const isLoggedIn = rootData?.isLoggedIn;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -77,7 +75,7 @@ export default function Index() {
             <EntryCard
               key={entry.id}
               entry={entry}
-              user={user}
+              isLoggedIn={isLoggedIn}
               currentAudio={currentAudio}
               setCurrentAudio={setCurrentAudio}
               hoverTimeout={hoverTimeout}
