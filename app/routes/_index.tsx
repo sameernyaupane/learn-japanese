@@ -1,7 +1,7 @@
 import { type LoaderFunctionArgs, type ActionFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import { getEntries } from '~/models/JmdictModel';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
@@ -61,6 +61,11 @@ export default function Index() {
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const rootData = useRouteLoaderData('root');
   const isLoggedIn = rootData?.isLoggedIn;
+
+  // Reset entries when authentication state changes
+  useEffect(() => {
+    setEntries(loaderEntries);
+  }, [loaderEntries, isLoggedIn]);
 
   const handleListToggle = (entSeq: number, isInList: boolean) => {
     setEntries(prevEntries => 

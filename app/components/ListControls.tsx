@@ -12,8 +12,6 @@ export function ListControls({
   const isInList = entry.isInList;
   const isSubmitting = fetcher.state !== 'idle';
 
-  console.log(entry.ent_seq, isInList)
-
   // Sync state after submission
   useEffect(() => {
     if (fetcher.state === 'idle' && fetcher.data?.success) {
