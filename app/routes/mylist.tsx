@@ -17,8 +17,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
-  const searchQuery = url.searchParams.get('q') || '';
-  const frequencyFilter = url.searchParams.get('frequency') || '';
+  const searchQuery = (url.searchParams.get('q') || '').trim();
+  const frequencyFilter = (url.searchParams.get('frequency') || '').trim();
   
   const { entries, totalEntries } = await getEntries(
     page,
