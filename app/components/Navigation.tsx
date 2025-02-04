@@ -14,13 +14,16 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
           <div className="flex items-center gap-4">
             {isLoggedIn ? (
               <>
-                <Link to="/mylist" className="text-sm text-gray-600 hover:text-gray-800">
+                <Link 
+                  to="/mylist" 
+                  className="text-sm text-gray-600 hover:text-gray-800 px-4 py-2 inline-flex items-center"
+                >
                   My List
                 </Link>
                 <logoutFetcher.Form method="post" action="/logout">
                   <button 
                     type="submit" 
-                    className="text-sm text-gray-600 hover:text-gray-800"
+                    className="text-sm text-gray-600 hover:text-gray-800 px-4 py-2 inline-flex items-center justify-center"
                     disabled={logoutFetcher.state !== 'idle'}
                   >
                     Logout
@@ -29,19 +32,22 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
               </>
             ) : (
               <>
-                <Link to="/login" className="text-sm text-gray-600 hover:text-gray-800">
+                <Link 
+                  to="/login" 
+                  className="text-sm text-gray-600 hover:text-gray-800 px-4 py-2 inline-flex items-center"
+                >
                   Login
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="text-sm text-gray-600 hover:text-gray-800"
+                  className="text-sm text-gray-600 hover:text-gray-800 px-4 py-2 inline-flex items-center"
                 >
                   Sign Up
                 </Link>
               </>
             )}
             
-            {/* Main navigation links - moved outside user conditional */}
+            {/* Main navigation links */}
             <NavLink
               to="/"
               className={({ isActive }) =>
@@ -49,7 +55,7 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
                   isActive
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } inline-flex items-center border-b-2 px-1 pt-1 pb-2 text-sm font-medium`
+                } inline-flex items-center border-b-2 px-4 py-2 text-sm font-medium`
               }
             >
               Entries
@@ -61,7 +67,7 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
                   isActive
                     ? 'border-blue-500 text-gray-900'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } inline-flex items-center border-b-2 px-1 pt-1 pb-2 text-sm font-medium`
+                } inline-flex items-center border-b-2 px-4 py-2 text-sm font-medium`
               }
             >
               Practice
