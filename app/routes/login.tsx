@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, useActionData, Link } from "@remix-run/react";
+import { Form, useActionData, Link, useFetcher } from "@remix-run/react";
 import { login } from "~/services/auth";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -19,7 +19,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Login() {
-  const data = useActionData<typeof action>();
+  const fetcher = useFetcher();
+  const data = fetcher.data;
   
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -29,7 +30,7 @@ export default function Login() {
           <p className="text-gray-600">Sign in to your account</p>
         </div>
 
-        <Form 
+        <fetcher.Form 
           method="post" 
           className="bg-white shadow-lg rounded-xl p-8 space-y-6"
         >
@@ -68,8 +69,9 @@ export default function Login() {
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
+            disabled={fetcher.state !== 'idle'}
           >
-            Sign in
+            {fetcher.state !== 'idle' ? 'Logging in...' : 'Log in'}
           </button>
 
           {data?.error && (
@@ -87,7 +89,7 @@ export default function Login() {
               Sign up
             </Link>
           </div>
-        </Form>
+        </fetcher.Form>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
-import { Link, Form } from '@remix-run/react';
+import { Link, useFetcher } from '@remix-run/react';
 import { NavLink } from '@remix-run/react';
 
 export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const logoutFetcher = useFetcher();
+  
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-3">
@@ -15,14 +17,15 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
                 <Link to="/mylist" className="text-sm text-gray-600 hover:text-gray-800">
                   My List
                 </Link>
-                <Form method="post" action="/logout">
+                <logoutFetcher.Form method="post" action="/logout">
                   <button 
                     type="submit" 
                     className="text-sm text-gray-600 hover:text-gray-800"
+                    disabled={logoutFetcher.state !== 'idle'}
                   >
                     Logout
                   </button>
-                </Form>
+                </logoutFetcher.Form>
               </>
             ) : (
               <>

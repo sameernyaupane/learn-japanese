@@ -140,3 +140,8 @@ export default function Index() {
     </div>
   );
 }
+
+export function shouldRevalidate({ formData }: { formData?: FormData }) {
+  const action = formData?.get('_action');
+  return !(action === 'addToList' || action === 'removeFromList');
+}

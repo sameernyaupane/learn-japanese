@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
-import { Form, useActionData, Link } from "@remix-run/react";
+import { Form, useActionData, Link, useFetcher } from "@remix-run/react";
 import { createUser } from "~/models/UserModel";
 import { login } from "~/services/auth";
 
@@ -46,7 +46,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Signup() {
-  const data = useActionData<typeof action>();
+  const fetcher = useFetcher();
+  const data = fetcher.data;
   
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -56,7 +57,7 @@ export default function Signup() {
           <p className="text-gray-600">Create a new account</p>
         </div>
 
-        <Form 
+        <fetcher.Form 
           method="post" 
           className="bg-white shadow-lg rounded-xl p-8 space-y-6"
         >
@@ -95,8 +96,9 @@ export default function Signup() {
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
+            disabled={fetcher.state !== 'idle'}
           >
-            Create Account
+            {fetcher.state !== 'idle' ? 'Creating account...' : 'Create Account'}
           </button>
 
           {data?.error && (
@@ -114,7 +116,7 @@ export default function Signup() {
               Sign in
             </Link>
           </div>
-        </Form>
+        </fetcher.Form>
       </div>
     </div>
   );

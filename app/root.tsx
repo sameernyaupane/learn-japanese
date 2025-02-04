@@ -32,6 +32,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
 }
 
+export function shouldRevalidate({ formAction }: { formAction?: string }) {
+  return ['/login', '/signup', '/logout'].includes(formAction || '');
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<typeof loader>();
   return (
