@@ -27,7 +27,7 @@ export function ListControls({
           name="_action"
           value="removeFromList"
           className="p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
-          title="Remove from list"
+          title="Remove from My List"
           disabled={isSubmitting}
         >
           {isSubmitting ? '...' : '★'}
@@ -37,7 +37,7 @@ export function ListControls({
           name="_action"
           value="addToList"
           className="p-1.5 bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-full transition-colors"
-          title="Add to list"
+          title="Add to My List"
           disabled={isSubmitting}
         >
           {isSubmitting ? '...' : '☆'}

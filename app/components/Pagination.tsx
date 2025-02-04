@@ -39,9 +39,13 @@ export function Pagination({
           let start = Math.max(2, currentPage - buffer);
           let end = Math.min(totalPages - 1, currentPage + buffer);
           
-          // Adjust if we're near the start/end
-          if (currentPage - buffer <= 2) end = maxVisible - 2;
-          if (totalPages - currentPage <= buffer) start = totalPages - maxVisible + 2;
+          // Adjusted with bounds checking
+          if (currentPage - buffer <= 2) {
+            end = Math.min(maxVisible - 2, totalPages - 1);
+          }
+          if (totalPages - currentPage <= buffer) {
+            start = Math.max(totalPages - maxVisible + 2, 2);
+          }
           
           // Always show first page
           const pages = [1];
@@ -55,8 +59,8 @@ export function Pagination({
           // Add trailing ellipsis if needed
           if (end < totalPages - 1) pages.push(-2);
           
-          // Always show last page
-          pages.push(totalPages);
+          // Only show last page if different from first
+          if (totalPages > 1) pages.push(totalPages);
 
           return pages.map((page) => (
             page === -1 || page === -2 ? (

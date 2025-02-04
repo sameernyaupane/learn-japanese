@@ -25,6 +25,8 @@ export function EntryCard({
 }) {
   return (
     <div className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100 relative">
+      {console.log(entry)}
+
       <ListControls entry={entry} onListToggle={onListToggle} />
       {entry.imageUrl && (
         <div className="w-full h-56 bg-gray-50 overflow-hidden border-b border-gray-100 rounded-t-xl">
