@@ -11,6 +11,8 @@ import { getUserId } from "~/services/auth";
 const PER_PAGE = 5;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const userId = await getUserId(request);
+
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
   const searchQuery = url.searchParams.get('q') || '';
@@ -20,7 +22,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     page, 
     PER_PAGE, 
     searchQuery,
-    frequencyFilter
+    frequencyFilter,
+    userId
   );
   
   return { entries, totalEntries, currentPage: page, searchQuery, frequencyFilter, perPage: PER_PAGE };
@@ -28,18 +31,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await getUserId(request);
+  if (!userId) return json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
   const formData = await request.formData();
   const entSeq = Number(formData.get('entSeq'));
   const action = formData.get('_action');
 
-  if (action === 'addToList') {
-    await addToUserList(userId, entSeq);
-  } else if (action === 'removeFromList') {
-    await removeFromUserList(userId, entSeq);
+  if (!entSeq || !action) {
+    return json({ success: false, error: 'Invalid request' }, { status: 400 });
   }
 
-  return { success: true };
+  try {
+    if (action === 'addToList') {
+      await addToUserList(userId, entSeq);
+    } else if (action === 'removeFromList') {
+      await removeFromUserList(userId, entSeq);
+    }
+    return json({ success: true });
+  } catch (error) {
+    return json({ success: false, error: 'Operation failed' }, { status: 500 });
+  }
 };
 
 export default function Index() {

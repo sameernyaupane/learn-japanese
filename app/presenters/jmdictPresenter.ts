@@ -61,7 +61,8 @@ export async function presentEntries(entriesResult: any[]): Promise<JMdictEntry[
         lsource: sense.lsource || [],
         glosses: sense.glosses || [],
         examples: sense.examples || []
-      })) || []
+      })) || [],
+      isInList: entry.is_in_list,
     };
   }));
 }
@@ -85,4 +86,5 @@ export interface JMdictEntry {
   // ... existing properties ...
   frequency?: string;
   frequencyLabel?: string;
+  isInList: boolean;
 } 

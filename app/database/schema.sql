@@ -90,17 +90,8 @@ CREATE TABLE jmdict_audio (
   UNIQUE(ent_seq)
 );
 
-CREATE TABLE user_list (
-  id SERIAL PRIMARY KEY,
-  user_id UUID NOT NULL REFERENCES users(id),
-  ent_seq INTEGER NOT NULL REFERENCES jmdict_entries(ent_seq),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(user_id, ent_seq)
-);
-
 CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id SERIAL PRIMARY KEY,
   email TEXT NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   username TEXT UNIQUE,
@@ -109,6 +100,15 @@ CREATE TABLE users (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   last_login TIMESTAMPTZ
+);
+
+CREATE TABLE user_list (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  ent_seq INTEGER NOT NULL REFERENCES jmdict_entries(ent_seq),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, ent_seq)
 );
 
 CREATE INDEX idx_kanji_entry_id ON kanji_elements(entry_id);

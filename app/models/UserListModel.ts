@@ -1,7 +1,7 @@
 import { sql } from '~/utils/db.server';
 import { presentEntries } from '~/presenters/jmdictPresenter';
 
-export async function addToUserList(userId: string, entSeq: number) {
+export async function addToUserList(userId: number, entSeq: number) {
   return sql`
     INSERT INTO user_list (user_id, ent_seq)
     VALUES (${userId}, ${entSeq})
@@ -9,7 +9,7 @@ export async function addToUserList(userId: string, entSeq: number) {
   `;
 }
 
-export async function removeFromUserList(userId: string, entSeq: number) {
+export async function removeFromUserList(userId: number, entSeq: number) {
   return sql`
     DELETE FROM user_list
     WHERE user_id = ${userId} AND ent_seq = ${entSeq}
@@ -17,7 +17,7 @@ export async function removeFromUserList(userId: string, entSeq: number) {
 }
 
 export async function getUserList(
-  userId: string,
+  userId: number,
   page: number,
   pageSize: number
 ) {

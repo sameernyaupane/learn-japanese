@@ -2,7 +2,7 @@ import * as argon2 from "argon2";
 import { sql } from "~/utils/db.server";
 
 export type User = {
-  id: string;
+  id: number;
   email: string;
   password_hash: string;
   created_at: Date;
@@ -41,7 +41,7 @@ export async function verifyLogin(email: string, password: string): Promise<Omit
   return safeUser;
 }
 
-export async function getUserById(id: string): Promise<Omit<User, 'password_hash'> | null> {
+export async function getUserById(id: number): Promise<Omit<User, 'password_hash'> | null> {
   const [user] = await sql<User[]>`
     SELECT id, email, created_at, updated_at 
     FROM users 
@@ -52,7 +52,7 @@ export async function getUserById(id: string): Promise<Omit<User, 'password_hash
 }
 
 export async function updateUser(
-  id: string, 
+  id: number, 
   updates: { email?: string; password?: string }
 ): Promise<Omit<User, 'password_hash'> | null> {
   let updatesQuery = sql``;
