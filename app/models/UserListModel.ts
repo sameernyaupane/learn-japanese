@@ -1,4 +1,5 @@
 import { sql } from '~/utils/db.server';
+import { presentEntries } from '~/presenters/jmdictPresenter';
 
 export async function addToUserList(userId: string, entSeq: number) {
   return sql`
@@ -15,8 +16,12 @@ export async function removeFromUserList(userId: string, entSeq: number) {
   `;
 }
 
-export async function getUserList(userId: string, page: number = 1, perPage: number = 50) {
-  const offset = (page - 1) * perPage;
+export async function getUserList(
+  userId: string,
+  page: number,
+  pageSize: number
+) {
+  const offset = (page - 1) * pageSize;
   
   const [entries, count] = await Promise.all([
     sql`
@@ -25,7 +30,7 @@ export async function getUserList(userId: string, page: number = 1, perPage: num
       INNER JOIN user_list ul ON e.ent_seq = ul.ent_seq
       WHERE ul.user_id = ${userId}
       ORDER BY ul.created_at DESC
-      LIMIT ${perPage}
+      LIMIT ${pageSize}
       OFFSET ${offset}
     `,
     sql`

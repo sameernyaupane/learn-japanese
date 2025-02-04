@@ -33,26 +33,48 @@ export function Pagination({
 
         {/* Page Numbers */}
         {(() => {
-          const visiblePages = 10; // Show 10 pages at a time
-          const startPage = Math.max(1, currentPage - 5);
-          const endPage = Math.min(totalPages, currentPage + 4);
+          const maxVisible = 10; // Max page buttons to show
+          const buffer = 3; // Pages to show around current
           
-          return Array.from({ length: endPage - startPage + 1 }, (_, i) => {
-            const pageNumber = startPage + i;
-            return (
+          let start = Math.max(2, currentPage - buffer);
+          let end = Math.min(totalPages - 1, currentPage + buffer);
+          
+          // Adjust if we're near the start/end
+          if (currentPage - buffer <= 2) end = maxVisible - 2;
+          if (totalPages - currentPage <= buffer) start = totalPages - maxVisible + 2;
+          
+          // Always show first page
+          const pages = [1];
+          
+          // Add leading ellipsis if needed
+          if (start > 2) pages.push(-1);
+          
+          // Add middle pages
+          for (let i = start; i <= end; i++) pages.push(i);
+          
+          // Add trailing ellipsis if needed
+          if (end < totalPages - 1) pages.push(-2);
+          
+          // Always show last page
+          pages.push(totalPages);
+
+          return pages.map((page) => (
+            page === -1 || page === -2 ? (
+              <span key={page} className="px-3 py-1 text-gray-500">...</span>
+            ) : (
               <Link
-                key={pageNumber}
-                to={`?q=${searchQuery}&page=${pageNumber}&frequency=${frequencyFilter}`}
+                key={page}
+                to={`?q=${searchQuery}&page=${page}&frequency=${frequencyFilter}`}
                 className={`px-3 py-1 rounded ${
-                  currentPage === pageNumber
+                  currentPage === page
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-400 hover:bg-gray-500'
                 }`}
               >
-                {pageNumber}
+                {page}
               </Link>
-            );
-          });
+            )
+          ));
         })()}
 
         {/* Next Button */}
@@ -69,8 +91,14 @@ export function Pagination({
         </Link>
       </div>
       <div className="text-sm text-gray-500">
-        Showing {(currentPage - 1) * perPage + 1} -{' '}
-        {Math.min(currentPage * perPage, totalEntries)} of {totalEntries} entries
+        {totalEntries > 0 ? (
+          <>
+            Showing {(currentPage - 1) * perPage + 1} -{' '}
+            {Math.min(currentPage * perPage, totalEntries)} of {totalEntries} entries
+          </>
+        ) : (
+          'No entries found'
+        )}
       </div>
     </div>
   );

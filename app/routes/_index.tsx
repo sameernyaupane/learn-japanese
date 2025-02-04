@@ -1,13 +1,12 @@
 import { type LoaderFunctionArgs, type ActionFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData, useMatches } from '@remix-run/react';
-import { getEntries } from '~/models/jmdict';
-import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { getEntries } from '~/models/JmdictModel';
 import { useState } from 'react';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
-import { addToUserList, removeFromUserList } from '~/models/userList.server';
+import { addToUserList, removeFromUserList } from '~/models/UserListModel';
+import { getUser } from '~/services/auth.server';
 
 const PER_PAGE = 5;
 
@@ -29,7 +28,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await authenticator.getUser(request);
-  if (!user) return json({ error: 'Not authenticated' }, { status: 401 });
 
   const formData = await request.formData();
   const entSeq = Number(formData.get('entSeq'));

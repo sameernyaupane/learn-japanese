@@ -1,20 +1,24 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { getUserList } from '~/models/userList.server';
+import { getUserList } from '~/models/UserListModel';
 import { EntryCard } from '~/components/EntryCard';
 import { Pagination } from '~/components/Pagination';
-import { authenticator, requireAuth } from '~/services/auth.server';
+import { requireUser } from '~/services/auth.server';
 import Navigation from '~/components/Navigation';
 
 const PER_PAGE = 50;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await requireAuth(request);
+  const user = await requireUser(request);
 
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
   
-  const { entries, totalEntries } = await getUserList(user.id, page, PER_PAGE);
+  const { entries, totalEntries } = await getUserList(
+    user.id, 
+    page, 
+    PER_PAGE
+  );
   
   return json({ 
     entries,
