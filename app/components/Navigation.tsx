@@ -14,21 +14,26 @@ export default function Navigation({ user }: { user?: User | null }) {
             {/* User-specific links */}
             {user ? (
               <>
-                <Link to="/mylist" className="text-gray-600 hover:text-gray-800">
+                <Link to="/mylist" className="text-sm text-gray-600 hover:text-gray-800">
                   My List
                 </Link>
                 <Form method="post" action="/logout">
-                  <button type="submit">Logout</button>
+                  <button 
+                    type="submit" 
+                    className="text-sm text-gray-600 hover:text-gray-800"
+                  >
+                    Logout
+                  </button>
                 </Form>
               </>
             ) : (
               <>
-                <Link to="/login" className="text-gray-600 hover:text-gray-800">
+                <Link to="/login" className="text-sm text-gray-600 hover:text-gray-800">
                   Login
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="text-gray-600 hover:text-gray-800"
+                  className="text-sm text-gray-600 hover:text-gray-800"
                 >
                   Sign Up
                 </Link>
