@@ -1,5 +1,5 @@
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function AudioPlayButton({
   audioUrl,
@@ -14,7 +14,24 @@ export function AudioPlayButton({
   hoverTimeout: NodeJS.Timeout | null;
   setHoverTimeout: (timeout: NodeJS.Timeout | null) => void;
 }) {
+  const [hasBeenClicked, setHasBeenClicked] = useState(false);
+  const [audioFinished, setAudioFinished] = useState(true);
+
+  useEffect(() => {
+    if (!currentAudio) return;
+
+    const handleAudioEnd = () => setAudioFinished(true);
+    currentAudio.addEventListener('ended', handleAudioEnd);
+    
+    return () => {
+      currentAudio.removeEventListener('ended', handleAudioEnd);
+    };
+  }, [currentAudio]);
+
   const handleAudioPlay = () => {
+    setHasBeenClicked(true);
+    setAudioFinished(false);
+    
     if (currentAudio) {
       currentAudio.pause();
     }
@@ -27,6 +44,8 @@ export function AudioPlayButton({
     <button
       onClick={handleAudioPlay}
       onMouseEnter={() => {
+        if (!hasBeenClicked || !audioFinished) return;
+        
         const timeout = setTimeout(() => {
           handleAudioPlay();
         }, 500);
