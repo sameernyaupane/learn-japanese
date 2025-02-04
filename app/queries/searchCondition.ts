@@ -5,20 +5,18 @@ export const searchCondition = (searchQuery: string) => {
   
   return sql`
     WHERE EXISTS (
-      SELECT 1 FROM kanji_elements ke 
-      WHERE ke.entry_id = e.id AND ke.keb ILIKE '%' || ${searchQuery} || '%'
-    )
-    OR EXISTS (
-      SELECT 1 FROM kana_elements ka 
-      WHERE ka.entry_id = e.id AND (
-        ka.reb ILIKE '%' || ${searchQuery} || '%' OR 
-        ka.romaji ILIKE '%' || ${searchQuery} || '%'
-      )
-    )
-    OR EXISTS (
-      SELECT 1 FROM senses s
-      JOIN glosses g ON s.id = g.sense_id
-      WHERE s.entry_id = e.id AND g.gloss ILIKE '%' || ${searchQuery} || '%'
+      SELECT 1 FROM (
+        SELECT keb AS term FROM kanji_elements WHERE entry_id = e.id
+        UNION
+        SELECT reb AS term FROM kana_elements WHERE entry_id = e.id
+        UNION
+        SELECT romaji AS term FROM kana_elements WHERE entry_id = e.id
+        UNION
+        SELECT gloss AS term FROM glosses WHERE sense_id IN (
+          SELECT id FROM senses WHERE entry_id = e.id
+        )
+      ) search_target
+      WHERE search_target.term ILIKE '%' || ${searchQuery} || '%'
     )
   `;
 }; 

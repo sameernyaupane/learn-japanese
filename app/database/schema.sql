@@ -178,3 +178,16 @@ CREATE TRIGGER update_users_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
+
+-- Add to extensions (if not already exists)
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+-- Add these new indexes
+CREATE INDEX IF NOT EXISTS idx_kanji_keb_trgm ON kanji_elements USING GIN (keb gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_kana_reb_trgm ON kana_elements USING GIN (reb gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_kana_romaji_trgm ON kana_elements USING GIN (romaji gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_gloss_gloss_trgm ON glosses USING GIN (gloss gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_kanji_pri_gin ON kanji_elements USING GIN (pri);
+CREATE INDEX IF NOT EXISTS idx_kana_pri_gin ON kana_elements USING GIN (pri);
+CREATE INDEX IF NOT EXISTS idx_examples_sense_id ON examples (sense_id);
+
