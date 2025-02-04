@@ -19,7 +19,8 @@ export async function removeFromUserList(userId: number, entSeq: number) {
 export async function getUserList(
   userId: number,
   page: number,
-  pageSize: number
+  pageSize: number,
+  searchQuery: string
 ) {
   const offset = (page - 1) * pageSize;
   

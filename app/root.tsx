@@ -49,6 +49,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="bg-white">
         <Navigation isLoggedIn={data?.isLoggedIn ?? false} />
         {children}
+        <footer className="mt-12 text-center text-sm text-gray-500">
+          Audio provided by{' '}
+          <a href="https://soundoftext.com" className="text-blue-600 hover:underline">
+            Sound of Text
+          </a>
+          {' • '}
+          Images from{' '}
+          <a 
+            href="https://pexels.com" 
+            className="text-blue-600 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Pexels
+          </a>
+        </footer>
         <ScrollRestoration />
         <Scripts />
       </body>
