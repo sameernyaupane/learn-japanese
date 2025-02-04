@@ -4,7 +4,7 @@ import { SenseGroup } from './SenseGroup';
 import { RelatedTerms } from './RelatedTerms';
 import { AudioPlayButton } from './AudioPlayButton';
 import { FrequencyBadge } from './FrequencyBadge';
-import { Form } from '@remix-run/react';
+import { ListControls } from './ListControls';
 
 export function EntryCard({
   entry,
@@ -13,17 +13,19 @@ export function EntryCard({
   hoverTimeout,
   setHoverTimeout,
   isLoggedIn,
+  onListToggle,
 }: {
   entry: any;
   currentAudio: HTMLAudioElement | null;
   setCurrentAudio: (audio: HTMLAudioElement | null) => void;
   hoverTimeout: NodeJS.Timeout | null;
   setHoverTimeout: (timeout: NodeJS.Timeout | null) => void;
-  isLoggedIn?: (boolean);
+  isLoggedIn?: boolean;
+  onListToggle: (entSeq: number, isInList: boolean) => void;
 }) {
   return (
     <div className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-gray-100 relative">
-      <ListControls entry={{entry, isLoggedIn}} />
+      <ListControls entry={entry} onListToggle={onListToggle} />
       {entry.imageUrl && (
         <div className="w-full h-56 bg-gray-50 overflow-hidden border-b border-gray-100 rounded-t-xl">
           <img 
@@ -108,34 +110,5 @@ export function EntryCard({
         </div>
       </div>
     </div>
-  );
-}
-
-function ListControls(entry: object) {
-  const isInList = entry.isInList;
-
-  return (
-    <Form method="post" className="absolute top-2 right-2">
-      <input type="hidden" name="entSeq" value={entry.ent_seq} />
-      {isInList ? (
-        <button
-          name="_action"
-          value="removeFromList"
-          className="p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
-          title="Remove from list"
-        >
-          ★
-        </button>
-      ) : (
-        <button
-          name="_action"
-          value="addToList"
-          className="p-1.5 bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-full transition-colors"
-          title="Add to list"
-        >
-          ☆
-        </button>
-      )}
-    </Form>
   );
 } 

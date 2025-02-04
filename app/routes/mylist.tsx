@@ -5,8 +5,7 @@ import { EntryCard } from '~/components/EntryCard';
 import { Pagination } from '~/components/Pagination';
 import Navigation from '~/components/Navigation';
 
-
-const PER_PAGE = 50;
+const PER_PAGE = 5;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request);

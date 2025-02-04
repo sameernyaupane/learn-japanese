@@ -6,6 +6,7 @@ import { SearchForm } from '~/components/SearchForm';
 import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
 import { addToUserList, removeFromUserList } from '~/models/UserListModel';
+import { getUserId } from "~/services/auth";
 
 const PER_PAGE = 5;
 
@@ -26,28 +27,37 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const user = await authenticator.getUser(request);
+  const userId = await getUserId(request);
 
   const formData = await request.formData();
   const entSeq = Number(formData.get('entSeq'));
   const action = formData.get('_action');
 
   if (action === 'addToList') {
-    await addToUserList(user.id, entSeq);
+    await addToUserList(userId, entSeq);
   } else if (action === 'removeFromList') {
-    await removeFromUserList(user.id, entSeq);
+    await removeFromUserList(userId, entSeq);
   }
 
   return { success: true };
 };
 
 export default function Index() {
-  const { entries, totalEntries, currentPage, searchQuery, frequencyFilter, perPage } = useLoaderData<typeof loader>();
+  const { entries: loaderEntries, totalEntries, currentPage, searchQuery, frequencyFilter, perPage } = useLoaderData<typeof loader>();
+  const [entries, setEntries] = useState(loaderEntries);
   const totalPages = Math.ceil(totalEntries / perPage);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const rootData = useRouteLoaderData('root');
   const isLoggedIn = rootData?.isLoggedIn;
+
+  const handleListToggle = (entSeq: number, isInList: boolean) => {
+    setEntries(prevEntries => 
+      prevEntries.map(entry => 
+        entry.ent_seq === entSeq ? { ...entry, isInList } : entry
+      )
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -80,6 +90,7 @@ export default function Index() {
               setCurrentAudio={setCurrentAudio}
               hoverTimeout={hoverTimeout}
               setHoverTimeout={setHoverTimeout}
+              onListToggle={handleListToggle}
             />
           ))}
         </div>
