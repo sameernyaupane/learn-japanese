@@ -9,7 +9,7 @@ import { Pagination } from '~/components/Pagination';
 import { EntryCard } from '~/components/EntryCard';
 import { addToUserList, removeFromUserList } from '~/models/userList.server';
 
-const PER_PAGE = 50;
+const PER_PAGE = 5;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);

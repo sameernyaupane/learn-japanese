@@ -34,7 +34,7 @@ export async function getUser(request: Request) {
   return userId ? getUserById(userId) : null;
 }
 
-export async function login({ email, password }: { email: string; password: string }) {
+export async function login(email: string, password: string) {
   const user = await verifyLogin(email, password);
   if (!user) return null;
   

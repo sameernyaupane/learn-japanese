@@ -8,16 +8,13 @@ export async function action({ request }: ActionFunctionArgs) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   
-  const user = await login(email, password);
-  if (!user) return json({ error: "Invalid credentials" });
+  const response = await login(email, password);
 
-  const session = await getSession(request.headers.get("Cookie"));
-  session.set("userId", user.id);
-  session.set("email", user.email);
+  if (!response) return json({ error: "Invalid credentials" });
 
   return redirect("/", {
     headers: {
-      "Set-Cookie": await commitSession(session)
+      "Set-Cookie": response.cookie
     }
   });
 }
