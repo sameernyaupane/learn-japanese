@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { SearchForm } from '~/components/SearchForm';
 import { addToUserList, removeFromUserList } from '~/models/UserListModel';
 
-const PER_PAGE = 5;
+const PER_PAGE = 50;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request);
