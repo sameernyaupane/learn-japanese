@@ -1,20 +1,20 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import { getUserList } from '~/models/UserListModel';
 import { EntryCard } from '~/components/EntryCard';
 import { Pagination } from '~/components/Pagination';
-import Navigation from '~/components/Navigation';
+import { getUserId } from "~/services/auth";
 
 const PER_PAGE = 5;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await requireUser(request);
+  const userId = await getUserId(request);
 
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page') || 1);
   
   const { entries, totalEntries } = await getUserList(
-    user.id, 
+    userId, 
     page, 
     PER_PAGE
   );
@@ -31,10 +31,11 @@ export default function MyListPage() {
   const { entries, totalEntries, currentPage, perPage } = useLoaderData<typeof loader>();
   const totalPages = Math.ceil(totalEntries / perPage);
 
+  const rootData = useRouteLoaderData('root');
+  const isLoggedIn = rootData?.isLoggedIn;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      
+    <div className="min-h-screen bg-gray-50">      
       <div className="max-w-6xl mx-auto px-4 py-6">
         <h1 className="text-xl font-semibold text-gray-800 mb-6 text-center">
           My Saved Words ({totalEntries})
