@@ -81,49 +81,57 @@ export default function MyListPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <SearchForm 
-          initialQuery={searchQuery} 
-          initialFrequency={frequencyFilter} 
-        />
-        
-        <h1 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-          {searchQuery ? `Results for "${searchQuery}"` : 'My List'}
-          <span className="ml-2 text-sm text-gray-500">
-            ({totalEntries} entries)
-          </span>
-        </h1>
+      {isLoggedIn ? (
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <SearchForm 
+            initialQuery={searchQuery} 
+            initialFrequency={frequencyFilter} 
+          />
+          
+          <h1 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+            {searchQuery ? `Results for "${searchQuery}"` : 'My List'}
+            <span className="ml-2 text-sm text-gray-500">
+              ({totalEntries} entries)
+            </span>
+          </h1>
 
-        {entries.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
-            No entries found matching your search criteria
+          {entries.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              No entries found matching your search criteria
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {entries.map((entry) => (
+              <EntryCard
+                key={entry.id}
+                entry={entry}
+                isLoggedIn={isLoggedIn}
+                currentAudio={currentAudio}
+                setCurrentAudio={setCurrentAudio}
+                hoverTimeout={hoverTimeout}
+                setHoverTimeout={setHoverTimeout}
+                onListToggle={handleListToggle}
+              />
+            ))}
           </div>
-        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {entries.map((entry) => (
-            <EntryCard
-              key={entry.id}
-              entry={entry}
-              isLoggedIn={isLoggedIn}
-              currentAudio={currentAudio}
-              setCurrentAudio={setCurrentAudio}
-              hoverTimeout={hoverTimeout}
-              setHoverTimeout={setHoverTimeout}
-              onListToggle={handleListToggle}
-            />
-          ))}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            searchQuery={searchQuery}
+            frequencyFilter={frequencyFilter}
+            totalEntries={totalEntries}
+            perPage={perPage}
+          />
         </div>
-
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          searchQuery={searchQuery}
-          frequencyFilter={frequencyFilter}
-          totalEntries={totalEntries}
-          perPage={perPage}
-        />
-      </div>
+      ) : (
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <div className="text-center py-12 text-gray-500">
+            Please login to access your custom list
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
