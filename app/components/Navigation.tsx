@@ -39,7 +39,7 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
             </NavLink>
 
             <NavLink
-              to="/words"
+              to="/sentences"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -48,7 +48,7 @@ export default function Navigation({ isLoggedIn }: { isLoggedIn: boolean }) {
                 } inline-flex items-center border-b-2 px-4 py-2 text-sm font-medium`
               }
             >
-              Practice
+              Sentences
             </NavLink>
 
             {isLoggedIn ? (
