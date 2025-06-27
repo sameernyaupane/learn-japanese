@@ -52,6 +52,7 @@ services:
       - "${PORT}:${PORT}"
     volumes:
       - .:/remixapp
+      - ./database_dumps:/remixapp/database_dumps
     depends_on:
       - postgres
       - redis
@@ -75,6 +76,7 @@ services:
     volumes:
       - ./certs:/remixapp/certs
       - ./public:/remixapp/public
+      - ./database_dumps:/remixapp/database_dumps
     depends_on:
       - postgres
       - redis
